@@ -82,9 +82,17 @@ A: Visão      B: Negócio    C: Sistemas Info    D: Tecnologia    E: Oportunida
 
 ### Phase E — Opportunities & Solutions
 - Work packages de implementação
-- Sequência de entrega (roadmap)
+- Sequência de entrega (roadmap Mermaid gantt)
 - Decisões de build/buy/integrate por componente
 - Riscos técnicos e mitigações
+
+### Phase E — Team Plan (E.4–E.9)
+- **E.4 Composição:** tabela HTML com ícones M365 por papel (Person.svg, People Team.svg, etc.)
+- **E.5 Ramp-up:** Mermaid gantt com linha por papel + marcos (Kick-off, MVP, Go-live)
+- **E.6 RACI:** matriz com ícones M365 nos cabeçalhos
+- **E.7 Custo de Equipe:** tabela com custo/mês por papel, dedicação, duração → total para Business Case
+- **E.8 Onboarding:** Mermaid flowchart com caminho por papel (Dev/DevOps/QA/Designer)
+- **E.9 Comunicação:** tabela HTML com ícones M365 (Chat, Calendar, Video, Clipboard)
 
 ---
 
@@ -97,7 +105,7 @@ A: Visão      B: Negócio    C: Sistemas Info    D: Tecnologia    E: Oportunida
 - Sempre incluir legenda e título no diagrama
 - Máximo 12 nós por diagrama (criar sub-diagramas se necessário)
 
-### Ícones Azure disponíveis
+### Ícones Azure (Mermaid architecture-beta — Iconify)
 ```
 Compute:       azure:app-service, azure:functions, azure:kubernetes-service,
                azure:virtual-machines, azure:container-apps
@@ -111,6 +119,44 @@ Mensageria:    azure:service-bus, azure:event-hubs, azure:event-grid
 IA/ML:         azure:cognitive-services, azure:machine-learning, azure:openai
 DevOps:        azure:devops, azure:container-registry
 ```
+
+### Ícones Microsoft Originais (SVG locais — HTML img tags)
+
+**Localização:** `assets/icons/m365/` e `assets/icons/power-platform/`  
+**Catálogo completo:** `assets/icons/ICONS.md`  
+**Uso:** Em seções HTML do markdown (Team Plan, Legend, tabelas de papéis)
+
+```html
+<!-- Exemplo: papel na matriz RACI -->
+<img src="../../assets/icons/m365/Person Wrench.svg" width="32">
+<!-- Exemplo: Power Platform em arquitetura -->
+<img src="../../assets/icons/power-platform/PowerAutomate_scalable.svg" width="32">
+```
+
+**Mapeamento Papel → Ícone M365:**
+| Papel | Ícone M365 |
+|-------|-----------|
+| Product Owner / PM | `Presenter.svg` |
+| Arquiteto | `Hat Graduation.svg` |
+| Tech Lead / Dev Sênior | `Person Wrench.svg` |
+| Backend / Frontend Dev | `People Team.svg` |
+| DevOps / SRE | `People Settings.svg` |
+| QA / Tester | `Person Settings.svg` |
+| UX / Designer | `Headset.svg` |
+| Data Engineer | `Data Trending.svg` |
+| Scrum Master | `People Community.svg` |
+| Stakeholder / Sponsor | `Building.svg` |
+| Usuário Final | `Person.svg` |
+
+**Mapeamento Conceito → Ícone Power Platform:**
+| Conceito | Ícone Power Platform |
+|----------|---------------------|
+| Automação de processos | `PowerAutomate_scalable.svg` |
+| App low-code | `PowerApps_scalable.svg` |
+| Portal / site externo | `PowerPages_scalable.svg` |
+| Banco de dados low-code | `Dataverse_scalable.svg` |
+| IA e modelos | `AIBuilder_scalable.svg` |
+| Agente conversacional | `CopilotStudio_scalable.svg` |
 
 ### Template: Diagrama de Contexto (Phase A)
 ```mermaid
@@ -262,13 +308,14 @@ Quando esta decisão deve ser revisada? Qual condição a tornaria obsoleta?
 
 ## Checklist de Qualidade
 
-- [ ] Phase A: Visão e princípios documentados
-- [ ] Phase B: Capacidades de negócio e fluxos mapeados
-- [ ] Phase C1: ER conceitual e estratégia de dados
-- [ ] Phase C2: Diagrama de container com ícones Azure
-- [ ] Phase D: Diagrama de tecnologia com ícones Azure
-- [ ] ADRs: mínimo 3, com alternativas documentadas
-- [ ] NFRs: cobertura 100%
-- [ ] Diagrama de sequência para fluxo principal
-- [ ] Riscos técnicos com mitigação
-- [ ] Artefato salvo + memory.md atualizado
+- [ ] Phase A: Visão, princípios arquiteturais e diagrama de Contexto (azure: icons)
+- [ ] Phase B: Mindmap de capacidades + flowchart processo To-Be
+- [ ] Phase C1: erDiagram conceitual + estratégia de dados + política LGPD
+- [ ] Phase C2: Diagrama Container (architecture-beta azure:) + sequenceDiagram
+- [ ] Phase D: Diagrama Tecnologia (architecture-beta azure:) + CI/CD + Rede/Segurança
+- [ ] Phase E Work Packages: tabela WP + gantt de entrega + build vs buy
+- [ ] Phase E Team Plan E.4–E.9: composição + ramp-up gantt + RACI + custo + onboarding
+- [ ] ADRs: mínimo 3, com alternativas documentadas e condição de revisão
+- [ ] NFRs: cobertura 100% com fase TOGAF e ADR mapeados
+- [ ] Ícones M365 usados na seção Team Plan (HTML img tags)
+- [ ] Artefato salvo + memory.md atualizado + todo.md Fase 3 marcado

@@ -476,6 +476,152 @@ gantt
 
 ---
 
+## Phase E — Team Plan
+
+> Estimativa de equipe, papéis, quando cada função entra no projeto e responsabilidades.  
+> **Atualizar** com nomes reais quando a equipe for definida.
+
+### E.4 Composição da Equipe
+
+<div align="center">
+
+| <img src="../../assets/icons/m365/Presenter.svg" width="36"><br>**Product Owner** | <img src="../../assets/icons/m365/Hat Graduation.svg" width="36"><br>**Arquiteto** | <img src="../../assets/icons/m365/Person Wrench.svg" width="36"><br>**Tech Lead** | <img src="../../assets/icons/m365/People Team.svg" width="36"><br>**Devs Backend** | <img src="../../assets/icons/m365/People Team.svg" width="36"><br>**Devs Frontend** |
+|:---:|:---:|:---:|:---:|:---:|
+| 1 pessoa | 1 pessoa | 1 pessoa | {N} pessoas | {N} pessoas |
+| **Full-time** | Part-time | Full-time | Full-time | Full-time |
+
+| <img src="../../assets/icons/m365/People Settings.svg" width="36"><br>**DevOps/Infra** | <img src="../../assets/icons/m365/Person Settings.svg" width="36"><br>**QA Engineer** | <img src="../../assets/icons/m365/Data Trending.svg" width="36"><br>**Data Engineer** | <img src="../../assets/icons/m365/Headset.svg" width="36"><br>**UX Designer** | <img src="../../assets/icons/m365/People Community.svg" width="36"><br>**Scrum Master** |
+|:---:|:---:|:---:|:---:|:---:|
+| {N} pessoas | 1 pessoa | {N/A ou 1} | 1 pessoa | 1 pessoa |
+| Part-time | Full-time | {se necessário} | Part-time | Part-time |
+
+</div>
+
+---
+
+### E.5 Ramp-up da Equipe — Quando Cada Função Entra
+
+```mermaid
+gantt
+  title Ramp-up da Equipe — {PROJETO}
+  dateFormat  YYYY-MM-DD
+  axisFormat  %d/%m
+  todayMarker on
+
+  section Fase de Análise
+    Product Owner (PO)        :active, po,     {DATA_INICIO},    {DATA_FIM_PROJETO}
+    Arquiteto de Solução      :        arq,    {DATA_INICIO},    6w
+    UX Designer               :        ux,     {DATA_INICIO},    8w
+
+  section Sprint 0 — Setup
+    Tech Lead                 :active, tl,     after arq,        {DATA_FIM_PROJETO}
+    DevOps / Infra            :        ops,    after arq,        4w
+    Scrum Master              :        sm,     after arq,        {DATA_FIM_PROJETO}
+
+  section Sprint 1 — MVP Core
+    Backend Dev 1             :active, be1,    after tl,         {DATA_FIM_PROJETO}
+    Backend Dev 2             :        be2,    after tl,         {DATA_FIM_PROJETO}
+    Frontend Dev 1            :        fe1,    after tl,         {DATA_FIM_PROJETO}
+    QA Engineer               :        qa,     after tl,         {DATA_FIM_PROJETO}
+
+  section Sprint 2 — Expansão
+    Frontend Dev 2            :        fe2,    after fe1,        {DATA_FIM_PROJETO}
+    Data Engineer             :        de,     after be1,        {DATA_FIM_PROJETO}
+
+  section Marcos
+    Kick-off                  :milestone, m1, {DATA_INICIO},     0d
+    Sprint 0 concluído        :milestone, m2, after ops,         0d
+    MVP lançado               :milestone, m3, {DATA_MVP},        0d
+    Go-live                   :milestone, m4, {DATA_GOLIVE},     0d
+```
+
+---
+
+### E.6 Matriz de Papéis e Responsabilidades (RACI)
+
+> R=Responsável | A=Aprovador | C=Consultado | I=Informado
+
+<div>
+
+| Atividade | <img src="../../assets/icons/m365/Presenter.svg" width="24"><br>PO | <img src="../../assets/icons/m365/Hat Graduation.svg" width="24"><br>Arquiteto | <img src="../../assets/icons/m365/Person Wrench.svg" width="24"><br>Tech Lead | <img src="../../assets/icons/m365/People Team.svg" width="24"><br>Backend | <img src="../../assets/icons/m365/People Team.svg" width="24"><br>Frontend | <img src="../../assets/icons/m365/People Settings.svg" width="24"><br>DevOps | <img src="../../assets/icons/m365/Person Settings.svg" width="24"><br>QA |
+|-----------|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| Discovery e PRD | A | C | C | I | I | I | I |
+| Decisões de arquitetura | C | R | C | C | C | C | I |
+| Implementação de features | I | C | A | R | R | I | C |
+| Setup de infraestrutura | I | C | A | I | I | R | I |
+| Testes e QA | I | I | A | C | C | I | R |
+| Deploy e release | A | I | C | I | I | R | C |
+| Sprint planning | A | I | R | C | C | I | C |
+| Revisão de backlog | R | I | C | C | C | I | C |
+
+</div>
+
+---
+
+### E.7 Estimativa de Custo de Equipe
+
+> Base para o Business Case. Atualizar com valores reais de mercado para a região/senioridade.
+
+| Papel | Senioridade | Dedicação | Custo/Mês (R$) | Início | Duração | Total (R$) |
+|-------|------------|----------|---------------|--------|---------|-----------|
+| Product Owner | Sênior | 100% | {R$ 18.000} | Semana 1 | {N} meses | |
+| Arquiteto | Sênior | 50% | {R$ 12.000} | Semana 1 | 6 semanas | |
+| Tech Lead | Sênior | 100% | {R$ 22.000} | Sprint 0 | {N} meses | |
+| Backend Dev | Pleno | 100% | {R$ 12.000} | Sprint 1 | {N} meses | |
+| Backend Dev | Pleno | 100% | {R$ 12.000} | Sprint 1 | {N} meses | |
+| Frontend Dev | Pleno | 100% | {R$ 11.000} | Sprint 1 | {N} meses | |
+| Frontend Dev | Júnior | 100% | {R$ 7.000} | Sprint 2 | {N} meses | |
+| DevOps | Pleno | 50% | {R$ 7.000} | Sprint 0 | {N} meses | |
+| QA Engineer | Pleno | 100% | {R$ 9.000} | Sprint 1 | {N} meses | |
+| UX Designer | Pleno | 50% | {R$ 7.000} | Semana 1 | 8 semanas | |
+| Scrum Master | Sênior | 50% | {R$ 6.000} | Sprint 0 | {N} meses | |
+| **Total mensal (pico)** | | | **{R$ ~N}** | | | **{R$ ~N total}** |
+
+> **Encargos e benefícios:** multiplicar por 1,7x para CLT (FGTS, INSS, férias, 13°, VT, VR)  
+> **Freelancer / PJ:** sem multiplicador, mas adicionar margem de 10-15% para imprevistos
+
+---
+
+### E.8 Plano de Onboarding
+
+```mermaid
+flowchart TD
+  A([👤 Novo Membro]) --> B[Acesso: Git + Azure DevOps]
+  B --> C[Acesso: Ambientes dev + staging]
+  C --> D[Leitura: PRD + Architecture.md]
+  D --> E{Papel?}
+
+  E -->|Dev| F[<img src='../../assets/icons/m365/Code.svg' width='16'> Setup local + Docker]
+  E -->|DevOps| G[<img src='../../assets/icons/m365/People Settings.svg' width='16'> Acesso Azure + CI/CD]
+  E -->|QA| H[<img src='../../assets/icons/m365/Person Settings.svg' width='16'> Acesso staging + test tools]
+  E -->|Designer| I[<img src='../../assets/icons/m365/Headset.svg' width='16'> Acesso Figma + design system]
+
+  F --> J[Pair programming com Tech Lead — 2 dias]
+  G --> K[Pair session DevOps — 1 dia]
+  H --> L[Review de ACs com PO — 1 dia]
+  I --> M[Briefing UX com PO — 1 dia]
+
+  J & K & L & M --> N([✅ Pronto para Sprint])
+
+  style A fill:#0078d4,color:#fff
+  style N fill:#107c10,color:#fff
+```
+
+---
+
+### E.9 Canais e Ferramentas de Comunicação da Equipe
+
+<div align="center">
+
+| <img src="../../assets/icons/m365/Chat.svg" width="32"><br>**Daily** | <img src="../../assets/icons/m365/Calendar Month.svg" width="32"><br>**Sprint** | <img src="../../assets/icons/m365/Video.svg" width="32"><br>**Demo** | <img src="../../assets/icons/m365/Clipboard Task List.svg" width="32"><br>**Tracking** | <img src="../../assets/icons/m365/Code.svg" width="32"><br>**Code** |
+|:---:|:---:|:---:|:---:|:---:|
+| MS Teams / Slack | {ferramenta} Board | Teams / Zoom | {Jira / Linear / ADO} | GitHub / Azure DevOps |
+| 15min / dia | 2 semanas | Fim de sprint | Diário | Contínuo |
+
+</div>
+
+---
+
 ## ADRs — Architecture Decision Records
 
 ### ADR-001: {Título — Estilo Arquitetural}

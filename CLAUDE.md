@@ -135,6 +135,60 @@ mdi:database, mdi:monitor, mdi:server, mdi:magnify
 
 ---
 
+## Ícones Microsoft — Uso por Contexto
+
+### Mermaid `architecture-beta` → Iconify (online)
+Use `azure:*` e `mdi:*` — renderizados automaticamente no Mermaid.
+
+### HTML `<img>` → SVG locais (ícones originais Microsoft)
+Use nos templates de arquitetura para: Team Plan, RACI, seções de papéis.
+
+**Caminhos:**
+- Power Platform: `assets/icons/power-platform/{nome}_scalable.svg`
+- M365: `assets/icons/m365/{Nome do Ícone}.svg`
+- Catálogo completo: `assets/icons/ICONS.md`
+
+**Mapeamento rápido Papel → Ícone M365:**
+```
+PO/PM           → Presenter.svg
+Arquiteto       → Hat Graduation.svg
+Dev/Tech Lead   → Person Wrench.svg
+Squad de Devs   → People Team.svg
+DevOps/SRE      → People Settings.svg
+QA              → Person Settings.svg
+UX/Designer     → Headset.svg
+Data Engineer   → Data Trending.svg
+Scrum Master    → People Community.svg
+Usuário Final   → Person.svg
+```
+
+**Power Platform em arquiteturas low-code:**
+```
+Automação   → PowerAutomate_scalable.svg
+App         → PowerApps_scalable.svg
+Portal      → PowerPages_scalable.svg
+Dados       → Dataverse_scalable.svg
+IA          → AIBuilder_scalable.svg
+Copilot     → CopilotStudio_scalable.svg
+```
+
+---
+
+## TODO List — Gestão de Tarefas
+
+`framework/todo.md` — template de TODO do framework  
+`docs/output/{projeto}/todo.md` — TODO específico por projeto (copiado do template)
+
+**Formato:** `[ ]` pendente | `[x]` concluído | `[~]` bloqueado | `[>]` delegado | `[-]` cancelado
+
+**Quando atualizar:**
+- @discovery *start → marca Fase 1 como iniciada
+- @architect *design → marca Fase 3 + cria todo.md do projeto
+- Qualquer agente ao SAVE → atualiza itens relevantes
+- Usuário pode marcar itens manualmente a qualquer momento
+
+---
+
 ## Comandos
 
 | Comando | Efeito |
@@ -145,6 +199,8 @@ mdi:database, mdi:monitor, mdi:server, mdi:magnify
 | `*resume {fase}` | Retoma fase específica (lendo memory.md) |
 | `*memory` | Exibe memory.md resumido do projeto atual |
 | `*lessons` | Exibe lições aplicáveis à fase atual |
+| `*todo` | Exibe TODO do projeto atual com progresso |
+| `*icons` | Lista ícones disponíveis (M365 + Power Platform) |
 
 ---
 

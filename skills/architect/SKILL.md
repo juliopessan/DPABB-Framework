@@ -114,6 +114,43 @@ Cada ADR DEVE ter:
 3. Avaliar build vs buy vs integrate por componente
 4. Documentar riscos técnicos (probabilidade × impacto)
 
+## Etapa 7b — Phase E: Team Plan (E.4–E.9)
+
+> Perguntas necessárias antes de gerar (verificar memory.md primeiro):
+> - "Qual é o tamanho esperado da equipe?" (se não no discovery)
+> - "A equipe já existe ou precisa ser contratada?"
+> - "Qual é o custo médio por papel na empresa/mercado?" (para Business Case)
+
+**E.4 Composição da Equipe:**
+- Tabela HTML com `<img src="../../assets/icons/m365/{Papel}.svg" width="36">` por papel
+- Papéis obrigatórios: PO, Tech Lead, Dev(s), DevOps, QA
+- Papéis opcionais por contexto: Arquiteto, Data Engineer, UX, Scrum Master
+
+**E.5 Ramp-up (gantt Mermaid):**
+- Uma linha por papel com datas de início e duração
+- Marcos: Kick-off, Sprint 0 concluído, MVP, Go-live
+- Datas relativas ao `{DATA_INICIO}` do projeto
+- PO e Arquiteto sempre iniciam na Semana 1
+
+**E.6 Matriz RACI:**
+- Cabeçalhos com ícones M365 HTML img (32px)
+- Atividades: Discovery/PRD, Arquitetura, Implementação, Infra, QA, Deploy, Sprint Planning
+- Valores: R/A/C/I por papel
+
+**E.7 Custo de Equipe:**
+- Tabela com: papel, senioridade, dedicação %, custo/mês, mês de início, duração, total
+- Nota de encargos: ×1.7 para CLT
+- Total mensal em pico de equipe
+- Esta tabela alimenta o CapEx do Business Case
+
+**E.8 Onboarding (flowchart Mermaid):**
+- Caminho padrão + bifurcação por papel
+- Tempo de onboarding por papel (Dev: 2 dias, DevOps: 1 dia, QA: 1 dia, Designer: 1 dia)
+
+**E.9 Comunicação:**
+- Tabela HTML com ícones M365: Chat (daily), Calendar (sprint), Video (demo), Clipboard (tracking), Code (git)
+- Ferramentas concretas por categoria
+
 ---
 
 ## Etapa 8 — Cobertura de NFRs
@@ -139,17 +176,26 @@ Montar tabela mapeando cada NFR para:
      - Stack: {resumo}
      - Componentes: {lista}
      - Complexidade: SIMPLE / STANDARD / COMPLEX
+     - Equipe estimada: {N} pessoas, custo/mês pico R$ {N}
      - Stories técnicas obrigatórias: WP-01 = TECH-001, TECH-002...
    → Atualizar Artefatos Produzidos: architecture.md = ✅
-   → Atualizar Decisões Tomadas: stack, auth, banco
+   → Atualizar Decisões Tomadas: stack, auth, banco, composição de equipe
 
 3. Write: pipeline-state.json
    → phases.architect.status = "completed"
    → phases.architect.completed_at = {ISO_DATE}
    → phases.architect.artifact_exists = true
    → phases.architect.handoff_written = true
-   → phases.architect.diagrams = { context: true, container: true, component: true, technology: true }
+   → phases.architect.diagrams = { context: true, container: true, component: true, technology: true, team_plan: true }
    → current_phase = "backlog"
+
+4. Write: docs/output/{projeto}/todo.md (se ainda não existe)
+   → Copiar de framework/todo.md
+   → Marcar como [x] os itens da Fase 3 concluídos:
+     [x] @architect *design executado
+     [x] Phase A–E documentadas
+     [x] ADRs criados
+     [x] Team Plan (E.4–E.9) gerado
 ```
 
 ---

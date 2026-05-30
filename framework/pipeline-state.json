@@ -44,7 +44,15 @@
         "context": false,
         "container": false,
         "component": false,
-        "technology": false
+        "technology": false,
+        "team_plan": false
+      },
+      "team_plan": {
+        "total_people": 0,
+        "roles": [],
+        "monthly_cost_peak_brl": 0,
+        "rampup_weeks": 0,
+        "onboarding_days": 0
       }
     },
     "backlog": {
@@ -86,6 +94,19 @@
     "last_updated": null,
     "questions_answered": 0,
     "tokens_saved_estimate": 0
+  },
+
+  "todo": {
+    "path": "docs/output/{projeto}/todo.md",
+    "total_items": 0,
+    "completed_items": 0,
+    "blocked_items": 0
+  },
+
+  "icons": {
+    "m365_path": "assets/icons/m365/",
+    "power_platform_path": "assets/icons/power-platform/",
+    "catalog": "assets/icons/ICONS.md"
   },
 
   "lessons_applied": [],
