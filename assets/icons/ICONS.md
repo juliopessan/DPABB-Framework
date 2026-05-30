@@ -80,6 +80,56 @@
 
 ---
 
+---
+
+## Azure Icons — Serviços Microsoft Azure
+
+> **705 ícones oficiais** organizados em 30 categorias.  
+> Catálogo completo: [`azure/AZURE-ICONS.md`](azure/AZURE-ICONS.md)
+
+### Mais Utilizados em Arquitetura
+
+| Ícone | Arquivo SVG | Mermaid (`azure:`) | Categoria |
+|-------|------------|-------------------|----------|
+| <img src="azure/networking/10073-icon-service-Front-Door-and-CDN-Profiles.svg" width="28"> | `networking/10073-...-Front-Door...svg` | `azure:front-door` | Networking |
+| <img src="azure/devops/10042-icon-service-API-Management-Services.svg" width="28"> | `devops/10042-...-API-Management-Services.svg` | `azure:api-management` | DevOps |
+| <img src="azure/compute/10035-icon-service-App-Services.svg" width="28"> | `compute/10035-...-App-Services.svg` | `azure:app-service` | Compute |
+| <img src="azure/compute/10029-icon-service-Function-Apps.svg" width="28"> | `compute/10029-...-Function-Apps.svg` | `azure:functions` | Compute |
+| <img src="azure/compute/10023-icon-service-Kubernetes-Services.svg" width="28"> | `compute/10023-...-Kubernetes-Services.svg` | `azure:kubernetes-service` | Compute |
+| <img src="azure/databases/10130-icon-service-SQL-Database.svg" width="28"> | `databases/10130-...-SQL-Database.svg` | `azure:sql-database` | Databases |
+| <img src="azure/databases/10121-icon-service-Azure-Cosmos-DB.svg" width="28"> | `databases/10121-...-Azure-Cosmos-DB.svg` | `azure:cosmos-db` | Databases |
+| <img src="azure/databases/10137-icon-service-Cache-for-Redis.svg" width="28"> | `databases/10137-...-Cache-for-Redis.svg` | `azure:cache-for-redis` | Databases |
+| <img src="azure/storage/10086-icon-service-Storage-Accounts.svg" width="28"> | `storage/10086-...-Storage-Accounts.svg` | `azure:storage-accounts` | Storage |
+| <img src="azure/identity/10230-icon-service-Azure-Active-Directory.svg" width="28"> | `identity/10230-...-Azure-Active-Directory.svg` | `azure:azure-active-directory` | Identity |
+| <img src="azure/identity/10228-icon-service-Azure-AD-B2C.svg" width="28"> | `identity/10228-...-Azure-AD-B2C.svg` | `azure:azure-ad-b2c` | Identity |
+| <img src="azure/security/10245-icon-service-Key-Vaults.svg" width="28"> | `security/10245-...-Key-Vaults.svg` | `azure:key-vault` | Security |
+| <img src="azure/integration/10836-icon-service-Service-Bus.svg" width="28"> | `integration/10836-...-Service-Bus.svg` | `azure:service-bus` | Integration |
+| <img src="azure/analytics/00039-icon-service-Event-Hubs.svg" width="28"> | `analytics/00039-...-Event-Hubs.svg` | `azure:event-hubs` | Analytics |
+| <img src="azure/monitor/00001-icon-service-Monitor.svg" width="28"> | `monitor/00001-...-Monitor.svg` | `azure:monitor` | Monitor |
+| <img src="azure/devops/00012-icon-service-Application-Insights.svg" width="28"> | `devops/00012-...-Application-Insights.svg` | `azure:application-insights` | DevOps |
+| <img src="azure/devops/10261-icon-service-Azure-DevOps.svg" width="28"> | `devops/10261-...-Azure-DevOps.svg` | `azure:devops` | DevOps |
+| <img src="azure/learning/03438-icon-service-Azure-OpenAI-Service.svg" width="28"> | `learning/03438-...-Azure-OpenAI-Service.svg` | `azure:openai` | AI/ML |
+
+### Uso em HTML
+
+```html
+<!-- Azure SVG local — usar em seções de documentação, Team Plan, legends -->
+<img src="assets/icons/azure/compute/10035-icon-service-App-Services.svg" width="40">
+<img src="assets/icons/azure/databases/10130-icon-service-SQL-Database.svg" width="40">
+<img src="assets/icons/azure/security/10245-icon-service-Key-Vaults.svg" width="40">
+```
+
+### Uso em Mermaid (Iconify online — não usa SVG local)
+
+```mermaid
+architecture-beta
+  service app(azure:app-service)[App Service]
+  service db(azure:sql-database)[SQL Database]
+  service kv(azure:key-vault)[Key Vault]
+```
+
+---
+
 ## Como Usar em Mermaid `architecture-beta`
 
 ```mermaid

@@ -77,6 +77,54 @@ architecture-beta
 
 ---
 
+### A.6 Legenda de Componentes Azure
+
+> Ícones oficiais Microsoft Azure usados nos diagramas. Nos diagramas Mermaid usa-se o prefixo `azure:` (Iconify online). Nos documentos HTML usa-se `<img src="...">` com os SVGs locais abaixo.
+
+<div align="center">
+
+#### Camada de Entrada e API
+
+| <img src="../../assets/icons/azure/networking/10073-icon-service-Front-Door-and-CDN-Profiles.svg" width="40"><br>**Front Door + WAF** | <img src="../../assets/icons/azure/devops/10042-icon-service-API-Management-Services.svg" width="40"><br>**API Management** | <img src="../../assets/icons/azure/networking/10076-icon-service-Application-Gateways.svg" width="40"><br>**App Gateway** | <img src="../../assets/icons/azure/networking/10062-icon-service-Load-Balancers.svg" width="40"><br>**Load Balancer** |
+|:---:|:---:|:---:|:---:|
+| `azure:front-door` | `azure:api-management` | `azure:application-gateway` | `azure:load-balancer` |
+
+#### Camada de Aplicação
+
+| <img src="../../assets/icons/azure/compute/10035-icon-service-App-Services.svg" width="40"><br>**App Service** | <img src="../../assets/icons/azure/compute/10029-icon-service-Function-Apps.svg" width="40"><br>**Function Apps** | <img src="../../assets/icons/azure/compute/10023-icon-service-Kubernetes-Services.svg" width="40"><br>**AKS** | <img src="../../assets/icons/azure/compute/10104-icon-service-Container-Instances.svg" width="40"><br>**Container Instances** |
+|:---:|:---:|:---:|:---:|
+| `azure:app-service` | `azure:functions` | `azure:kubernetes-service` | `azure:container-instances` |
+
+#### Camada de Dados
+
+| <img src="../../assets/icons/azure/databases/10130-icon-service-SQL-Database.svg" width="40"><br>**SQL Database** | <img src="../../assets/icons/azure/databases/10121-icon-service-Azure-Cosmos-DB.svg" width="40"><br>**Cosmos DB** | <img src="../../assets/icons/azure/databases/10137-icon-service-Cache-for-Redis.svg" width="40"><br>**Redis Cache** | <img src="../../assets/icons/azure/storage/10086-icon-service-Storage-Accounts.svg" width="40"><br>**Storage** |
+|:---:|:---:|:---:|:---:|
+| `azure:sql-database` | `azure:cosmos-db` | `azure:cache-for-redis` | `azure:storage-accounts` |
+
+#### Segurança e Identidade
+
+| <img src="../../assets/icons/azure/identity/10230-icon-service-Azure-Active-Directory.svg" width="40"><br>**Entra ID** | <img src="../../assets/icons/azure/identity/10228-icon-service-Azure-AD-B2C.svg" width="40"><br>**AD B2C** | <img src="../../assets/icons/azure/security/10245-icon-service-Key-Vaults.svg" width="40"><br>**Key Vault** | <img src="../../assets/icons/azure/security/10241-icon-service-Microsoft-Defender-for-Cloud.svg" width="40"><br>**Defender** |
+|:---:|:---:|:---:|:---:|
+| `azure:azure-active-directory` | `azure:azure-ad-b2c` | `azure:key-vault` | `azure:defender-for-cloud` |
+
+#### Integração e Mensageria
+
+| <img src="../../assets/icons/azure/integration/10836-icon-service-Service-Bus.svg" width="40"><br>**Service Bus** | <img src="../../assets/icons/azure/integration/10206-icon-service-Event-Grid.svg" width="40"><br>**Event Grid** | <img src="../../assets/icons/azure/analytics/00039-icon-service-Event-Hubs.svg" width="40"><br>**Event Hubs** | <img src="../../assets/icons/azure/integration/02631-icon-service-Logic-Apps.svg" width="40"><br>**Logic Apps** |
+|:---:|:---:|:---:|:---:|
+| `azure:service-bus` | `azure:event-grid` | `azure:event-hubs` | `azure:logic-apps` |
+
+#### Monitor, DevOps e IA
+
+| <img src="../../assets/icons/azure/monitor/00001-icon-service-Monitor.svg" width="40"><br>**Monitor** | <img src="../../assets/icons/azure/devops/00012-icon-service-Application-Insights.svg" width="40"><br>**App Insights** | <img src="../../assets/icons/azure/devops/10261-icon-service-Azure-DevOps.svg" width="40"><br>**Azure DevOps** | <img src="../../assets/icons/azure/learning/03438-icon-service-Azure-OpenAI-Service.svg" width="40"><br>**Azure OpenAI** |
+|:---:|:---:|:---:|:---:|
+| `azure:monitor` | `azure:application-insights` | `azure:devops` | `azure:openai` |
+
+</div>
+
+> Catálogo completo: [`assets/icons/azure/AZURE-ICONS.md`](../../assets/icons/azure/AZURE-ICONS.md) — 705 ícones em 30 categorias.
+
+---
+
 ## Phase B — Business Architecture
 
 ### B.1 Mapa de Capacidades de Negócio

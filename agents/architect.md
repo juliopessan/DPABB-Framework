@@ -122,16 +122,52 @@ DevOps:        azure:devops, azure:container-registry
 
 ### Ícones Microsoft Originais (SVG locais — HTML img tags)
 
-**Localização:** `assets/icons/m365/` e `assets/icons/power-platform/`  
-**Catálogo completo:** `assets/icons/ICONS.md`  
-**Uso:** Em seções HTML do markdown (Team Plan, Legend, tabelas de papéis)
+**Localização:**
+- M365: `assets/icons/m365/` (62 SVGs — pessoas, infra, processo)
+- Power Platform: `assets/icons/power-platform/` (8 SVGs — PowerApps, Automate, etc.)
+- Azure: `assets/icons/azure/` (705 SVGs em 30 categorias — serviços Azure oficiais)
+
+**Catálogos:**
+- M365 + Power Platform: `assets/icons/ICONS.md`
+- Azure: `assets/icons/azure/AZURE-ICONS.md`
+
+**Uso:** Em seções HTML do markdown (Phase A.6 Legenda, Team Plan, RACI, tabelas de papéis)
 
 ```html
-<!-- Exemplo: papel na matriz RACI -->
+<!-- Papel na matriz RACI — ícones M365 -->
 <img src="../../assets/icons/m365/Person Wrench.svg" width="32">
-<!-- Exemplo: Power Platform em arquitetura -->
+
+<!-- Power Platform em arquitetura low-code -->
 <img src="../../assets/icons/power-platform/PowerAutomate_scalable.svg" width="32">
+
+<!-- Serviço Azure em legenda de componentes (Phase A.6) -->
+<img src="../../assets/icons/azure/compute/10035-icon-service-App-Services.svg" width="40">
+<img src="../../assets/icons/azure/databases/10130-icon-service-SQL-Database.svg" width="40">
+<img src="../../assets/icons/azure/security/10245-icon-service-Key-Vaults.svg" width="40">
+<img src="../../assets/icons/azure/identity/10230-icon-service-Azure-Active-Directory.svg" width="40">
 ```
+
+**Mapeamento rápido — Componente → SVG Azure:**
+| Componente | SVG Local |
+|-----------|----------|
+| Front Door + WAF | `azure/networking/10073-icon-service-Front-Door-and-CDN-Profiles.svg` |
+| API Management | `azure/devops/10042-icon-service-API-Management-Services.svg` |
+| App Service | `azure/compute/10035-icon-service-App-Services.svg` |
+| Functions | `azure/compute/10029-icon-service-Function-Apps.svg` |
+| AKS | `azure/compute/10023-icon-service-Kubernetes-Services.svg` |
+| SQL Database | `azure/databases/10130-icon-service-SQL-Database.svg` |
+| Cosmos DB | `azure/databases/10121-icon-service-Azure-Cosmos-DB.svg` |
+| Redis Cache | `azure/databases/10137-icon-service-Cache-for-Redis.svg` |
+| Storage | `azure/storage/10086-icon-service-Storage-Accounts.svg` |
+| Entra ID | `azure/identity/10230-icon-service-Azure-Active-Directory.svg` |
+| AD B2C | `azure/identity/10228-icon-service-Azure-AD-B2C.svg` |
+| Key Vault | `azure/security/10245-icon-service-Key-Vaults.svg` |
+| Service Bus | `azure/integration/10836-icon-service-Service-Bus.svg` |
+| Event Hubs | `azure/analytics/00039-icon-service-Event-Hubs.svg` |
+| Monitor | `azure/monitor/00001-icon-service-Monitor.svg` |
+| App Insights | `azure/devops/00012-icon-service-Application-Insights.svg` |
+| Azure DevOps | `azure/devops/10261-icon-service-Azure-DevOps.svg` |
+| Azure OpenAI | `azure/learning/03438-icon-service-Azure-OpenAI-Service.svg` |
 
 **Mapeamento Papel → Ícone M365:**
 | Papel | Ícone M365 |
