@@ -6,78 +6,141 @@
 
 ---
 
-## Objetivo
+## Pré-condições
 
-Conduzir uma sessão de elicitação estruturada para transformar uma ideia ou problema vago em um relatório de discovery rico em contexto, pronto para o @prd processar.
+- Nenhuma fase anterior (é a primeira fase)
+- Projeto nomeado pelo usuário
 
 ---
 
-## Execução
+## Etapa 0 — INIT (primeira execução)
 
-### Etapa 1 — Contextualização (2-3 perguntas)
+```
+1. Verificar se docs/output/{projeto}/ existe
+   → Se não: criar diretório
+
+2. Verificar se docs/output/{projeto}/memory.md existe
+   → Se não: criar a partir de framework/memory.md (substituir {PROJETO})
+
+3. Verificar se docs/output/{projeto}/pipeline-state.json existe
+   → Se não: criar a partir de framework/pipeline-state.json (substituir {projeto})
+
+4. Read: framework/lessons-learned.md
+   → Grep: [DISCOVERY] → aplicar lições relevantes desta sessão
+
+5. Read: docs/output/{projeto}/memory.md
+   → Se já existe (retomada): carregar perguntas respondidas, não repetir
+
+6. Write: pipeline-state.json
+   → phases.discovery.status = "in_progress"
+   → phases.discovery.started_at = {ISO_DATE}
+```
+
+---
+
+## Etapa 1 — Contextualização
+
+> Antes de iniciar: ler `memory.md § Perguntas Respondidas` e pular as que já têm resposta.
 
 Faça as perguntas abaixo de forma conversacional, uma a uma:
 
-1. "Qual é o nome do projeto/produto e em qual empresa ou contexto ele será desenvolvido?"
-2. "Descreva o problema principal que estamos resolvendo em 2-3 frases. Qual é a dor real?"
+1. "Qual é o nome do projeto e em qual empresa ou contexto ele será desenvolvido?"
+2. "Descreva o problema principal em 2-3 frases. Qual é a dor real?"
 3. "Por que resolver isso agora? Qual foi o gatilho?"
 
-Registre as respostas antes de continuar.
+---
 
-### Etapa 2 — Stakeholders (2-3 perguntas)
+## Etapa 2 — Stakeholders
 
 4. "Quem são os principais stakeholders? Liste: quem paga, quem usa, quem aprova."
 5. "Qual é o objetivo principal de cada stakeholder com este projeto?"
 6. "Existe alguém que pode bloquear ou resistir ao projeto? Por quê?"
 
-### Etapa 3 — Problema em Profundidade (3-4 perguntas)
+---
 
-7. "Como o problema é resolvido hoje? (processo manual, outra ferramenta, não resolvido?)"
+## Etapa 3 — Problema em Profundidade
+
+7. "Como o problema é resolvido hoje?"
 8. "Qual é o impacto financeiro ou operacional do problema não resolvido?"
 9. "O que seria uma solução ideal na visão dos stakeholders?"
 10. "Há tentativas anteriores de resolver esse problema? O que não funcionou?"
 
-### Etapa 4 — Restrições (2-3 perguntas)
+> **Lição aplicada [DISCOVERY]:** Se resposta for vaga, perguntar "quanto custa isso por mês?" antes de continuar.
 
-11. "Há tecnologias obrigatórias ou proibidas no contexto da empresa?"
-12. "Há integrações com sistemas existentes que são obrigatórias?"
-13. "Há restrições regulatórias? (LGPD, PCI DSS, SOC2, setor regulado?)"
+---
+
+## Etapa 4 — Restrições
+
+11. "Há tecnologias obrigatórias ou proibidas?"
+12. "Há integrações com sistemas existentes obrigatórias?"
+13. "Há restrições regulatórias? (LGPD, PCI, SOC2, setor regulado?)"
 14. "Qual é o prazo indicativo e o orçamento disponível?"
 
-### Etapa 5 — Métricas (1-2 perguntas)
+---
+
+## Etapa 5 — Métricas
 
 15. "Como o sucesso será medido em 6 meses? Quais são os KPIs?"
-16. "Qual é o mínimo aceitável para considerar o projeto um sucesso (MVP)?"
+16. "Qual é o mínimo aceitável para o MVP?"
 
 ---
 
-## Geração do Output
+## Etapa 6 — Geração do Artefato
 
-Após coletar todas as respostas, preencher o template:
-`templates/discovery/discovery-report.md`
-
-Salvar em: `docs/output/{projeto}/discovery-report.md`
+Preencher template: `templates/discovery/discovery-report.md`  
+Substituir todos os `{PLACEHOLDER}` com dados coletados.
 
 ---
 
-## Validação
-
-Antes de finalizar, executar o checklist do agente (`agents/discovery.md § Checklist de Qualidade`).
-
-Se algum item falhar, fazer as perguntas de follow-up necessárias.
-
----
-
-## Handoff para @prd
-
-Ao finalizar, comunicar:
+## Etapa 7 — SAVE (via artifact-manager)
 
 ```
-Discovery concluído. 
+1. Write: docs/output/{projeto}/discovery-report.md
 
-Resumo: {2-3 linhas do problema e contexto}
-Requerimentos de alto nível identificados: {N}
+2. Write: docs/output/{projeto}/memory.md (update)
+   → Preencher: Contexto Acumulado (problema, stakeholders, restrições)
+   → Preencher: Handoff Discovery → PRD:
+     "Problema: {resumo}
+      RQs levantados: {N}
+      Restrições críticas: {lista}
+      Prazo/orçamento: {valores}
+      KPIs: {lista}"
+   → Preencher: Perguntas Respondidas (todas as 16)
+   → Preencher: Artefatos Produzidos → discovery-report.md = ✅
+   → Preencher: Decisões Tomadas (restrições fixas)
+   → Atualizar: fase_atual = "prd"
+
+3. Write: pipeline-state.json
+   → phases.discovery.status = "completed"
+   → phases.discovery.completed_at = {ISO_DATE}
+   → phases.discovery.artifact_exists = true
+   → phases.discovery.handoff_written = true
+   → current_phase = "prd"
+   → memory.questions_answered = 16
+```
+
+---
+
+## Validação antes de SAVE
+
+Checar: `agents/discovery.md § Checklist de Qualidade` (7/7 para GO)
+
+---
+
+## Comunicar ao usuário
+
+```
+Discovery concluído ✅
+
+Problema: {1 linha}
+Stakeholders: {N} identificados
+Requerimentos de alto nível: {N}
 Riscos críticos: {lista breve}
 
-Pronto para @prd *generate
+Artefatos salvos:
+  ✅ docs/output/{projeto}/discovery-report.md
+  ✅ docs/output/{projeto}/memory.md (iniciado)
+  ✅ docs/output/{projeto}/pipeline-state.json
+
+Próxima fase: @prd *generate
 ```

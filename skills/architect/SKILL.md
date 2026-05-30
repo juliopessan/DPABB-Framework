@@ -1,108 +1,188 @@
-# Skill: Architecture Design
+# Skill: Architecture Design (TOGAF + Mermaid)
 
 **Agente:** @architect (Aria)  
 **Trigger:** `*design`  
-**Input:** `docs/output/{projeto}/prd.md`  
+**Método:** TOGAF 10 — ADM Phases A–E  
+**Input:** `docs/output/{projeto}/prd.md` + `docs/output/{projeto}/memory.md`  
 **Output:** `docs/output/{projeto}/architecture.md`
-
----
-
-## Objetivo
-
-Propor uma arquitetura técnica fundamentada que cubra todos os NFRs do PRD, com decisões documentadas em ADRs e trade-offs explícitos.
 
 ---
 
 ## Pré-condições
 
-- [ ] `prd.md` existe e está aprovado
-- [ ] NFRs de performance, segurança e disponibilidade definidos
-- [ ] Restrições técnicas documentadas
+- [ ] `pipeline-state.json` → `phases.prd.status = "completed"`
+- [ ] `prd.md` existe com NFRs definidos
+- [ ] `memory.md` existe com handoff PRD → Architect
 
 ---
 
-## Execução
+## Etapa 0 — LOAD (via artifact-manager)
 
-### Etapa 1 — Análise de Complexidade
-Preencher a matriz de complexidade (5 dimensões, score 1-5):
-- Escopo, Integração, Infraestrutura, Conhecimento, Risco
-- Classificar: SIMPLE / STANDARD / COMPLEX
+```
+1. Read: docs/output/{projeto}/pipeline-state.json
+   → Verificar prd.status = "completed"
 
-### Etapa 2 — Escolha do Estilo Arquitetural
-Avaliar estilos com base em:
-- Classificação de complexidade
-- Restrições técnicas do PRD
-- NFRs (especialmente escala e disponibilidade)
-- Tamanho da equipe (inferir do contexto ou perguntar)
+2. Read: docs/output/{projeto}/memory.md
+   → Extrair: handoff PRD→Architect, decisões fixas, restrições técnicas
 
-Documentar alternativas descartadas e motivo.
+3. Read: framework/lessons-learned.md
+   → Grep: [ARCHITECT] → aplicar lições relevantes
 
-### Etapa 3 — Stack Tecnológica
-Para cada camada (frontend, backend, banco, auth, infra, CI/CD, monitoramento):
-- Propor tecnologia
-- Justificar com base em NFR ou restrição
-- Verificar restrições técnicas do PRD antes de propor
+4. Read: docs/output/{projeto}/prd.md
+   → Extrair: NFRs, restrições técnicas, personas, FRs críticos
 
-### Etapa 4 — Componentes
-- Listar componentes principais com responsabilidades claras
-- Definir contratos/interfaces entre componentes
-- Descrever diagramas C4 Context e Container em texto
-
-### Etapa 5 — Modelo de Dados
-- Identificar entidades principais e seus relacionamentos
-- Não prescrever DDL completo (é tarefa do @data-engineer se necessário)
-- Documentar estratégia de armazenamento por tipo de dado
-
-### Etapa 6 — Segurança
-Sempre cobrir:
-- Autenticação (solução e protocolo)
-- Autorização (RBAC, ABAC, ou simples)
-- Criptografia em trânsito e repouso
-- Gestão de segredos (vault, env vars, etc.)
-- LGPD se dados pessoais envolvidos
-
-### Etapa 7 — ADRs
-Criar pelo menos 3 ADRs para:
-- Escolha de stack principal
-- Solução de autenticação
-- Estratégia de banco de dados
-
-Formato: `agents/architect.md § Formato de ADR`
-
-### Etapa 8 — Riscos Técnicos
-Para cada risco: probabilidade, impacto, mitigação proposta
-
-### Etapa 9 — Cobertura de NFRs
-Tabela mapeando cada NFR para a decisão arquitetural que o cobre.
-
-### Etapa 10 — Geração
-Preencher template: `templates/architect/architecture.md`  
-Salvar em: `docs/output/{projeto}/architecture.md`
+5. Write: pipeline-state.json
+   → phases.architect.status = "in_progress"
+   → phases.architect.started_at = {ISO_DATE}
+```
 
 ---
 
-## Perguntas de Clarificação
+## Etapa 1 — Phase A: Architecture Vision
 
-Fazer ao usuário apenas se necessário:
-- "O PRD restringe tecnologia mas não especifica versão — há preferência?"
-- "A equipe já usa [tecnologia X] — devo mantê-la para reduzir curva de aprendizado?"
-- "Não encontrei informação sobre o tamanho da equipe — quantos devs?"
+1. Ler contexto do memory.md (handoff PRD→Architect)
+2. Identificar capacidades de negócio ausentes (gap As-Is → To-Be)
+3. Definir princípios arquiteturais (sempre incluir Security by Design e Observability First)
+4. Mapear preocupações de cada stakeholder
+5. **Gerar diagrama de Contexto** (Mermaid `architecture-beta` com ícones Azure)
+6. Classificar complexidade (5 dimensões × score 1-5 = total /25)
+
+---
+
+## Etapa 2 — Phase B: Business Architecture
+
+1. Mapear capacidades de negócio necessárias (mindmap Mermaid)
+2. Desenhar fluxo To-Be do processo principal (flowchart Mermaid)
+3. Preencher Matriz Ator × Capacidade com base nas personas do PRD
+
+---
+
+## Etapa 3 — Phase C1: Data Architecture
+
+1. Identificar entidades principais a partir dos FRs
+2. **Gerar diagrama ER** (Mermaid `erDiagram`)
+3. Definir estratégia de armazenamento por tipo de dado
+4. Se dados pessoais: documentar política LGPD (retenção, exclusão, criptografia)
+5. Criar diagrama de fluxo de dados (flowchart Mermaid)
+
+---
+
+## Etapa 4 — Phase C2: Application Architecture
+
+1. Montar catálogo de componentes com responsabilidades
+2. **Gerar diagrama de Container** (Mermaid `architecture-beta` com ícones Azure)
+   - Usar ícones Azure específicos por serviço (não genéricos)
+   - Agrupar por zona: Frontend / Backend / Data / Infrastructure
+   - Mostrar todas as dependências entre componentes
+3. **Gerar diagrama de Sequência** para o fluxo principal (Mermaid `sequenceDiagram`)
+   - Incluir: Actor → SPA → APIM → Service → DB → Cache → Auth
+   - Mostrar cache hit/miss
+   - Mostrar erros e fallbacks
+
+---
+
+## Etapa 5 — Phase D: Technology Architecture
+
+1. Selecionar stack completa (frontend, backend, banco, auth, infra, CI/CD, monitor)
+2. **Gerar diagrama de Tecnologia** (Mermaid `architecture-beta` — nível infraestrutura)
+   - Usar ícones Azure para todos os serviços cloud
+   - Mostrar zonas de rede (Public, Private, Data, Security)
+3. Documentar estratégia de segurança (WAF, APIM, Entra ID, KV)
+4. **Gerar diagrama de CI/CD** (Mermaid `flowchart`)
+5. Definir estratégia de observabilidade
+
+---
+
+## Etapa 6 — ADRs
+
+Criar mínimo 3 ADRs obrigatórios:
+- **ADR-001:** Estilo arquitetural (Monolito / Microservices / etc.)
+- **ADR-002:** Banco de dados (tecnologia + tier)
+- **ADR-003:** Autenticação (protocolo + produto)
+
+Cada ADR DEVE ter:
+- Mínimo 2 alternativas rejeitadas com motivo técnico
+- Consequências positivas E negativas (trade-offs honestos)
+- Condição de revisão futura
+
+---
+
+## Etapa 7 — Phase E: Opportunities & Solutions
+
+1. Definir work packages agrupando componentes por dependência
+2. **Gerar diagrama Gantt** com sequência de entrega (Mermaid `gantt`)
+3. Avaliar build vs buy vs integrate por componente
+4. Documentar riscos técnicos (probabilidade × impacto)
+
+---
+
+## Etapa 8 — Cobertura de NFRs
+
+Montar tabela mapeando cada NFR para:
+- Solução arquitetural específica
+- Fase TOGAF onde é endereçado
+- ADR relacionado (se houver)
+
+**Regra:** 100% dos NFRs Must/Should devem ter cobertura documentada.
+
+---
+
+## Etapa 9 — SAVE (via artifact-manager)
+
+```
+1. Write: docs/output/{projeto}/architecture.md
+   → Usando template: templates/architect/architecture.md
+
+2. Write: docs/output/{projeto}/memory.md (update)
+   → Adicionar seção "Architect → Backlog":
+     - Estilo arquitetural: {escolha}
+     - Stack: {resumo}
+     - Componentes: {lista}
+     - Complexidade: SIMPLE / STANDARD / COMPLEX
+     - Stories técnicas obrigatórias: WP-01 = TECH-001, TECH-002...
+   → Atualizar Artefatos Produzidos: architecture.md = ✅
+   → Atualizar Decisões Tomadas: stack, auth, banco
+
+3. Write: pipeline-state.json
+   → phases.architect.status = "completed"
+   → phases.architect.completed_at = {ISO_DATE}
+   → phases.architect.artifact_exists = true
+   → phases.architect.handoff_written = true
+   → phases.architect.diagrams = { context: true, container: true, component: true, technology: true }
+   → current_phase = "backlog"
+```
 
 ---
 
 ## Handoff para @backlog
 
+Escrever no memory.md:
+
 ```
-Arquitetura concluída.
+### Architect → Backlog
 
 Estilo: {Monolito Modular / Microservices / etc.}
-Stack principal: {resumo em 1 linha}
-Componentes definidos: {N}
-ADRs documentados: {N}
-NFRs cobertos: {N}/{N}
+Stack: {resumo em 1 linha — ex: Next.js + Node.js + Azure SQL + Redis + Entra ID}
+Complexidade: SIMPLE / STANDARD / COMPLEX → Estimativa base: {N} pts/componente
 
-Complexidade estimada: SIMPLE / STANDARD / COMPLEX
-Riscos técnicos críticos: {lista breve}
+Componentes que viram stories técnicas (TECH-XXX):
+- TECH-001: Setup repositório + Azure DevOps CI/CD + environments (dev/staging/prod)
+- TECH-002: Configurar Entra ID + APIM JWT validation + RBAC seed
+- TECH-003: Provisionar Azure SQL + Redis Cache + Key Vault + App Insights
+- TECH-004: {componente específico do projeto}
 
-Pronto para @backlog *breakdown
+WPs para mapear em Epics:
+- WP-01 → Epic EPIC-TECH (foundation)
+- WP-02 → Epic EPIC-{domínio A}
+- WP-03 → Epic EPIC-{domínio B}
+
+Riscos técnicos a virar stories de spike:
+- RT-01: {risco} → Story de investigação {N} pts
 ```
+
+---
+
+## Validação antes de SAVE
+
+Executar checklist: `agents/architect.md § Checklist de Qualidade`  
+Mínimo exigido: 8/9 itens antes de marcar fase como completed.

@@ -1,0 +1,93 @@
+{
+  "_comment": "Estado do pipeline. Atualizado automaticamente por cada agente ao iniciar e finalizar sua fase.",
+  "project": "{PROJETO}",
+  "version": "1.0",
+  "created_at": "{ISO_DATE}",
+  "updated_at": "{ISO_DATE}",
+
+  "current_phase": "discovery",
+  "pipeline_status": "in_progress",
+
+  "phases": {
+    "discovery": {
+      "status": "pending",
+      "started_at": null,
+      "completed_at": null,
+      "agent": "scout",
+      "artifact": "docs/output/{projeto}/discovery-report.md",
+      "artifact_exists": false,
+      "quality_gate": null,
+      "handoff_written": false
+    },
+    "prd": {
+      "status": "pending",
+      "started_at": null,
+      "completed_at": null,
+      "agent": "priya",
+      "artifact": "docs/output/{projeto}/prd.md",
+      "artifact_exists": false,
+      "quality_gate": null,
+      "handoff_written": false,
+      "depends_on": ["discovery"]
+    },
+    "architect": {
+      "status": "pending",
+      "started_at": null,
+      "completed_at": null,
+      "agent": "aria",
+      "artifact": "docs/output/{projeto}/architecture.md",
+      "artifact_exists": false,
+      "quality_gate": null,
+      "handoff_written": false,
+      "depends_on": ["prd"],
+      "diagrams": {
+        "context": false,
+        "container": false,
+        "component": false,
+        "technology": false
+      }
+    },
+    "backlog": {
+      "status": "pending",
+      "started_at": null,
+      "completed_at": null,
+      "agent": "ben",
+      "artifact": "docs/output/{projeto}/backlog.md",
+      "artifact_exists": false,
+      "quality_gate": null,
+      "handoff_written": false,
+      "depends_on": ["prd", "architect"],
+      "metrics": {
+        "total_epics": 0,
+        "total_stories": 0,
+        "total_points": 0,
+        "sprint1_points": 0,
+        "estimated_sprints": 0
+      }
+    },
+    "business_case": {
+      "status": "pending",
+      "started_at": null,
+      "completed_at": null,
+      "agent": "biz",
+      "artifact": "docs/output/{projeto}/business-case.md",
+      "artifact_exists": false,
+      "quality_gate": null,
+      "handoff_written": false,
+      "depends_on": ["discovery", "prd", "architect", "backlog"],
+      "recommendation": null,
+      "roi_24m": null,
+      "payback_months": null
+    }
+  },
+
+  "memory": {
+    "path": "docs/output/{projeto}/memory.md",
+    "last_updated": null,
+    "questions_answered": 0,
+    "tokens_saved_estimate": 0
+  },
+
+  "lessons_applied": [],
+  "decisions": []
+}
