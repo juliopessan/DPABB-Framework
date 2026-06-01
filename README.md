@@ -73,7 +73,7 @@ O pipeline avança automaticamente fase a fase, lendo o `memory.md` para não re
 ## Estrutura do Repositório
 
 ```
-requirements-intel/
+DPABB-Framework/
 │
 ├── CLAUDE.md                        ← Configuração AIOS + regras de memória
 │

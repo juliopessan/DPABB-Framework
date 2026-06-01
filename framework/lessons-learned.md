@@ -45,6 +45,16 @@ O @business-case é responsável por adicionar novas lições ao finalizar cada 
 **Aplicar quando:** Sempre, ao finalizar cada fase.  
 **Lição:** O handoff deve ter: decisões-chave + números críticos + o que NÃO explorar.
 
+### [DISCOVERY] Definir escopo de privacidade e nivel de agregacao no inicio evita retrabalho
+**Contexto:** Em projetos com dados de comunicacao corporativa, quando o nivel de analise (agregado vs individual) nao e decidido no discovery, PRD e arquitetura precisam ser revisados depois.  
+**Aplicar quando:** Casos com dados sensiveis (chat, email, colaboracao interna).  
+**Lição:** Registrar no discovery a fronteira de privacidade e o nivel de agregacao permitido para todas as camadas de consumo.
+
+### [BUSINESS-CASE] Modelar cenario base com gates obrigatorios melhora decisao executiva
+**Contexto:** Recomendacoes binarias (GO/NO-GO) sem condicoes de qualidade e governanca nao refletem risco real em projetos de IA aplicada.  
+**Aplicar quando:** PoCs de IA com dados sensiveis e risco de escala de custo.  
+**Lição:** Emitir "GO com condicoes" com gates explicitos (compliance, qualidade de modelo, custo de escala) aumenta confianca e governanca da decisao.
+
 ---
 
 ## Armadilhas Comuns

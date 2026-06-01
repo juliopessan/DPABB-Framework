@@ -146,7 +146,7 @@
 
 ## 🟪 Framework — Melhorias Pendentes
 
-> Melhorias ao próprio requirements-intel framework
+> Melhorias ao próprio DPABB Framework
 
 - [ ] Criar integração com Linear para importar backlog automaticamente
 - [ ] Criar integração com Azure DevOps para criar work items

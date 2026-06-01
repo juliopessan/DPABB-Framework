@@ -137,8 +137,40 @@
 
 ---
 
+## Enrichment Section A - Generic Delivery Snapshot
+
+| Campo | Valor |
+|---|---|
+| Escopo do release | |
+| Capacidade por sprint | |
+| Janela de entrega | |
+| Dependências críticas | |
+
+---
+
+## Enrichment Section B - Generic Dependency and Risk Controls
+
+### B.1 Dependency Watchlist
+| Dependência | Tipo | Owner | Status |
+|---|---|---|---|
+| {Dependência} | Interna/Externa | {Owner} | Open |
+
+### B.2 Delivery Risk Triggers
+1. {Trigger de risco}
+2. {Trigger de risco}
+
+---
+
+## Enrichment Section C - Generic Quality and Governance Add-on
+
+- Definition of Ready mínimo por story crítica.
+- Definition of Done com evidência de teste e rastreabilidade FR/NFR.
+- Gate de aceite por sprint com checklist funcional e técnico.
+
+---
+
 ## Histórico de Versões
 
 | Versão | Data | Autor | Mudança |
 |--------|------|-------|---------|
-| 1.0 | {DATA} | @backlog | Versão inicial |
+| 1.0 | {DATA} | @backlog | Estrutura base preservada + seções genéricas de enriquecimento |
