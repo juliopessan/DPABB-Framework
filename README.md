@@ -92,7 +92,7 @@ requirements-intel/
 │   └── prd/SKILL.md
 │
 ├── templates/                       ← Templates de output por fase
-│   ├── architect/architecture.md    ← TOGAF completo com 11 diagramas Mermaid
+│   ├── architect/architecture.md    ← TOGAF completo com 14 diagramas Mermaid
 │   ├── backlog/backlog.md
 │   ├── business-case/business-case.md
 │   ├── discovery/discovery-report.md
@@ -100,7 +100,7 @@ requirements-intel/
 │
 ├── framework/                       ← Arquivos globais do framework
 │   ├── memory.md                    ← Template de memória por projeto
-│   ├── lessons-learned.md           ← Lições acumuladas entre projetos
+│   ├── lessons-learned.md           ← Lições acumuladas entre projetos (auto-evolutivo)
 │   ├── pipeline-state.json          ← Template de estado do pipeline
 │   └── todo.md                      ← Template de TODO por projeto
 │
@@ -109,11 +109,11 @@ requirements-intel/
 │   └── checklists/pipeline-quality.md
 │
 ├── assets/icons/                    ← Ícones Microsoft oficiais
-│   ├── ICONS.md                     ← Catálogo M365 + Power Platform
+│   ├── ICONS.md                     ← Catálogo M365 + Power Platform + referência Azure
 │   ├── m365/                        ← 62 SVGs Microsoft 365 (pessoas, infra, processo)
 │   ├── power-platform/              ← 8 SVGs Power Platform
 │   └── azure/                       ← 705 SVGs Azure Public Service Icons V23
-│       └── AZURE-ICONS.md           ← Catálogo completo com Mermaid alt
+│       └── AZURE-ICONS.md           ← Catálogo completo por categoria com Mermaid alt
 │
 ├── workflows/
 │   ├── requirements-pipeline.md    ← Pipeline completo 5 fases
@@ -121,8 +121,8 @@ requirements-intel/
 │
 └── docs/
     ├── example-run.md               ← Exemplo de execução
-    └── output/                      ← Artefatos gerados por projeto
-        └── estapar-ocr/             ← Exemplo: Estapar OCR Fechamento de Caixa
+    └── output/                      ← Artefatos gerados por projeto (gitignored por padrão)
+        └── {projeto}/
             ├── discovery-report.md
             ├── prd.md
             ├── architecture.md
@@ -148,18 +148,18 @@ memory.md
 └── Changelog
 ```
 
-**Economia de tokens estimada:** ~75% por fase (agente lê o handoff, não o artefato inteiro anterior)
+**Economia de tokens estimada:** ~75% por fase — o agente lê apenas o handoff comprimido, não o artefato completo da fase anterior.
 
 ---
 
 ## Arquitetura — TOGAF + Mermaid
 
-O `@architect` usa **TOGAF 10 ADM (Phases A–E)** e gera obrigatoriamente 11 diagramas Mermaid:
+O `@architect` usa **TOGAF 10 ADM (Phases A–E)** e gera obrigatoriamente os seguintes diagramas Mermaid:
 
 | Diagrama | Tipo Mermaid | Fase TOGAF |
 |----------|-------------|-----------|
 | Contexto (C4 L1) | `architecture-beta` | Phase A |
-| Legenda Azure (componentes) | HTML `<img>` + SVGs locais | Phase A |
+| Legenda de componentes Azure | HTML `<img>` + SVGs locais | Phase A |
 | Capacidades de negócio | `mindmap` | Phase B |
 | Processo To-Be | `flowchart TD` | Phase B |
 | ER Conceitual | `erDiagram` | Phase C1 |
@@ -169,19 +169,20 @@ O `@architect` usa **TOGAF 10 ADM (Phases A–E)** e gera obrigatoriamente 11 di
 | Tecnologia / Infra | `architecture-beta` | Phase D |
 | Rede e segurança | `flowchart TB` | Phase D |
 | CI/CD | `flowchart LR` | Phase D |
-| Roadmap | `gantt` | Phase E |
+| Roadmap de entrega | `gantt` | Phase E |
 | Ramp-up de equipe | `gantt` | Phase E |
-| Onboarding | `flowchart TD` | Phase E |
+| Onboarding por papel | `flowchart TD` | Phase E |
 
-### Ícones em diagramas Mermaid (`azure:` / `mdi:`)
+### Ícones em diagramas Mermaid (`azure:` e `mdi:`)
 
 ```
-azure:api-management    azure:app-service        azure:functions
-azure:kubernetes-service azure:sql-database      azure:cosmos-db
-azure:cache-for-redis   azure:storage-accounts   azure:key-vault
-azure:monitor           azure:application-insights azure:service-bus
-azure:event-hubs        azure:front-door          azure:devops
-azure:azure-active-directory  azure:openai        azure:cognitive-services
+azure:api-management       azure:app-service          azure:functions
+azure:kubernetes-service   azure:sql-database         azure:cosmos-db
+azure:cache-for-redis      azure:storage-accounts     azure:key-vault
+azure:monitor              azure:application-insights azure:service-bus
+azure:event-hubs           azure:front-door            azure:devops
+azure:azure-active-directory  azure:openai            azure:cognitive-services
+mdi:web  mdi:cellphone  mdi:account-group  mdi:database  mdi:server
 ```
 
 ### Ícones locais SVG (HTML `<img>` — Team Plan, RACI, Legenda)
@@ -196,74 +197,65 @@ azure:azure-active-directory  azure:openai        azure:cognitive-services
 
 ## Team Plan (Phase E)
 
-O `@architect` gera automaticamente na Phase E um **plano completo de equipe** com:
+O `@architect` gera automaticamente na Phase E um **plano completo de equipe**:
 
-- **E.4** Composição: tabela com ícones M365 por papel (PO, Arquiteto, Tech Lead, Devs, DevOps, QA, Data Engineer, UX, Scrum Master)
-- **E.5** Ramp-up: Gantt com quando cada papel entra no projeto
-- **E.6** RACI: matriz de responsabilidades com ícones M365 nos cabeçalhos
-- **E.7** Custo: tabela de custo/mês por papel com multiplicador CLT ×1,7
-- **E.8** Onboarding: flowchart bifurcado por papel com tempo por papel
-- **E.9** Comunicação: ferramentas e canais por categoria
+| Seção | Conteúdo |
+|-------|---------|
+| **E.4 Composição** | Tabela com ícones M365 por papel — PO, Arquiteto, Tech Lead, Devs, DevOps, QA, Data Engineer, UX, Scrum Master |
+| **E.5 Ramp-up** | Gantt com quando cada papel entra no projeto + marcos (Kick-off, Sprint 0, MVP, Go-live) |
+| **E.6 RACI** | Matriz de responsabilidades (R/A/C/I) com ícones M365 nos cabeçalhos |
+| **E.7 Custo** | Tabela custo/mês por papel, dedicação, duração, total — com multiplicador CLT ×1,7 |
+| **E.8 Onboarding** | Flowchart bifurcado por papel com tempo de integração por função |
+| **E.9 Comunicação** | Ferramentas e canais por categoria (daily, sprint, demo, tracking, code) |
 
 ---
 
 ## Auto-Evolutivo — Lessons Learned
 
-Ao final de cada pipeline completo, o `@business-case` atualiza o `framework/lessons-learned.md` com novas lições. Todo agente lê as lições da sua fase (`grep [FASE]`) antes de executar.
+Ao final de cada pipeline completo, o `@business-case` atualiza `framework/lessons-learned.md` com novas lições. Todo agente lê as lições da sua fase (`grep [FASE]`) antes de executar.
 
 ```
 lessons-learned.md
 ├── [DISCOVERY] — Padrões de elicitação eficaz
-├── [PRD] — NFRs com métrica mensurável
+├── [PRD]       — NFRs com métrica mensurável
 ├── [ARCHITECT] — Monolito para equipes pequenas
-├── [BACKLOG] — Stories técnicas no Sprint 1
-└── [PIPELINE] — Handoff escrito economiza >40% tokens
+├── [BACKLOG]   — Stories técnicas no Sprint 1
+└── [PIPELINE]  — Handoff escrito economiza >40% tokens
 ```
-
----
-
-## Exemplo de Output: Estapar OCR
-
-Pipeline executado sobre a **Especificação Funcional v1.1 — Estapar OCR/Orquestrador (Fechamento de Caixa)**:
-
-| Artefato | Highlights |
-|---------|-----------|
-| `discovery-report.md` | 11 sistemas PDV, 9+ bancos, 18 RNs extraídas, 9 itens pendentes mapeados |
-| `prd.md` | 32 FRs com critérios BDD + 13 NFRs com métricas + rastreabilidade FR→RN |
-| `architecture.md` | TOGAF ADM A–E, 11 diagramas Mermaid, 3 ADRs, Team Plan 9 pessoas |
-| `backlog.md` | 8 épicos, 54 stories, 273 story points, 8 sprints (~4 meses) |
-| `business-case.md` | ROI 18,7% em 24 meses, payback ~16 meses, recomendação **GO** |
 
 ---
 
 ## Pipeline State Machine
 
-O `pipeline-state.json` por projeto controla o estado de cada fase:
+O `pipeline-state.json` por projeto controla o estado de cada fase e bloqueia execução fora de ordem:
 
 ```json
 {
   "current_phase": "architect",
   "pipeline_status": "in_progress",
   "phases": {
-    "discovery": { "status": "completed", "artifact_exists": true },
-    "prd":       { "status": "completed", "artifact_exists": true },
-    "architect": { "status": "in_progress" },
-    "backlog":   { "status": "pending" },
-    "business_case": { "status": "pending" }
+    "discovery":      { "status": "completed", "artifact_exists": true },
+    "prd":            { "status": "completed", "artifact_exists": true },
+    "architect":      { "status": "in_progress" },
+    "backlog":        { "status": "pending", "depends_on": ["prd", "architect"] },
+    "business_case":  { "status": "pending", "depends_on": ["discovery", "prd", "architect", "backlog"] }
   }
 }
 ```
 
-Nenhuma fase inicia sem que as dependências estejam `"completed"`.
-
 ---
 
-## Contribuindo
+## Artefatos por Fase
 
-1. Adicione lições em `framework/lessons-learned.md` com a tag `[FASE]`
-2. Melhore templates em `templates/{fase}/`
-3. Estenda agents em `agents/{agente}.md`
-4. Adicione novos workflows em `workflows/`
+Cada fase produz um artefato em `docs/output/{projeto}/`:
+
+| Fase | Artefato | Conteúdo típico |
+|------|---------|----------------|
+| Discovery | `discovery-report.md` | Stakeholders, problema, regras de negócio, riscos, itens pendentes |
+| PRD | `prd.md` | FRs com critérios BDD, NFRs com métricas, personas, rastreabilidade |
+| Architect | `architecture.md` | TOGAF A–E, 14 diagramas Mermaid, 3+ ADRs, Team Plan E.4–E.9 |
+| Backlog | `backlog.md` | Épicos, stories, story points, Sprint 1 plan, rastreabilidade FR→Story |
+| Business Case | `business-case.md` | TCO, ROI, payback, análise de sensibilidade, recomendação GO/NO-GO |
 
 ---
 
@@ -271,6 +263,6 @@ Nenhuma fase inicia sem que as dependências estejam `"completed"`.
 
 - **Runtime:** Claude Code (Anthropic) com AIOS Framework
 - **Diagramas:** Mermaid.js (`architecture-beta`, `erDiagram`, `sequenceDiagram`, `gantt`, `mindmap`, `flowchart`)
-- **Ícones:** Microsoft Azure Icons V23 (705 SVGs) + Microsoft 365 Icons + Power Platform Icons
-- **Metodologia:** TOGAF 10 ADM | C4 Model | MoSCoW | BDD (Given/When/Then)
-- **Estado:** JSON state machine por projeto
+- **Ícones:** Microsoft Azure Icons V23 (705 SVGs) · Microsoft 365 Icons (62 SVGs) · Power Platform Icons (8 SVGs)
+- **Metodologia:** TOGAF 10 ADM · C4 Model · MoSCoW · BDD (Given/When/Then) · Story Points
+- **Estado:** JSON state machine por projeto com dependências entre fases
