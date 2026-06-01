@@ -1,4 +1,4 @@
-# Requirements Intel — AIOS Framework
+# DPABB Framework
 
 > Pipeline AIOS de 5 fases que transforma uma especificação bruta em **Discovery Report + PRD + Arquitetura TOGAF + Backlog + Business Case** — totalmente gerados por agentes de IA especializados.
 
