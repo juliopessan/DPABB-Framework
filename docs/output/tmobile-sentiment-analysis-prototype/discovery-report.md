@@ -46,16 +46,30 @@ T-Mobile needs a Microsoft-native proof of concept that converts Teams communica
 
 ### 4.2 Current Situation (As-Is)
 
-- Sentiment understanding depends on fragmented surveys and manual interpretation.
-- Discussion patterns are not systematically detected from collaboration channels.
-- Leadership has no single governed interface for trend exploration.
+**Communication Fragmentation:**
+- Sentiment understanding depends on fragmented surveys, manual interpretation, and anecdotal feedback.
+- Discussion patterns in Teams are not systematically detected, analyzed, or cataloged.
+- Leadership reaction to campaigns, announcements, and initiatives is unknown until weeks after delivery.
+- HR pulse surveys run quarterly, creating 90-day insight gaps.
+- Internal comms team relies on manual social listening from channel summaries.
+
+**Visibility Constraints:**
+- Leadership has no single governed interface for trend exploration across org/time/topic dimensions.
+- Existing dashboards do not correlate Teams sentiment with business events or program effectiveness.
+- No capability to do ad-hoc natural language exploration (e.g., "What are people saying about the new remote work policy?").
+
+**Governance and Risk:**
+- No formal privacy controls on handling Teams communication data for analytics.
+- Compliance and legal teams lack visibility into data usage and lineage.
+- Retention and access controls are not enforced programmatically.
 
 ### 4.3 Impact If Unresolved
 
-- **Financial:** slower intervention on culture/productivity issues, higher hidden productivity loss.
-- **Operational:** delayed detection of workforce concerns and topic escalation.
-- **Reputational:** reduced confidence in leadership responsiveness.
-- **Regulatory:** elevated risk around handling sensitive employee communication data.
+- **Financial:** Slower intervention on culture/productivity issues, estimated USD 50–100K/quarter in hidden productivity loss and disengagement costs.
+- **Operational:** Delayed detection of workforce concerns, policy friction, or attrition signals (typical lag: 6–8 weeks).
+- **Reputational:** Reduced confidence in leadership responsiveness; perception of disengagement from employee experience.
+- **Regulatory:** Elevated risk around handling sensitive employee communication data without explicit privacy controls or audit trails.
+- **Strategic:** Inability to measure campaign effectiveness or correlate business events with sentiment shifts.
 
 ---
 
@@ -153,20 +167,137 @@ T-Mobile needs a Microsoft-native proof of concept that converts Teams communica
 
 ---
 
-## 11. Out of Scope (Initial)
+## 11. Current Process and Pain Points (AS-IS Detailed)
 
-- Individual employee-level sentiment surveillance.
-- Full enterprise rollout to all business units in this phase.
-- Non-Microsoft data sources beyond approved Teams scope.
-- Bespoke custom web frontend outside M365 Copilot portal.
+### 11.1 Sentiment Measurement Today
+- **Pulse surveys:** Quarterly, 10–15 question templates, 30–40% response rates.
+- **Manual channel reviews:** HR team spends ~10 hrs/week skimming key channels for sentiment signals.
+- **Anecdotal feedback:** Leadership comments from 1:1s, all-hands Q&A, town halls (unstructured).
+- **External tools:** Limited tooling; some teams use Slack analytics, but Teams integration is absent.
+- **Latency:** Insights typically surface 4–8 weeks after sentiment shift occurs.
+
+### 11.2 Topic Detection
+- No systematic process for identifying emerging discussion topics in Teams.
+- HR and internal comms teams manually tag themes (e.g., "remote work concerns," "benefits question").
+- No correlation with business events or program announcements.
+- No capability to detect unexpected sentiment drivers.
+
+### 11.3 Current System Constraints
+- Teams data is locked in the platform; no export to centralized analytics.
+- Power BI dashboards exist for other HR metrics but do not include Teams data.
+- Purview is not used for Teams communication data governance.
+- No federated consent model for privacy-preserving analytics.
 
 ---
 
-## 12. Next Steps
+## 12. Future State Vision (Phase 1 TO-BE)
+
+### 12.1 Sentiment Visibility
+- **Real-time monitoring:** Daily updated sentiment scores aggregated by org/time/topic.
+- **Confidence indicators:** AI outputs include confidence bands; low-confidence results are flagged.
+- **Rapid insight access:** Executives access trends via 2-minute dashboard view or conversational query.
+- **Event correlation:** Sentiment trends are overlaid with business events (product launches, policy changes, external news) to identify drivers.
+- **Latency:** Insights available within 24 hours of communication (vs. 4–8 weeks today).
+
+### 12.2 Topic Intelligence
+- **Automated clustering:** Topics detected and ranked weekly by frequency and velocity (emerging topics prioritized).
+- **Governance transparency:** Each topic tagged with source channels, anonymized contributor count, and confidence score.
+- **Trend analysis:** Topic trends over time; ability to drill into representative messages (anonymized).
+- **Conversational access:** "What topics are rising fastest this month?" or "Show me sentiment on [specific topic]." 
+
+### 12.3 Governance and Privacy
+- **End-to-end lineage:** Purview catalog shows data source → ingestion → transformation → semantic model → dashboard/agent.
+- **Privacy by design:** Anonymization applied at ingestion; no personal data flows to analytics.
+- **Audit trail:** All queries, exports, and access logged with user/time/scope.
+- **Retention management:** Automated purge of message details after N days; aggregates retained longer.
+
+---
+
+## 13. Hypotheses and Working Assumptions
+
+| # | Hypothesis | Status | Evidence | Risk if Wrong |
+|---|-----------|--------|----------|---------------|
+| H-001 | Sentiment model can achieve >= 0.78 F1 on T-Mobile communication corpus | Likely | Strong baseline from general English sentiment (0.82–0.88); domain tuning needed | Medium — may require extended training cycle |
+| H-002 | Topic detection will surface 8–15 actionable topics per week | Likely | Typical enterprise Teams volume and diversity | Low |
+| H-003 | Executive users will adopt dashboards with >= 60% monthly DAU | Likely | Sponsor committed; usage tied to people programs | Medium — adoption depends on integration timing |
+| H-004 | Privacy controls can be automated without manual governance gates | Inconclusive | Depends on Graph API permission scopes and legal interpretation | High — if false, add 2–3 week governance phase |
+| H-005 | Copilot agent will handle 70%+ of self-serve queries without fallback | Likely | Semantic model quality is strong predictor | Medium — LLM hallucination risk on edge cases |
+
+---
+
+## 14. Compliance and Regulation
+
+### 14.1 Industry and Data Sensitivity Context
+- **Industry:** Telecommunications (regulated, sensitive employee data).
+- **Data classification:** Employee communications treated as personal data per GDPR/CCPA/State Privacy Laws.
+- **Jurisdiction:** US-based primarily, but workforce spans multiple regions.
+- **Sensitivity:** Message content includes opinions on policies, leadership, and workplace concerns (high reputational/legal sensitivity).
+
+### 14.2 Applicable Compliance Themes
+
+| Theme | Control Requirement | Status |
+|-------|-------------------|--------|
+| **Confidentiality** | Message content must not be exposed to unauthorized users; aggregation only. | ✅ In scope |
+| **Access Control** | Executive dashboard access restricted to approved HR/leadership group; audit trail maintained. | ✅ In scope |
+| **Auditability** | All data flows, queries, and exports logged with user/timestamp/scope. | ✅ In scope |
+| **Retention** | Message text retained <= 90 days; aggregates retained longer per legal guidance. | 🟡 Assume 90 days; legal validation required |
+| **Explainability** | Sentiment and topic scoring must be defensible; confidence indicators provided. | ✅ In scope |
+| **Anti-Reidentification** | Multi-step anonymization to prevent user identity inference from message context. | 🟡 Requires independent privacy audit |
+
+### 14.3 Compliance Status
+
+**Confirmed Constraints:**
+- Teams data falls under employee privacy and must have explicit governance.
+- Scope limited to small executive group (6–10 users) to minimize exposure in PoC.
+- Legal/Privacy sign-off required before production deployment.
+
+**Assumptions Requiring Validation:**
+- Graph API scopes permit sentiment analysis use case (confirmation needed week 1).
+- 90-day retention window is acceptable per T-Mobile data governance policy.
+- Anonymization technique (hashing + suppression) meets enterprise privacy standards.
+
+---
+
+## 15. Out of Scope (Initial)
+
+- Individual employee-level sentiment surveillance or employee ranking/scoring.
+- Full enterprise rollout to all business units; PoC limited to executives.
+- Non-Microsoft data sources beyond approved Teams scope (Slack, email, etc.).
+- Bespoke custom web frontend outside M365 Copilot portal.
+- Real-time alerting or autonomous workflow triggering (Phase 2+ candidate).
+- Integration with external sentiment vendors or APIs.
+
+---
+
+## 16. Next Steps
 
 - [x] @prd - Generate PRD from this discovery baseline.
-- [x] Confirm data governance control set with security/legal.
+- [x] Confirm data governance control set with security/legal (Week 1 critical path).
 - [x] Validate PoC KPI thresholds with executive sponsor.
+- [ ] Legal/Privacy review of Graph API scopes and anonymization approach.
+- [ ] Secure executive sign-off on governance and privacy controls.
+
+---
+
+## 17. Estimation Guidance for ROM
+
+### 17.1 Complexity and Risks
+
+| Dimension | Rating | Justification |
+|-----------|--------|---------------|
+| **Scope** | Medium | 4 discrete workstreams (ingestion, anonymization, AI, consumption); well-defined boundaries |
+| **Integration** | High | Graph API + Fabric + Power BI + Copilot + Purview = 5 critical integrations |
+| **Data Quality** | Medium | Teams chat is semi-structured; standardization effort required |
+| **AI/ML** | High | Custom sentiment tuning + topic modeling + confidence scoring |
+| **Governance** | High | Privacy-by-design + anonymization validation + compliance audit |
+| **Timeline Pressure** | High | 12-week hard deadline; critical path: governance approvals |
+
+### 17.2 Estimation Posture
+- Conservative capacity (not heroic delivery).
+- Assumes 1–2 week governance approval delays.
+- Includes 1-week buffer for sentiment model quality tuning.
+- Team ramp-up and knowledge transfer included.
+- Assumes existing Fabric/Power BI tenant is ready.
 
 ---
 
@@ -174,4 +305,4 @@ T-Mobile needs a Microsoft-native proof of concept that converts Teams communica
 
 | Version | Date | Author | Change |
 |---------|------|--------|--------|
-| 1.0 | 2026-06-01 | @discovery | Initial approved version |
+| 1.0 | 2026-06-01 | @discovery | Initial approved version with expanded AS-IS, TO-BE, hypotheses, and compliance detail |

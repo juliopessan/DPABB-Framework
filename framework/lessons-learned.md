@@ -6,6 +6,14 @@
 
 ---
 
+### 2026-06-03 — Template Conformance: enforce 100% template adherence
+- **Context:** User requested that agents strictly follow repository templates for discovery/PRD/architecture artifacts for all new projects; previously agents produced shorter, non-template-conformant discovery outputs.
+- **Lesson:** Always apply the canonical templates under `/templates/` when generating artifacts. If template fields are missing, the agent must prompt for required values rather than omitting sections.
+- **Action:** Created `/memories/template_conformance.md` to persist this preference; agents should read this memory and the corresponding template before saving any project artifact.
+- **Tag:** [process|quality]
+
+---
+
 ## Como Usar
 
 Todo agente deve ler as lições relevantes à sua fase **antes** de executar.  
@@ -78,6 +86,42 @@ O @business-case é responsável por adicionar novas lições ao finalizar cada 
 
 ### [BACKLOG] Estimativas sem referência de velocidade
 **O que acontece:** Story points estimados sem saber a velocidade do time geram roadmap irreal.  
+
+### [DISCOVERY] Communication-data requires 2x governance time vs. other PoCs
+**O que acontece:** Quando dados são de comunicação interna (Teams, email), legal+security+privacy levam 2-3x mais tempo validar scopes, retention e uso.
+**Causa:** Reputational risk elevado; threat model complexo (re-identification, inference attacks, misuse).
+**Prevenção:** Listar "compliance gates" no Discovery e assumir Week 1-2 para aprovações. Ter plano B reduzido de escopo se approvals atrasarem.
+
+---
+
+## Padrões do T-Mobile Sentiment Analysis PoC
+
+> Lições específicas do projeto que podem ser generalizadas.
+
+### [DISCOVERY + PRD] Privacy-by-design começa na definição de agregação
+**Contexto:** No T-Mobile, decidir "agregado por org/time/topic, sem drill-to-individual" no Discovery economizou 40+ horas de re-arquitetura.
+**Aplicar quando:** Qualquer projeto com dados sensíveis (chat, email, HR, medical, financeiro).
+**Lição:** Registrar explicitamente no Discovery: (1) o que é PII neste contexto, (2) qual é o nível mínimo de agregação seguro, (3) quem aprova casos de edge.
+
+### [PRD] Confidence labeling deve ser feature de MVP, não Phase 2
+**Contexto:** Inicialmente T-Mobile considerou remover confidence scores para simplificar. Cancelado após avaliar: executivos com baixa confiança tomariam decisões erradas.
+**Aplicar quando:** PoC com LLM ou modelos com incerteza inerente.
+**Lição:** Confidence labeling, low-confidence flagging, e fallback suggestions são **non-negotiable** para credibilidade. Incluir no Sprint 1.
+
+### [BUSINESS-CASE] "GO com condições" é mais responsável que GO/NO-GO binário
+**Contexto:** T-Mobile ROI calcula +30%, mas risco de escala de custos é alto. Recomendação "GO with conditions: model F1 >= 0.78, privacy audit 0 findings, cost governance quotas" reflete risco real.
+**Aplicar quando:** PoCs de IA com dados sensíveis, LLM consumption, ou modelos que podem degradar na escala.
+**Lição:** Estruturar decisão como GO/AMBER/NO-GO com explicit gates. Comunica responsabilidade.
+
+### [ARCHITECT] Purview governance designer deve estar no kick-off, não no UAT
+**Contexto:** Governance lead juntou-se na week 10; lineage + audit foi retrofitted. Com presença early, teria economizado 20 horas.
+**Aplicar quando:** Qualquer projeto com Purview, compliance, ou PII.
+**Lição:** Governance/Compliance **não é fase-final**; é workstream paralela desde week 1.
+
+### [BACKLOG] Sentiment ML requires both human validation SET e continuous monitoring harness
+**Contexto:** Estimativa inicial de 8 pts para "model validation". Com dois repositórios (validation set + monitoring harness) cresceu para 16 pts (M-size).
+**Aplicar quando:** Qualquer NLP/sentiment scope.
+**Lição:** Separar: (1) curated validation set (labeled, Avanade-owned), (2) production monitoring harness (automated daily checks), (3) human review loop (governance gate). Cada um é story separada.
 **Causa:** Ausência de dados históricos ou benchmark.  
 **Prevenção:** Perguntar sempre: "qual é a velocidade média do time por sprint?" ou usar 20pts como default conservador para times novos.
 

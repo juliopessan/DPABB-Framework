@@ -21,6 +21,34 @@
 
 ---
 
+
+## Team Estimates & Effort (Template)
+
+Use esta seção para declarar esforço por papel e calendário de alocação. Mantenha-a genérica para reaplicar em novos projetos — preencha os campos no documento do projeto específico.
+
+### Instruções
+- Substitua `{Role}` por papel (Tech Lead, Backend Dev, Frontend Dev, QA, PO, Security Reviewer, etc.).
+- `Hours/week`: horas médias alocadas por semana para essa função durante o período indicado.
+- `Duration (weeks)`: duração total da alocação em semanas.
+- `Start week` / `End week`: referência de calendário do projeto (Sprint 1 = week 1).
+- `Person-hours` = `Hours/week × Duration`.
+- Use as estimativas para calcular custo e capacidade por sprint.
+
+| Role | Hours/week | Activity | Duration (weeks) | Start week | End week | Person-hours | Notes |
+|------|-----------:|----------|-----------------:|-----------:|---------:|-------------:|------|
+| {Role} | {hrs/week} | {atividade} | {dur} | {start} | {end} | {calc} | {observação} |
+
+### Example (fill for quick start)
+| Role | Hours/week | Activity | Duration (weeks) | Start week | End week | Person-hours | Notes |
+|------|-----------:|----------|-----------------:|-----------:|---------:|-------------:|------|
+| Tech Lead | 40 | Build / architecture oversight | 6 | 2 | 7 | 240 | Reviews design, leads sprints |
+| Backend Dev | 40 | APIs / Agent orchestrator | 6 | 2 | 7 | 240 | Implement services and integrations |
+| Frontend Dev | 40 | Add-In UI / Office.js | 6 | 2 | 7 | 240 | Taskpane and comment flows |
+| QA | 20 | Test harness / cross-client tests | 4 | 5 | 8 | 80 | Part-time during WP-4 |
+
+Guidance: copie a tabela genérica para o artefato do projeto e preencha os valores reais; mantenha o exemplo apenas como referência.
+
+
 ## EPIC-01: {Nome do Epic}
 
 **Objetivo:** ...  
