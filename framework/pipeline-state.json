@@ -6,7 +6,7 @@
   "updated_at": "{ISO_DATE}",
 
   "current_phase": "discovery",
-  "pipeline_status": "in_progress",
+  "pipeline_status": "not_started",
 
   "phases": {
     "discovery": {
@@ -42,9 +42,16 @@
       "depends_on": ["prd"],
       "diagrams": {
         "context": false,
+        "business_capabilities": false,
+        "process_to_be": false,
+        "er_conceptual": false,
+        "data_flow": false,
         "container": false,
-        "component": false,
+        "sequence": false,
         "technology": false,
+        "network_security": false,
+        "cicd": false,
+        "roadmap": false,
         "team_plan": false
       },
       "team_plan": {
@@ -106,7 +113,9 @@
   "icons": {
     "m365_path": "assets/icons/m365/",
     "power_platform_path": "assets/icons/power-platform/",
-    "catalog": "assets/icons/ICONS.md"
+    "azure_path": "assets/icons/azure/",
+    "catalog": "assets/icons/ICONS.md",
+    "azure_catalog": "assets/icons/azure/AZURE-ICONS.md"
   },
 
   "lessons_applied": [],

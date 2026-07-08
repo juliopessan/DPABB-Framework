@@ -6,14 +6,6 @@
 
 ---
 
-### 2026-06-03 — Template Conformance: enforce 100% template adherence
-- **Context:** User requested that agents strictly follow repository templates for discovery/PRD/architecture artifacts for all new projects; previously agents produced shorter, non-template-conformant discovery outputs.
-- **Lesson:** Always apply the canonical templates under `/templates/` when generating artifacts. If template fields are missing, the agent must prompt for required values rather than omitting sections.
-- **Action:** Created `/memories/template_conformance.md` to persist this preference; agents should read this memory and the corresponding template before saving any project artifact.
-- **Tag:** [process|quality]
-
----
-
 ## Como Usar
 
 Todo agente deve ler as lições relevantes à sua fase **antes** de executar.  
@@ -47,6 +39,11 @@ O @business-case é responsável por adicionar novas lições ao finalizar cada 
 **Contexto:** Quando CI/CD e Auth foram deixados para Sprint 2, o Sprint 1 gerou dívida técnica que atrasou todos os outros.  
 **Aplicar quando:** Sempre.  
 **Lição:** TECH-001 (CI/CD) e TECH-002 (Auth) são sempre Must Have no Sprint 1.
+
+### [PIPELINE] Conformidade 100% com templates canônicos (2026-06-03)
+**Contexto:** Agentes produziam artefatos de discovery mais curtos e fora do padrão dos templates do repositório.  
+**Aplicar quando:** Sempre, ao gerar qualquer artefato de fase.  
+**Lição:** Aplicar os templates canônicos de `/templates/` integralmente. Se faltar valor para um campo do template, perguntar ao usuário em vez de omitir a seção.
 
 ### [PIPELINE] Handoff escrito economiza >40% dos tokens na fase seguinte
 **Contexto:** Agentes que escrevem um handoff estruturado no memory.md permitem que o próximo agente inicie sem re-ler artefatos inteiros.  

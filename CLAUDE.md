@@ -224,7 +224,7 @@ Copilot     → CopilotStudio_scalable.svg
 | `*memory` | Exibe memory.md resumido do projeto atual |
 | `*lessons` | Exibe lições aplicáveis à fase atual |
 | `*todo` | Exibe TODO do projeto atual com progresso |
-| `*icons` | Lista ícones disponíveis (M365 + Power Platform) |
+| `*icons` | Lista ícones disponíveis (M365 + Power Platform + Azure) |
 
 ---
 
