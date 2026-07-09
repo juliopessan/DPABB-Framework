@@ -1,11 +1,79 @@
 {
+  "_comment": "Migrado para o schema canônico de framework/pipeline-state.json. Todos os artefatos existem no diretório.",
   "project": "ip-word-addin",
-  "state": {
-    "discovery": "completed",
-    "prd": "pending",
-    "architecture": "pending",
-    "backlog": "pending",
-    "business-case": "pending"
+  "version": "1.0",
+  "created_at": "2026-06-03T00:00:00Z",
+  "updated_at": "2026-06-03T00:00:00Z",
+
+  "current_phase": "done",
+  "pipeline_status": "completed",
+
+  "phases": {
+    "discovery": {
+      "status": "completed",
+      "started_at": "2026-06-03T00:00:00Z",
+      "completed_at": "2026-06-03T00:00:00Z",
+      "agent": "scout",
+      "artifact": "docs/output/ip-word-addin/discovery-report.md",
+      "artifact_exists": true,
+      "quality_gate": "passed",
+      "handoff_written": true
+    },
+    "prd": {
+      "status": "completed",
+      "started_at": "2026-06-03T00:00:00Z",
+      "completed_at": "2026-06-03T00:00:00Z",
+      "agent": "priya",
+      "artifact": "docs/output/ip-word-addin/prd.md",
+      "artifact_exists": true,
+      "quality_gate": "passed",
+      "handoff_written": true,
+      "depends_on": ["discovery"]
+    },
+    "architect": {
+      "status": "completed",
+      "started_at": "2026-06-03T00:00:00Z",
+      "completed_at": "2026-06-03T00:00:00Z",
+      "agent": "aria",
+      "artifact": "docs/output/ip-word-addin/architecture.md",
+      "artifact_exists": true,
+      "quality_gate": "passed",
+      "handoff_written": true,
+      "depends_on": ["prd"]
+    },
+    "backlog": {
+      "status": "completed",
+      "started_at": "2026-06-03T00:00:00Z",
+      "completed_at": "2026-06-03T00:00:00Z",
+      "agent": "ben",
+      "artifact": "docs/output/ip-word-addin/backlog.md",
+      "artifact_exists": true,
+      "quality_gate": "passed",
+      "handoff_written": true,
+      "depends_on": ["prd", "architect"]
+    },
+    "business_case": {
+      "status": "completed",
+      "started_at": "2026-06-03T00:00:00Z",
+      "completed_at": "2026-06-03T00:00:00Z",
+      "agent": "biz",
+      "artifact": "docs/output/ip-word-addin/business-case.md",
+      "artifact_exists": true,
+      "quality_gate": "passed",
+      "handoff_written": true,
+      "depends_on": ["discovery", "prd", "architect", "backlog"]
+    }
   },
-  "updated": "2026-06-03T00:00:00Z"
+
+  "memory": {
+    "path": "docs/output/ip-word-addin/memory.md",
+    "last_updated": "2026-06-03T00:00:00Z"
+  },
+
+  "todo": {
+    "path": "docs/output/ip-word-addin/todo.md"
+  },
+
+  "lessons_applied": [],
+  "decisions": []
 }

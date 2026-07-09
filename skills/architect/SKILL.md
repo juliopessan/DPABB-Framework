@@ -186,7 +186,9 @@ Montar tabela mapeando cada NFR para:
    → phases.architect.completed_at = {ISO_DATE}
    → phases.architect.artifact_exists = true
    → phases.architect.handoff_written = true
-   → phases.architect.diagrams = { context: true, container: true, component: true, technology: true, team_plan: true }
+   → phases.architect.diagrams = { context, business_capabilities, process_to_be,
+       er_conceptual, data_flow, container, sequence, technology,
+       network_security, cicd, roadmap, team_plan } — marcar true cada diagrama gerado
    → current_phase = "backlog"
 
 4. Write: docs/output/{projeto}/todo.md (se ainda não existe)
@@ -231,4 +233,23 @@ Riscos técnicos a virar stories de spike:
 ## Validação antes de SAVE
 
 Executar checklist: `agents/architect.md § Checklist de Qualidade`  
-Mínimo exigido: 8/9 itens antes de marcar fase como completed.
+Mínimo exigido: 11/11 itens antes de marcar fase como completed.
+
+---
+
+## Etapa 10 (opcional) — Export HTML: SME View / Developer Guide
+
+**Trigger:** `*html` (após architect e, idealmente, backlog completed)
+
+```
+1. Read: templates/html/sme-view.html
+2. Read: docs/output/{projeto}/memory.md (handoffs), architecture.md, backlog.md
+   → Se business-case.md existir, usar para KPIs financeiros
+3. Preencher os placeholders {CLIENTE}, {PROJETO}, {DATA}, {N_*} e as 12 seções:
+   1 Objetivo Técnico · 2 Arquitetura Alvo (Mermaid) · 3 Stack · 4 Setup Infra
+   5 Guia de Implementação (1 por Epic/UC) · 6 NFRs · 7 Segurança & Compliance
+   8 Resumo de Esforço · 9 WBS/Backlog · 10 Plano de Equipe · 11 Riscos · 12 Referências
+   → Diagramas: reusar o Mermaid do architecture.md dentro de .mermaid-wrap
+   → Tabelas largas sempre dentro de .table-scroll
+4. Write: docs/output/{projeto}/sme-view.html
+```

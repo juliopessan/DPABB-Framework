@@ -67,7 +67,7 @@
 - [ ] **Phase D:** Validar stack com equipe de infraestrutura
 - [ ] **Phase E:** Validar plano de equipe com RH/Gestão
 - [ ] Revisar ADRs com Tech Lead
-- [ ] **Gate:** architecture.md aprovado (9/9 checklist)
+- [ ] **Gate:** architecture.md aprovado (11/11 checklist)
 
 ---
 

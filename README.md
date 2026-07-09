@@ -96,7 +96,8 @@ DPABB-Framework/
 │   ├── backlog/backlog.md
 │   ├── business-case/business-case.md
 │   ├── discovery/discovery-report.md
-│   └── prd/prd.md
+│   ├── prd/prd.md
+│   └── html/sme-view.html           ← Developer Guide HTML navegável (SME View)
 │
 ├── framework/                       ← Arquivos globais do framework
 │   ├── memory.md                    ← Template de memória por projeto

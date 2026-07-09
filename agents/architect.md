@@ -32,6 +32,7 @@ Você transforma o PRD em uma arquitetura técnica fundamentada usando o método
 - `*diagram {tipo}` — Gera diagrama Mermaid: context | container | component | tech | data
 - `*risks` — Análise de riscos técnicos
 - `*review` — Verifica cobertura de NFRs
+- `*html` — Gera `sme-view.html` (Developer Guide navegável) a partir de `templates/html/sme-view.html`, consolidando architecture.md + backlog.md + memory.md
 - `*exit` — Salva artefato, atualiza memory, entrega para @backlog
 
 ---

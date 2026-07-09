@@ -43,9 +43,16 @@
       ],
       "diagrams": {
         "context": true,
+        "business_capabilities": true,
+        "process_to_be": true,
+        "er_conceptual": true,
+        "data_flow": true,
         "container": true,
-        "component": true,
+        "sequence": true,
         "technology": true,
+        "network_security": true,
+        "cicd": true,
+        "roadmap": true,
         "team_plan": true
       },
       "team_plan": {
@@ -126,5 +133,12 @@
     "Fabric medallion architecture selected",
     "Aggregate-only outputs in PoC",
     "Copilot portal selected over custom frontend"
-  ]
+  ],
+  "icons": {
+    "m365_path": "assets/icons/m365/",
+    "power_platform_path": "assets/icons/power-platform/",
+    "azure_path": "assets/icons/azure/",
+    "catalog": "assets/icons/ICONS.md",
+    "azure_catalog": "assets/icons/azure/AZURE-ICONS.md"
+  }
 }
