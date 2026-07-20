@@ -45,6 +45,11 @@ O @business-case é responsável por adicionar novas lições ao finalizar cada 
 **Aplicar quando:** Sempre, ao finalizar cada fase.  
 **Lição:** O handoff deve ter: decisões-chave + números críticos + o que NÃO explorar.
 
+### [ARCHITECT] Governança de IA como princípio arquitetural, não feature isolada
+**Contexto:** No projeto Intelligent Operations Document Platform (RFP-001), o requisito "nenhuma decisão material apenas por IA não revisada" foi tratado como princípio arquitetural (PA-01) e refletido em todo componente (gate de confiança, auditoria, ADR-002), não como uma story isolada.  
+**Aplicar quando:** RFP/PRD contém requisito explícito de supervisão humana sobre resultado de IA.  
+**Lição:** Elevar o requisito de governança de IA a princípio arquitetural (Phase A) garante que ele seja considerado em todas as fases TOGAF seguintes, em vez de arriscar ser esquecido em uma única story de backlog.
+
 ---
 
 ## Armadilhas Comuns
@@ -75,6 +80,11 @@ O @business-case é responsável por adicionar novas lições ao finalizar cada 
 **O que acontece:** ROI calculado com benefícios otimistas não questicionados gera expectativas irreais.  
 **Causa:** Pressão por números positivos.  
 **Prevenção:** Cada linha de benefício tem: fonte da premissa + cenário base + cenário pessimista (-30%).
+
+### [BACKLOG] Integração com sistema alvo não confirmado bloqueia estimativa, não a story
+**O que acontece:** No projeto Intelligent Operations Document Platform, o sistema financeiro e o CRM alvo não estavam definidos no RFP (questão aberta), mas a story de roteamento (STORY-04.01/04.02) ainda pôde ser estimada e sequenciada, marcando a dependência explicitamente em vez de bloquear todo o backlog.  
+**Causa:** Tentação de não estimar nada até resolver toda ambiguidade externa.  
+**Prevenção:** Estimar a story com a integração mais provável/genérica, registrar a dependência explícita no backlog e sinalizar o risco no Business Case (não travar o pipeline inteiro por uma decisão pendente de terceiros).
 
 ---
 
@@ -122,7 +132,7 @@ O @business-case é responsável por adicionar novas lições ao finalizar cada 
 
 | Projeto | Data | Fases completadas | Tokens economizados | Qualidade gate |
 |---------|------|------------------|--------------------|----|
-| | | | | |
+| intelligent-operations-document-platform | 2026-07-19 | 5/5 (discovery→business-case) | Handoffs escritos entre todas as fases; N/A (execução única em sessão contínua) | GO com ressalvas |
 
 ---
 

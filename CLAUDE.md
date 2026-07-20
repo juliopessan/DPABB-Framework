@@ -32,7 +32,13 @@ Cada fase produz um artefato, persiste contexto no `memory.md` e aprende com `le
     ↓ lê memory.md, salva backlog.md + atualiza memory.md
 @business-case *analyze
     ↓ lê memory.md, salva business-case.md + atualiza lessons-learned.md
+@business-case *consolidate (parte de *exit — ETAPA FINAL OBRIGATÓRIA)
+    ↓ consolida os 5 artefatos na íntegra em relatorio-consolidado.html
+      usando templates/consolidated-report/base-template.html
 ```
+
+> **Regra:** nenhum pipeline é considerado `done` sem o `relatorio-consolidado.html` gerado — mesmo em
+> execuções parciais (`*quick`), a etapa de consolidação roda com as fases disponíveis.
 
 ---
 
@@ -47,7 +53,8 @@ docs/output/{projeto}/
 ├── prd.md                 ← Output: @prd
 ├── architecture.md        ← Output: @architect (TOGAF + Mermaid)
 ├── backlog.md             ← Output: @backlog
-└── business-case.md       ← Output: @business-case
+├── business-case.md       ← Output: @business-case
+└── relatorio-consolidado.html  ← Output final: @business-case *consolidate (obrigatório)
 ```
 
 ### Arquivos de Framework (globais)
@@ -93,6 +100,7 @@ framework/
 | Backlog SAVE | — | `backlog.md`, `memory.md`, `state.json` |
 | BizCase LOAD | `pipeline-state.json`, `memory.md`, `lessons-learned.md` | `state.json` |
 | BizCase SAVE | — | `business-case.md`, `memory.md`, `state.json`, `lessons-learned.md` |
+| Consolidate (`*exit`) | Todos os `.md` das 5 fases + `templates/consolidated-report/base-template.html` | `relatorio-consolidado.html` |
 
 ---
 

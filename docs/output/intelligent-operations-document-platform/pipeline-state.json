@@ -1,0 +1,119 @@
+{
+  "_comment": "Estado do pipeline. Atualizado automaticamente por cada agente ao iniciar e finalizar sua fase.",
+  "project": "intelligent-operations-document-platform",
+  "version": "1.0",
+  "created_at": "2026-07-19T00:00:00Z",
+  "updated_at": "2026-07-19T00:00:00Z",
+
+  "current_phase": "done",
+  "pipeline_status": "completed",
+
+  "phases": {
+    "discovery": {
+      "status": "completed",
+      "started_at": "2026-07-19T00:00:00Z",
+      "completed_at": "2026-07-19T00:10:00Z",
+      "agent": "scout",
+      "artifact": "docs/output/intelligent-operations-document-platform/discovery-report.md",
+      "artifact_exists": true,
+      "quality_gate": "approved",
+      "handoff_written": true
+    },
+    "prd": {
+      "status": "completed",
+      "started_at": "2026-07-19T00:10:00Z",
+      "completed_at": "2026-07-19T00:25:00Z",
+      "agent": "priya",
+      "artifact": "docs/output/intelligent-operations-document-platform/prd.md",
+      "artifact_exists": true,
+      "quality_gate": "approved",
+      "handoff_written": true,
+      "depends_on": ["discovery"]
+    },
+    "architect": {
+      "status": "completed",
+      "started_at": "2026-07-19T00:25:00Z",
+      "completed_at": "2026-07-19T00:50:00Z",
+      "agent": "aria",
+      "artifact": "docs/output/intelligent-operations-document-platform/architecture.md",
+      "artifact_exists": true,
+      "quality_gate": "approved",
+      "handoff_written": true,
+      "depends_on": ["prd"],
+      "diagrams": {
+        "context": true,
+        "container": true,
+        "component": true,
+        "technology": true,
+        "team_plan": true
+      },
+      "team_plan": {
+        "total_people": 11,
+        "roles": ["Product Owner", "Arquiteto", "Tech Lead", "Backend Dev x2", "AI/ML Engineer", "Frontend Dev", "DevOps/SRE", "QA Engineer", "Data Engineer", "Scrum Master"],
+        "monthly_cost_peak_brl": 95500,
+        "rampup_weeks": 4,
+        "onboarding_days": 2
+      }
+    },
+    "backlog": {
+      "status": "completed",
+      "started_at": "2026-07-19T00:50:00Z",
+      "completed_at": "2026-07-19T01:10:00Z",
+      "agent": "ben",
+      "artifact": "docs/output/intelligent-operations-document-platform/backlog.md",
+      "artifact_exists": true,
+      "quality_gate": "approved",
+      "handoff_written": true,
+      "depends_on": ["prd", "architect"],
+      "metrics": {
+        "total_epics": 6,
+        "total_stories": 26,
+        "total_points": 176,
+        "sprint1_points": 47,
+        "estimated_sprints": 5
+      }
+    },
+    "business_case": {
+      "status": "completed",
+      "started_at": "2026-07-19T01:10:00Z",
+      "completed_at": "2026-07-19T01:30:00Z",
+      "agent": "biz",
+      "artifact": "docs/output/intelligent-operations-document-platform/business-case.md",
+      "artifact_exists": true,
+      "quality_gate": "approved",
+      "handoff_written": true,
+      "depends_on": ["discovery", "prd", "architect", "backlog"],
+      "recommendation": "GO com ressalvas",
+      "roi_24m": "payback ~14-16 meses; NPV 3 anos positivo (R$ 284.462, premissas ilustrativas)",
+      "payback_months": 15
+    }
+  },
+
+  "memory": {
+    "path": "docs/output/intelligent-operations-document-platform/memory.md",
+    "last_updated": "2026-07-19T01:30:00Z",
+    "questions_answered": 5,
+    "tokens_saved_estimate": 0
+  },
+
+  "todo": {
+    "path": "docs/output/intelligent-operations-document-platform/todo.md",
+    "total_items": 0,
+    "completed_items": 0,
+    "blocked_items": 0
+  },
+
+  "icons": {
+    "m365_path": "assets/icons/m365/",
+    "power_platform_path": "assets/icons/power-platform/",
+    "catalog": "assets/icons/ICONS.md"
+  },
+
+  "lessons_applied": [],
+  "decisions": [
+    "Event-driven modular architecture (ADR-001)",
+    "Hybrid AI+rules classification/extraction (ADR-002)",
+    "Entra ID + RBAC + Conditional Access (ADR-003)",
+    "Build over Buy/Integrate (business-case)"
+  ]
+}

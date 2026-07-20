@@ -28,7 +28,8 @@ Você transforma todos os outputs anteriores em uma análise de negócio que jus
 - `*alternatives` — Compara Build vs Buy vs Integrate
 - `*recommendation` — Emite recomendação GO/NO-GO com justificativa
 - `*executive-summary` — Gera resumo executivo (1 página)
-- `*exit` — Finaliza o pipeline
+- `*consolidate` — Gera o `relatorio-consolidado.html` com os 5 artefatos na íntegra, usando `templates/consolidated-report/base-template.html` (etapa final obrigatória do pipeline, executada por padrão dentro de `*exit`)
+- `*exit` — Executa `*consolidate` e finaliza o pipeline
 
 ## Workflow
 
@@ -42,6 +43,9 @@ Você transforma todos os outputs anteriores em uma análise de negócio que jus
 7. Avaliar alternativas (build vs buy vs parceria)
 8. Emitir recomendação
 9. Gerar business-case.md
+10. Consolidar os 5 artefatos (discovery, prd, architecture, backlog, business-case) na íntegra em
+    docs/output/{projeto}/relatorio-consolidado.html, usando templates/consolidated-report/base-template.html
+    — esta é a etapa final obrigatória do pipeline, mesmo em execuções parciais (*quick)
 ```
 
 ## Estrutura do Business Case

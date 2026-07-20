@@ -1,0 +1,166 @@
+<!--
+  Template base do Relatório Consolidado — requirements-intel framework
+  Usado por: @business-case *consolidate (etapa final obrigatória do pipeline)
+  Origem do design: template Avanade-style fornecido pelo usuário em 2026-07-19
+  (ver memória `feedback_consolidated_html_report.md`)
+
+  Como usar:
+  1. Copiar este arquivo para docs/output/{projeto}/relatorio-consolidado.html
+  2. Substituir {PROJETO_TITULO}, {PROJETO_SUBTITULO}, {FONTE}, {DATA}, {RECOMENDACAO}
+  3. Para cada fase (discovery, prd, architect, backlog, business-case), gerar uma
+     <section class="phase"> com <div class="phase-num">NN<small>Fase N<br>Nome</small></div>
+     numerada 00-04, reproduzindo o conteúdo do .md correspondente NA ÍNTEGRA
+     (tabelas de FR/NFR/stakeholders/epics/custos, não apenas resumos)
+  4. Diagramas Mermaid dos artefatos podem ser embutidos ao vivo via <pre class="mermaid">
+     (mermaid.js já carregado via CDN) — não é necessário gerar imagens estáticas
+  5. ADRs entram em blocos .adr; riscos e gates de qualidade em .gates
+  6. Footer reflete o status real do pipeline (recomendação GO/NO-GO/REVISÃO)
+-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{PROJETO_TITULO} — Pipeline Consolidado</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<style>
+:root{
+  --paper:#faf7f2; --ink:#111110; --ink-soft:#3d3b38; --ink-mute:#7a766f;
+  --accent:#FF5800; --accent-dark:#DC4600; --aurora:#890078;
+  --line:#e3ded5; --card:#ffffff; --dark:#141312;
+  --font-display:'Space Grotesk',sans-serif; --font-body:'Inter',sans-serif; --font-mono:'JetBrains Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:var(--font-body);line-height:1.65;font-size:16px;overflow-x:hidden}
+::selection{background:var(--accent);color:#fff}
+.grain{position:fixed;inset:-100%;width:300%;height:300%;pointer-events:none;z-index:900;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 250 250' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:grain 8s steps(10) infinite}
+@keyframes grain{0%,100%{transform:translate(0,0)}10%{transform:translate(-5%,-8%)}30%{transform:translate(5%,-5%)}50%{transform:translate(-8%,4%)}70%{transform:translate(6%,7%)}90%{transform:translate(-4%,6%)}}
+.wrap{max-width:1180px;margin:0 auto;padding:0 5vw}
+section{padding:5.5rem 0 2rem}
+.label{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.28em;text-transform:uppercase;color:var(--accent-dark);display:flex;align-items:center;gap:.9rem;margin-bottom:1.6rem}
+.label::before{content:"";width:34px;height:1px;background:var(--accent)}
+h2{font-family:var(--font-display);font-weight:500;font-size:clamp(1.7rem,3.4vw,2.6rem);letter-spacing:-.02em;margin-bottom:1.4rem}
+h3{font-family:var(--font-display);font-weight:500;font-size:1.15rem;margin:2rem 0 .7rem}
+h4{font-family:var(--font-display);font-weight:500;font-size:.98rem;margin:1.4rem 0 .5rem;color:var(--accent-dark)}
+p{color:var(--ink-soft);max-width:76ch;margin-bottom:1rem}
+strong{color:var(--ink)}
+em{color:var(--accent-dark);font-style:normal;font-weight:600}
+code{font-family:var(--font-mono);font-size:.82em;background:#f0ece4;padding:.12em .4em;border-radius:3px;color:var(--ink)}
+blockquote{border-left:3px solid var(--accent);padding:.3rem 0 .3rem 1.2rem;margin:1rem 0;color:var(--ink-mute);font-size:.92rem;max-width:70ch}
+header.hero{min-height:70vh;display:flex;flex-direction:column;justify-content:center;padding:7rem 0 3rem;position:relative}
+.hero-meta{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-mute);display:flex;gap:2.2rem;flex-wrap:wrap;margin-bottom:2.4rem}
+.hero-meta b{color:var(--accent-dark);font-weight:500}
+h1{font-family:var(--font-display);font-weight:700;font-size:clamp(2.3rem,6vw,4.6rem);line-height:1.05;letter-spacing:-.03em;margin-bottom:2rem}
+h1 .strike{position:relative;color:var(--ink-mute);white-space:nowrap}
+h1 .strike::after{content:"";position:absolute;left:-2%;right:-2%;top:52%;height:.08em;background:var(--accent);transform:rotate(-2deg)}
+.hero-sub{font-size:1.1rem;max-width:68ch}
+.hero-rule{margin-top:3rem;height:4px;width:120px;background:linear-gradient(90deg,var(--accent),var(--aurora))}
+.band{background:var(--dark);color:var(--paper);padding:4rem 0;margin:3rem 0}
+.band .label{color:var(--accent)}
+.band-metric{font-family:var(--font-display);font-weight:300;font-size:clamp(1.3rem,2.6vw,2rem);line-height:1.35;max-width:56ch}
+.band-metric b{color:var(--accent);font-weight:700}
+.band-note{font-family:var(--font-mono);font-size:.75rem;color:#8f8b84;margin-top:1.5rem;letter-spacing:.05em}
+.phase{border-top:1px solid var(--line);padding-top:3.2rem;margin-top:3.2rem;display:grid;grid-template-columns:180px 1fr;gap:2.5rem}
+.phase-num{font-family:var(--font-display);font-weight:700;font-size:3.4rem;line-height:1;color:transparent;-webkit-text-stroke:1.5px var(--accent);position:sticky;top:2rem;align-self:start}
+.phase-num small{display:block;-webkit-text-stroke:0;color:var(--ink-mute);font-family:var(--font-mono);font-weight:400;font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;margin-top:.8rem}
+@media(max-width:820px){.phase{grid-template-columns:1fr;gap:1rem}.phase-num{position:static;font-size:2.4rem}}
+.tbl{width:100%;border-collapse:collapse;margin:1.4rem 0 2rem;font-size:.87rem;background:var(--card);box-shadow:0 1px 0 var(--line)}
+.tbl th{font-family:var(--font-mono);font-size:.63rem;letter-spacing:.16em;text-transform:uppercase;text-align:left;color:var(--paper);background:var(--ink);padding:.7rem .85rem;font-weight:500}
+.tbl td{padding:.65rem .85rem;border-bottom:1px solid var(--line);vertical-align:top;color:var(--ink-soft)}
+.tbl tr:last-child td{border-bottom:none}
+.tbl td:first-child{font-weight:600;color:var(--ink);white-space:nowrap}
+.tbl .hl{color:var(--accent-dark);font-weight:600}
+.tbl-scroll{overflow-x:auto}
+.gates{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1.1rem;margin:1.6rem 0}
+.gate{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--accent);padding:1.3rem;transition:transform .3s,box-shadow .3s}
+.gate:hover{transform:translateY(-4px);box-shadow:0 12px 28px rgba(17,17,16,.08)}
+.gate .g-id{font-family:var(--font-mono);font-size:.66rem;letter-spacing:.2em;color:var(--accent-dark);text-transform:uppercase;margin-bottom:.6rem}
+.gate .g-crit{font-family:var(--font-display);font-weight:500;font-size:1rem;line-height:1.4}
+.gate .g-note{font-size:.8rem;color:var(--ink-mute);margin-top:.6rem}
+ul.list{list-style:none;margin:.6rem 0 1.4rem}
+ul.list li{padding:.42rem 0 .42rem 1.6rem;position:relative;color:var(--ink-soft);max-width:78ch}
+ul.list li::before{content:"";position:absolute;left:0;top:.9rem;width:9px;height:9px;background:var(--accent);border-radius:1px;transform:rotate(45deg)}
+ol.steps{counter-reset:s;list-style:none;margin:.6rem 0 1.4rem}
+ol.steps li{counter-increment:s;padding:.5rem 0 .5rem 3rem;position:relative;color:var(--ink-soft);max-width:78ch}
+ol.steps li::before{content:counter(s,decimal-leading-zero);position:absolute;left:0;top:.5rem;font-family:var(--font-mono);font-size:.76rem;color:var(--accent-dark);border:1px solid var(--line);background:var(--card);padding:.15rem .45rem}
+.callout{background:linear-gradient(135deg,var(--accent),var(--aurora));color:#fff;padding:1.7rem 2rem;margin:1.8rem 0;max-width:80ch}
+.callout p{color:#fff;margin:0;font-family:var(--font-display);font-weight:500;font-size:1.02rem}
+.diagram{background:var(--card);border:1px solid var(--line);padding:1.4rem;margin:1.6rem 0;overflow-x:auto}
+.diagram .cap{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-mute);margin-bottom:.8rem}
+.adr{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--aurora);padding:1.4rem 1.6rem;margin:1.4rem 0}
+.adr h4{margin-top:0;color:var(--aurora)}
+.adr .meta{font-family:var(--font-mono);font-size:.68rem;color:var(--ink-mute);letter-spacing:.08em;margin-bottom:.8rem}
+.pill{display:inline-block;font-family:var(--font-mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;padding:.2rem .6rem;border:1px solid var(--accent);color:var(--accent-dark);margin:.1rem .3rem .1rem 0}
+.marquee{overflow:hidden;white-space:nowrap;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:1.2rem 0;margin:4rem 0 0;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.marquee-track{display:inline-block;font-family:var(--font-display);font-weight:700;font-size:clamp(1.6rem,4.4vw,3.2rem);letter-spacing:.02em;color:transparent;-webkit-text-stroke:1.2px var(--ink-mute);animation:mq 34s linear infinite;text-transform:uppercase}
+.marquee-track span{color:var(--accent);-webkit-text-stroke:0;margin:0 1.5rem}
+.marquee:hover .marquee-track{animation-play-state:paused}
+@keyframes mq{to{transform:translateX(-50%)}}
+footer{background:var(--dark);color:var(--paper);padding:4.5rem 0 2.5rem;margin-top:5rem}
+.foot-name{font-family:var(--font-display);font-weight:700;font-size:clamp(2.4rem,8vw,6.5rem);line-height:.95;letter-spacing:-.03em;color:transparent;-webkit-text-stroke:1.5px #4a4844;transition:color .5s}
+.foot-name:hover{color:var(--accent);-webkit-text-stroke:1.5px var(--accent)}
+.foot-row{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1.5rem;margin-top:3rem;border-top:1px solid #2b2a28;padding-top:1.6rem}
+.foot-mono{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:#8f8b84}
+.foot-mono b{color:var(--accent);font-weight:500}
+.status-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#00A650;margin-right:.5rem;animation:pulse 2s infinite}
+@keyframes pulse{50%{opacity:.35}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+
+<header class="hero wrap">
+  <div class="hero-meta">
+    <span>Requirements Intel <b>AIOS Framework</b></span>
+    <span>v1.0 · {DATA}</span>
+    <span>Fonte · <b>{FONTE}</b></span>
+  </div>
+  <h1>{PROJETO_TITULO}</h1>
+  <p class="hero-sub">{PROJETO_SUBTITULO}</p>
+  <div class="hero-rule"></div>
+</header>
+
+<div class="band">
+  <div class="wrap">
+    <div class="label">Recomendação do Pipeline</div>
+    <div class="band-metric">{RECOMENDACAO}</div>
+    <div class="band-note">// done = discovery + prd + architecture + backlog + business-case, todos com gate de qualidade 100% e rastreabilidade RQ → FR/NFR → Story → ADR → Business Case</div>
+  </div>
+</div>
+
+<main class="wrap">
+
+<!-- Repetir <section class="phase" id="{fase}"> para cada uma das 5 fases, numeradas 00-04 -->
+<!-- <div class="phase-num">00<small>Fase 1<br>Discovery</small></div> ... -->
+
+<!-- Seção opcional de Modelo de Testes (se gerado) -->
+
+</main>
+
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track" id="mq">{PALAVRAS_CHAVE_DO_PROJETO}</div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-name">Pipeline<br>Consolidado</div>
+    <div class="foot-row">
+      <div class="foot-mono"><span class="status-dot"></span>Pipeline · <b>Done — {RECOMENDACAO_CURTA}</b></div>
+      <div class="foot-mono">Requirements Intel · <b>AIOS Framework</b></div>
+      <div class="foot-mono">Fonte · <b>{FONTE}</b> · {DATA}</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+mermaid.initialize({ startOnLoad: true, theme: "neutral", themeVariables: { fontFamily: "Inter, sans-serif", primaryColor: "#fff3ec", primaryBorderColor: "#FF5800", lineColor: "#7a766f", secondaryColor: "#f0ece4" } });
+var mq = document.getElementById("mq");
+if (mq){ mq.innerHTML += mq.innerHTML; }
+</script>
+</body>
+</html>

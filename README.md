@@ -1,6 +1,6 @@
 # Requirements Intel — AIOS Framework
 
-> Pipeline AIOS de 5 fases que transforma uma especificação bruta em **Discovery Report + PRD + Arquitetura TOGAF + Backlog + Business Case** — totalmente gerados por agentes de IA especializados.
+> Pipeline AIOS de 5 fases que transforma uma especificação bruta em **Discovery Report + PRD + Arquitetura TOGAF + Backlog + Business Case** — totalmente gerados por agentes de IA especializados, e consolidados ao final em um único relatório HTML.
 
 ---
 
@@ -20,7 +20,35 @@ Documento / Ideia / Reunião
   @backlog *breakdown        →  backlog.md
          ↓
   @business-case *analyze    →  business-case.md  +  lessons-learned.md
+         ↓
+  @business-case *consolidate (executado dentro de *exit) → relatorio-consolidado.html
 ```
+
+**Etapa final obrigatória:** ao concluir `@business-case *analyze` (ou ao chamar `*exit`), os 5 artefatos são
+consolidados **na íntegra** em um único `docs/output/{projeto}/relatorio-consolidado.html`, usando o design
+system em `templates/consolidated-report/base-template.html` (editorial dark/paper, Space Grotesk + Inter +
+JetBrains Mono, diagramas Mermaid renderizados ao vivo). Esse HTML é o entregável final apresentável ao
+stakeholder — os `.md` continuam sendo a fonte de verdade para o pipeline.
+
+---
+
+## Padrão do Relatório Consolidado (HTML)
+
+O `relatorio-consolidado.html` segue um design system editorial fixo — não é gerado com estilo livre a cada execução. Regras obrigatórias:
+
+| Token | Valor |
+|-------|-------|
+| Fundo claro / seções escuras | `--paper:#faf7f2` / `--dark:#141312` |
+| Cor de destaque / gradiente | `--accent:#FF5800` (laranja) → `--aurora:#890078` (roxo) |
+| Tipografia | Space Grotesk (display/headings) · Inter (corpo) · JetBrains Mono (labels/meta uppercase) |
+| Estrutura | Hero com título tachado (`.strike`) → band de métrica north-star (fundo escuro) → 5 `<section class="phase">` numeradas `00`–`04` (uma por fase, número grande stroke-only sticky à esquerda) → marquee de palavras-chave → footer escuro com status-dot |
+| Componentes | `.tbl` (tabelas com header escuro), `.gate` (cards de critério/gate/ressalva), `.callout` (gradiente laranja→roxo para destaques), `.story` (cada user story do backlog), `.adr` (borda esquerda roxa, uma por ADR) |
+| Diagramas | Mermaid.js via CDN (`<script src=".../mermaid.min.js">` + `<pre class="mermaid">`), renderizados **ao vivo** no navegador — nunca como imagem estática |
+| Conteúdo | Os 5 `.md` transcritos **na íntegra** (todas as stories, ADRs completos com alternativas/consequências, todas as tabelas de FR/NFR/riscos) — nunca uma versão resumida |
+
+**Como gerar:** copiar `templates/consolidated-report/base-template.html`, substituir os placeholders (`{PROJETO_TITULO}`, `{RECOMENDACAO}`, etc.) e preencher uma seção `.phase` por fase com o conteúdo completo do `.md` correspondente. Executado automaticamente por `@business-case *consolidate` (parte de `*exit`).
+
+**Exemplo de referência:** [`docs/output/intelligent-operations-document-platform/relatorio-consolidado.html`](docs/output/intelligent-operations-document-platform/relatorio-consolidado.html).
 
 ---
 
@@ -96,7 +124,9 @@ requirements-intel/
 │   ├── backlog/backlog.md
 │   ├── business-case/business-case.md
 │   ├── discovery/discovery-report.md
-│   └── prd/prd.md
+│   ├── prd/prd.md
+│   └── consolidated-report/
+│       └── base-template.html       ← Skeleton do relatório HTML final (etapa obrigatória de *exit)
 │
 ├── framework/                       ← Arquivos globais do framework
 │   ├── memory.md                    ← Template de memória por projeto
@@ -129,7 +159,8 @@ requirements-intel/
             ├── backlog.md
             ├── business-case.md
             ├── memory.md
-            └── pipeline-state.json
+            ├── pipeline-state.json
+            └── relatorio-consolidado.html  ← Etapa final: os 5 artefatos na íntegra em 1 HTML
 ```
 
 ---

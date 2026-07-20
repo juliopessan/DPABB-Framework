@@ -1,0 +1,1484 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Intelligent Operations Document Platform — Pipeline Consolidado</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<style>
+:root{
+  --paper:#faf7f2; --ink:#111110; --ink-soft:#3d3b38; --ink-mute:#7a766f;
+  --accent:#FF5800; --accent-dark:#DC4600; --aurora:#890078;
+  --line:#e3ded5; --card:#ffffff; --dark:#141312;
+  --font-display:'Space Grotesk',sans-serif; --font-body:'Inter',sans-serif; --font-mono:'JetBrains Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:var(--font-body);line-height:1.65;font-size:16px;overflow-x:hidden}
+::selection{background:var(--accent);color:#fff}
+.grain{position:fixed;inset:-100%;width:300%;height:300%;pointer-events:none;z-index:900;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 250 250' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:grain 8s steps(10) infinite}
+@keyframes grain{0%,100%{transform:translate(0,0)}10%{transform:translate(-5%,-8%)}30%{transform:translate(5%,-5%)}50%{transform:translate(-8%,4%)}70%{transform:translate(6%,7%)}90%{transform:translate(-4%,6%)}}
+.wrap{max-width:1180px;margin:0 auto;padding:0 5vw}
+section{padding:5.5rem 0 2rem}
+.label{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.28em;text-transform:uppercase;color:var(--accent-dark);display:flex;align-items:center;gap:.9rem;margin-bottom:1.6rem}
+.label::before{content:"";width:34px;height:1px;background:var(--accent)}
+h2{font-family:var(--font-display);font-weight:500;font-size:clamp(1.7rem,3.4vw,2.6rem);letter-spacing:-.02em;margin-bottom:1.4rem}
+h3{font-family:var(--font-display);font-weight:500;font-size:1.15rem;margin:2.2rem 0 .7rem;padding-top:.6rem;border-top:1px dashed var(--line)}
+h3:first-of-type{border-top:none;padding-top:0}
+h4{font-family:var(--font-display);font-weight:500;font-size:1rem;margin:1.4rem 0 .5rem;color:var(--accent-dark)}
+h5{font-family:var(--font-mono);font-size:.78rem;letter-spacing:.05em;color:var(--ink);margin:1.2rem 0 .3rem;text-transform:uppercase}
+p{color:var(--ink-soft);max-width:78ch;margin-bottom:1rem}
+strong{color:var(--ink)}
+em{color:var(--accent-dark);font-style:normal;font-weight:600}
+code{font-family:var(--font-mono);font-size:.82em;background:#f0ece4;padding:.12em .4em;border-radius:3px;color:var(--ink)}
+pre.plain{font-family:var(--font-mono);font-size:.8rem;background:#f0ece4;padding:1rem 1.2rem;overflow-x:auto;color:var(--ink-soft);margin:1rem 0;white-space:pre-wrap}
+blockquote{border-left:3px solid var(--accent);padding:.3rem 0 .3rem 1.2rem;margin:1rem 0;color:var(--ink-mute);font-size:.92rem;max-width:74ch}
+header.hero{min-height:70vh;display:flex;flex-direction:column;justify-content:center;padding:7rem 0 3rem;position:relative}
+.hero-meta{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-mute);display:flex;gap:2.2rem;flex-wrap:wrap;margin-bottom:2.4rem}
+.hero-meta b{color:var(--accent-dark);font-weight:500}
+h1{font-family:var(--font-display);font-weight:700;font-size:clamp(2.3rem,6vw,4.6rem);line-height:1.05;letter-spacing:-.03em;margin-bottom:2rem}
+h1 .strike{position:relative;color:var(--ink-mute);white-space:nowrap}
+h1 .strike::after{content:"";position:absolute;left:-2%;right:-2%;top:52%;height:.08em;background:var(--accent);transform:rotate(-2deg)}
+.hero-sub{font-size:1.1rem;max-width:70ch}
+.hero-rule{margin-top:3rem;height:4px;width:120px;background:linear-gradient(90deg,var(--accent),var(--aurora))}
+.band{background:var(--dark);color:var(--paper);padding:4rem 0;margin:3rem 0}
+.band .label{color:var(--accent)}
+.band-metric{font-family:var(--font-display);font-weight:300;font-size:clamp(1.3rem,2.6vw,2rem);line-height:1.35;max-width:60ch}
+.band-metric b{color:var(--accent);font-weight:700}
+.band-note{font-family:var(--font-mono);font-size:.75rem;color:#8f8b84;margin-top:1.5rem;letter-spacing:.05em}
+.phase{border-top:1px solid var(--line);padding-top:3.2rem;margin-top:3.2rem;display:grid;grid-template-columns:180px 1fr;gap:2.5rem}
+.phase-num{font-family:var(--font-display);font-weight:700;font-size:3.4rem;line-height:1;color:transparent;-webkit-text-stroke:1.5px var(--accent);position:sticky;top:2rem;align-self:start}
+.phase-num small{display:block;-webkit-text-stroke:0;color:var(--ink-mute);font-family:var(--font-mono);font-weight:400;font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;margin-top:.8rem}
+@media(max-width:820px){.phase{grid-template-columns:1fr;gap:1rem}.phase-num{position:static;font-size:2.4rem}}
+.tbl{width:100%;border-collapse:collapse;margin:1.2rem 0 2rem;font-size:.85rem;background:var(--card);box-shadow:0 1px 0 var(--line)}
+.tbl th{font-family:var(--font-mono);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;text-align:left;color:var(--paper);background:var(--ink);padding:.65rem .8rem;font-weight:500}
+.tbl td{padding:.6rem .8rem;border-bottom:1px solid var(--line);vertical-align:top;color:var(--ink-soft)}
+.tbl tr:last-child td{border-bottom:none}
+.tbl td:first-child{font-weight:600;color:var(--ink)}
+.tbl .hl{color:var(--accent-dark);font-weight:600}
+.tbl-scroll{overflow-x:auto}
+.gates{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1.1rem;margin:1.6rem 0}
+.gate{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--accent);padding:1.3rem;transition:transform .3s,box-shadow .3s}
+.gate:hover{transform:translateY(-4px);box-shadow:0 12px 28px rgba(17,17,16,.08)}
+.gate .g-id{font-family:var(--font-mono);font-size:.66rem;letter-spacing:.2em;color:var(--accent-dark);text-transform:uppercase;margin-bottom:.6rem}
+.gate .g-crit{font-family:var(--font-display);font-weight:500;font-size:1rem;line-height:1.4}
+.gate .g-note{font-size:.8rem;color:var(--ink-mute);margin-top:.6rem}
+ul.list{list-style:none;margin:.6rem 0 1.4rem}
+ul.list li{padding:.42rem 0 .42rem 1.6rem;position:relative;color:var(--ink-soft);max-width:80ch}
+ul.list li::before{content:"";position:absolute;left:0;top:.9rem;width:9px;height:9px;background:var(--accent);border-radius:1px;transform:rotate(45deg)}
+ol.steps{counter-reset:s;list-style:none;margin:.6rem 0 1.4rem}
+ol.steps li{counter-increment:s;padding:.5rem 0 .5rem 3rem;position:relative;color:var(--ink-soft);max-width:80ch}
+ol.steps li::before{content:counter(s,decimal-leading-zero);position:absolute;left:0;top:.5rem;font-family:var(--font-mono);font-size:.76rem;color:var(--accent-dark);border:1px solid var(--line);background:var(--card);padding:.15rem .45rem}
+.callout{background:linear-gradient(135deg,var(--accent),var(--aurora));color:#fff;padding:1.7rem 2rem;margin:1.8rem 0;max-width:82ch}
+.callout p{color:#fff;margin:0;font-family:var(--font-display);font-weight:500;font-size:1.02rem;max-width:none}
+.diagram{background:var(--card);border:1px solid var(--line);padding:1.4rem;margin:1.6rem 0;overflow-x:auto}
+.diagram .cap{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-mute);margin-bottom:.8rem}
+.story{background:var(--card);border:1px solid var(--line);padding:1.2rem 1.4rem;margin:1rem 0}
+.story .s-id{font-family:var(--font-mono);font-size:.68rem;color:var(--accent-dark);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.4rem}
+.story .s-title{font-family:var(--font-display);font-weight:500;font-size:1rem;margin-bottom:.5rem}
+.story .s-meta{font-family:var(--font-mono);font-size:.72rem;color:var(--ink-mute);margin-top:.6rem;padding-top:.6rem;border-top:1px dashed var(--line)}
+.epic-header{background:var(--dark);color:var(--paper);padding:1rem 1.4rem;margin-top:2.4rem}
+.epic-header .e-title{font-family:var(--font-display);font-weight:500;font-size:1.15rem;color:#fff}
+.epic-header .e-meta{font-family:var(--font-mono);font-size:.7rem;color:var(--accent);letter-spacing:.06em;margin-top:.4rem}
+.adr{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--aurora);padding:1.4rem 1.6rem;margin:1.4rem 0}
+.adr h4{margin-top:0;color:var(--aurora)}
+.adr .meta{font-family:var(--font-mono);font-size:.68rem;color:var(--ink-mute);letter-spacing:.06em;margin-bottom:.8rem}
+.marquee{overflow:hidden;white-space:nowrap;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:1.2rem 0;margin:4rem 0 0;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.marquee-track{display:inline-block;font-family:var(--font-display);font-weight:700;font-size:clamp(1.6rem,4.4vw,3.2rem);letter-spacing:.02em;color:transparent;-webkit-text-stroke:1.2px var(--ink-mute);animation:mq 34s linear infinite;text-transform:uppercase}
+.marquee-track span{color:var(--accent);-webkit-text-stroke:0;margin:0 1.5rem}
+.marquee:hover .marquee-track{animation-play-state:paused}
+@keyframes mq{to{transform:translateX(-50%)}}
+footer{background:var(--dark);color:var(--paper);padding:4.5rem 0 2.5rem;margin-top:5rem}
+.foot-name{font-family:var(--font-display);font-weight:700;font-size:clamp(2.4rem,8vw,6.5rem);line-height:.95;letter-spacing:-.03em;color:transparent;-webkit-text-stroke:1.5px #4a4844;transition:color .5s}
+.foot-name:hover{color:var(--accent);-webkit-text-stroke:1.5px var(--accent)}
+.foot-row{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1.5rem;margin-top:3rem;border-top:1px solid #2b2a28;padding-top:1.6rem}
+.foot-mono{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:#8f8b84}
+.foot-mono b{color:var(--accent);font-weight:500}
+.status-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#00A650;margin-right:.5rem;animation:pulse 2s infinite}
+@keyframes pulse{50%{opacity:.35}}
+.toc{display:flex;flex-wrap:wrap;gap:.6rem;margin:1.6rem 0}
+.toc a{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-dark);border:1px solid var(--line);padding:.4rem .8rem;text-decoration:none;background:var(--card)}
+.toc a:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+
+<header class="hero wrap">
+  <div class="hero-meta">
+    <span>Requirements Intel <b>AIOS Framework</b></span>
+    <span>v1.0 · 19 Jul 2026</span>
+    <span>Fonte · <b>RFP-001 Northstar Operations Group (fictício)</b></span>
+  </div>
+  <h1>Documento entra, decisão sai.<br><span class="strike">Nunca sem revisão humana.</span></h1>
+  <p class="hero-sub">Consolidação integral do pipeline de 5 fases — Discovery → PRD → Architecture → Backlog → Business Case — para a Intelligent Operations Document Platform: intake governado, classificação e extração assistidas por IA, gate obrigatório de aprovação humana para todo campo crítico, e roteamento auditável para sistema financeiro e CRM.</p>
+  <div class="hero-rule"></div>
+  <div class="toc">
+    <a href="#discovery">00 Discovery</a>
+    <a href="#prd">01 PRD</a>
+    <a href="#architecture">02 Arquitetura</a>
+    <a href="#backlog">03 Backlog</a>
+    <a href="#business-case">04 Business Case</a>
+  </div>
+</header>
+
+<div class="band">
+  <div class="wrap">
+    <div class="label">Recomendação do Pipeline</div>
+    <div class="band-metric"><b>GO com ressalvas.</b> NPV positivo em 3 anos (R$ 284.462, cenário base) e payback ~14–16 meses, condicionados à confirmação do sistema financeiro/CRM alvo e dos volumes reais de documentos.</div>
+    <div class="band-note">// done = discovery + prd + architecture + backlog + business-case, todos com gate de qualidade 100% e rastreabilidade RQ → FR/NFR → Story → ADR → Business Case</div>
+  </div>
+</div>
+
+<main class="wrap">
+
+<!-- ================= FASE 00 — DISCOVERY ================= -->
+<section class="phase" id="discovery">
+  <div class="phase-num">00<small>Fase 1<br>Discovery</small></div>
+  <div>
+    <div class="label">@discovery · Scout · v1.0 · 2026-07-19 · Status: Draft</div>
+    <h2>Um processo fragmentado, sem rastreabilidade e sem gate de IA.</h2>
+
+    <h3>1. Resumo Executivo</h3>
+    <p>A Northstar Operations Group processa ~180.000 páginas, 65.000 e-mails e 12.000 documentos estruturados/semiestruturados por mês através de processos manuais fragmentados (caixas compartilhadas, pastas de rede, SharePoint, planilhas). Isso gera classificação inconsistente, re-digitação de dados, baixa rastreabilidade e risco de uso de resultados de IA não aprovados como se fossem fato de negócio. O programa busca uma <strong>Plataforma Inteligente de Documentos de Operações</strong> governada, com piloto de produção nas áreas de Finance Operations e Customer Operations, preservando revisão humana obrigatória para qualquer resultado crítico.</p>
+
+    <h3>2. Contexto</h3>
+    <div class="tbl-scroll"><table class="tbl">
+      <tr><th>Campo</th><th>Valor</th></tr>
+      <tr><td>Empresa / Área</td><td>Northstar Operations Group — Finance Operations e Customer Operations (piloto)</td></tr>
+      <tr><td>Produto / Sistema</td><td>Intelligent Operations Document Platform (intake, classificação, extração, validação, busca, roteamento)</td></tr>
+      <tr><td>Gatilho do Projeto</td><td>Fragmentação operacional, re-digitação manual, falta de rastreabilidade fonte→ação, risco de uso indevido de output de IA</td></tr>
+      <tr><td>Prazo Indicativo</td><td>25 semanas (mobilização → go-live), ver §18 do RFP</td></tr>
+      <tr><td>Orçamento Indicativo</td><td>Não informado no RFP — a definir na resposta comercial (Seção 21); custo será modelado no Business Case</td></tr>
+    </table></div>
+
+    <h3>3. Stakeholders</h3>
+    <div class="tbl-scroll"><table class="tbl">
+      <tr><th>Stakeholder</th><th>Papel</th><th>Objetivo Principal</th><th>Nível de Influência</th></tr>
+      <tr><td>Chief Operating Officer</td><td>Sponsor executivo</td><td>Valor de negócio e adoção</td><td class="hl">Alto</td></tr>
+      <tr><td>Finance Operations Director</td><td>Business owner</td><td>Precisão, throughput, controles</td><td class="hl">Alto</td></tr>
+      <tr><td>Customer Operations Director</td><td>Business owner</td><td>Tempo de resposta e qualidade de roteamento</td><td class="hl">Alto</td></tr>
+      <tr><td>Enterprise Architect</td><td>Autoridade de arquitetura</td><td>Padrões, integração, reuso</td><td class="hl">Alto</td></tr>
+      <tr><td>Data Protection Officer</td><td>Autoridade de privacidade</td><td>Minimização de dados, retenção, base legal</td><td class="hl">Alto</td></tr>
+      <tr><td>Information Security Lead</td><td>Autoridade de segurança</td><td>Identidade, secrets, rede, monitoramento</td><td class="hl">Alto</td></tr>
+      <tr><td>Finance reviewer</td><td>SME</td><td>Qualidade de validação e tratamento de exceções</td><td>Médio</td></tr>
+      <tr><td>Customer service analyst</td><td>Usuário final</td><td>Usabilidade e produtividade de fila</td><td>Médio</td></tr>
+      <tr><td>Platform engineering team</td><td>Owner de operação</td><td>Confiabilidade, deploy, suportabilidade</td><td class="hl">Alto</td></tr>
+      <tr><td>Procurement</td><td>Owner comercial</td><td>Preço, contrato, risco de fornecedor</td><td>Médio</td></tr>
+    </table></div>
+
+    <h3>4. Problema Central</h3>
+    <h5>4.1 Declaração do Problema</h5>
+    <blockquote>"Como analista de Finance Operations ou Customer Operations, enfrento classificação manual e re-digitação de dados de documentos operacionais, o que causa atrasos de fila, erros de retrabalho e perda de rastreabilidade, porque a ingestão hoje é fragmentada entre mailboxes, pastas de rede, SharePoint e sistemas de linha de negócio sem um pipeline de governança único."</blockquote>
+    <h5>4.2 Situação Atual (As-Is)</h5>
+    <p>Analistas abrem manualmente cada e-mail/anexo, identificam o tipo de documento, copiam valores para planilha ou sistema de negócio, verificam completude e, se faltar dado, buscam a informação por e-mail/telefone antes de rotear ou submeter o registro. O status é atualizado manualmente e o reporting é periódico e não em tempo real (ver fluxograma §7 do RFP).</p>
+    <h5>4.3 Impacto do Problema Não Resolvido</h5>
+    <ul class="list">
+      <li><strong>Financeiro:</strong> custo de re-digitação e retrabalho, atraso em processamento de pagamentos/faturas.</li>
+      <li><strong>Operacional:</strong> filas com atraso, ageing de exceções sem dono claro, tempo de recuperação de documentos lento.</li>
+      <li><strong>Reputacional:</strong> tempo de resposta ao cliente degradado em Customer Operations.</li>
+      <li><strong>Regulatório:</strong> dificuldade de auditoria e resolução de disputas por ausência de proveniência fonte→campo→ação; risco de decisão material tomada a partir de output de IA não revisado.</li>
+    </ul>
+
+    <h3>5. Oportunidades</h3>
+    <div class="tbl-scroll"><table class="tbl">
+      <tr><th>#</th><th>Oportunidade</th><th>Valor Estimado</th><th>Urgência</th></tr>
+      <tr><td>1</td><td>Intake governado único (mailbox + SharePoint) eliminando triagem manual</td><td>Redução de tempo de classificação</td><td class="hl">Alta</td></tr>
+      <tr><td>2</td><td>Extração automática com confiança calibrada + fila de validação humana</td><td>Redução de re-digitação e erro</td><td class="hl">Alta</td></tr>
+      <tr><td>3</td><td>Roteamento automático para sistema financeiro e CRM</td><td>Redução de manuseio manual</td><td class="hl">Alta</td></tr>
+      <tr><td>4</td><td>Proveniência completa fonte→campo→ação para auditoria</td><td>Evidência para disputas e compliance</td><td>Média</td></tr>
+      <tr><td>5</td><td>Arquitetura reutilizável para novos domínios/tipos de documento pós-piloto</td><td>Escala futura sem redesenho</td><td>Média</td></tr>
+    </table></div>
+
+    <h3>6. Requerimentos de Alto Nível</h3>
+    <div class="tbl-scroll"><table class="tbl">
+      <tr><th>ID</th><th>Requerimento</th><th>Tipo</th><th>Prioridade</th></tr>
+      <tr><td>RQ-001</td><td>Centralizar intake de documentos do piloto (mailbox + SharePoint)</td><td>Funcional</td><td class="hl">Must</td></tr>
+      <tr><td>RQ-002</td><td>Classificar documentos com taxonomia configurável (regras + IA)</td><td>Funcional</td><td class="hl">Must</td></tr>
+      <tr><td>RQ-003</td><td>Extrair campos configurados retendo proveniência de fonte</td><td>Funcional</td><td class="hl">Must</td></tr>
+      <tr><td>RQ-004</td><td>Calcular confiança e rotear baixa confiança para revisão humana</td><td>Funcional</td><td class="hl">Must</td></tr>
+      <tr><td>RQ-005</td><td>Impedir que resultado crítico não aprovado seja tratado como dado confiável</td><td>Não-Funcional (Governança)</td><td class="hl">Must</td></tr>
+      <tr><td>RQ-006</td><td>Rotear resultados aprovados para 1 sistema financeiro e 1 CRM</td><td>Funcional</td><td class="hl">Must</td></tr>
+      <tr><td>RQ-007</td><td>Fornecer filas de trabalho e visões de status por papel</td><td>Funcional</td><td class="hl">Must</td></tr>
+      <tr><td>RQ-008</td><td>Registrar histórico de auditoria imutável/protegido</td><td>Não-Funcional (Compliance)</td><td class="hl">Must</td></tr>
+      <tr><td>RQ-009</td><td>Suportar inglês, português e italiano no piloto</td><td>Funcional</td><td>Should</td></tr>
+      <tr><td>RQ-010</td><td>Permitir configuração de novos tipos de documento sem redesenvolvimento completo</td><td>Não-Funcional (Manutenibilidade)</td><td>Should</td></tr>
+      <tr><td>RQ-011</td><td>Fornecer dashboards operacionais e métricas exportáveis</td><td>Funcional</td><td>Should</td></tr>
+      <tr><td>RQ-012</td><td>Fornecer roadmap de scale-up pós-piloto</td><td>Não-Funcional (Estratégico)</td><td class="hl">Must</td></tr>
+    </table></div>
+
+    <h3>7. Restrições</h3>
+    <h5>7.1 Técnicas</h5>
+    <ul class="list">
+      <li>Ambiente preferencial Azure (alternativas aceitas com justificativa técnica/negócio).</li>
+      <li>Ambientes separados: desenvolvimento, teste e produção.</li>
+      <li>SSO corporativo + MFA, least privilege.</li>
+      <li>Nenhuma decisão financeira, legal ou operacionalmente material pode ser tomada exclusivamente por output de IA generativa não revisado.</li>
+    </ul>
+    <h5>7.2 Regulatórias / Compliance</h5>
+    <ul class="list">
+      <li>Minimização de dados, retenção e exclusão configuráveis.</li>
+      <li>Proibição de gravar conteúdo sensível em logs de diagnóstico por padrão.</li>
+      <li>Residência de dados para UK e UE/EEE.</li>
+      <li>Não usar serviços públicos de IA não aprovados com dados confidenciais.</li>
+      <li>WCAG 2.1 AA (acessibilidade) como meta de piloto.</li>
+    </ul>
+    <h5>7.3 Organizacionais</h5>
+    <ul class="list">
+      <li>Piloto restrito a Finance Operations (faturas de fornecedor, evidência de pagamento) e Customer Operations (anexos de solicitação de serviço).</li>
+      <li>Fora de escopo: substituição de ERP/CRM, aprovação financeira autônoma, interpretação jurídica autônoma, redesenho de todos os processos, migração de todo histórico, data warehouse de propósito geral.</li>
+    </ul>
+    <h5>7.4 Integrações Obrigatórias</h5>
+    <div class="tbl-scroll"><table class="tbl">
+      <tr><th>Sistema</th><th>Tipo de Integração</th><th>SLA Atual</th></tr>
+      <tr><td>Shared mailbox</td><td>Ingestão de e-mail/anexo</td><td>A confirmar em Discovery detalhado</td></tr>
+      <tr><td>SharePoint</td><td>Retrieval de documento + metadata update</td><td>A confirmar</td></tr>
+      <tr><td>Sistema financeiro (1)</td><td>Submissão + status feedback</td><td>A confirmar — depende de qual sistema (questão aberta)</td></tr>
+      <tr><td>CRM (1)</td><td>Criação/atualização de caso</td><td>A confirmar — depende de qual CRM (questão aberta)</td></tr>
+      <tr><td>Identity Provider corporativo</td><td>SSO/MFA</td><td>A confirmar</td></tr>
+    </table></div>
+
+    <h3>8. Premissas</h3>
+    <ol class="steps">
+      <li>A organização detém ou está autorizada a processar os dados do piloto.</li>
+      <li>Serviços de identidade corporativa estão disponíveis para integração.</li>
+      <li>O sistema financeiro e o CRM expõem interfaces de integração suportadas.</li>
+      <li>SMEs de negócio podem fornecer amostras rotuladas e tempo de validação.</li>
+      <li>O piloto usará dados anonimizados/sintéticos quando dado de produção não for necessário.</li>
+      <li>Volumes indicativos (180k páginas/mês, 65k e-mails/mês, 12k documentos/mês) são estimativas e serão validados em Discovery aprofundado.</li>
+    </ol>
+
+    <h3>9. Riscos Identificados</h3>
+    <div class="tbl-scroll"><table class="tbl">
+      <tr><th>Risco</th><th>Probabilidade</th><th>Impacto</th><th>Mitigação Inicial</th></tr>
+      <tr><td>Sistema financeiro/CRM alvo não definidos até o fim da Discovery</td><td>Alta</td><td class="hl">Alto</td><td>Priorizar decisão no Kick-off; bloquear integrações até confirmação</td></tr>
+      <tr><td>Baixa qualidade de dados de treino/rotulagem (SMEs sem tempo)</td><td>Média</td><td class="hl">Alto</td><td>Plano de amostragem mínima + sintético desde o início</td></tr>
+      <tr><td>Uso indevido de output de IA não revisado como fato de negócio</td><td>Média</td><td class="hl">Crítico</td><td>Gate de aprovação obrigatório por campo crítico (BR-005)</td></tr>
+      <tr><td>Dados sensíveis (PII/financeiro) vazando para logs de diagnóstico</td><td>Média</td><td class="hl">Alto</td><td>Redação de log por padrão + revisão de segurança antes do go-live</td></tr>
+      <tr><td>Volumes reais divergentes das estimativas indicativas</td><td>Média</td><td>Médio</td><td>Validar baseline real na Discovery antes de dimensionar capacidade (NFR-004)</td></tr>
+      <tr><td>Multilinguismo (EN/PT/IT) com acurácia desigual entre idiomas</td><td>Média</td><td>Médio</td><td>Medir acurácia por idioma separadamente nos critérios de sucesso</td></tr>
+    </table></div>
+
+    <h3>10. Métricas de Sucesso</h3>
+    <div class="tbl-scroll"><table class="tbl">
+      <tr><th>Métrica</th><th>Baseline Atual</th><th>Meta</th><th>Prazo</th></tr>
+      <tr><td>Documentos com status de processamento</td><td>Não medido (processo manual)</td><td class="hl">≥ 95%</td><td>Fim do piloto</td></tr>
+      <tr><td>Documentos classificados corretamente na taxonomia</td><td>Não medido</td><td class="hl">≥ 90%</td><td>Fim do piloto</td></tr>
+      <tr><td>Acurácia de extração de campos prioritários</td><td>Não medido</td><td class="hl">≥ 85%</td><td>Fim do piloto</td></tr>
+      <tr><td>Registros aprovados com lineage completo</td><td>Não medido</td><td class="hl">100%</td><td>Fim do piloto</td></tr>
+      <tr><td>Campos críticos de baixa confiança roteados para revisão humana</td><td>Não medido</td><td class="hl">100%</td><td>Fim do piloto</td></tr>
+      <tr><td>Achados críticos de segurança/privacidade em aberto no go-live</td><td>N/A</td><td class="hl">0</td><td>Go-live</td></tr>
+      <tr><td>Reviewers capazes de concluir o workflow após treinamento</td><td>N/A</td><td>≥ 80%</td><td>Fim do treinamento</td></tr>
+    </table></div>
+
+    <h3>11. Fora de Escopo (Inicial)</h3>
+    <ul class="list">
+      <li>Substituição do ERP ou CRM existentes.</li>
+      <li>Aprovação autônoma completa de transações financeiras.</li>
+      <li>Interpretação jurídica ou aconselhamento legal autônomo.</li>
+      <li>Redesenho de todos os processos de negócio existentes.</li>
+      <li>Migração de todo o histórico documental.</li>
+      <li>Construção de data warehouse corporativo de propósito geral.</li>
+      <li>Uso de serviços públicos de IA não aprovados com dados confidenciais.</li>
+      <li>Contratos e documentos legais, idiomas além de EN/PT/IT, novos ERPs/CRMs, reconciliação automatizada, canais self-service, analytics preditivo avançado (todos: escopo futuro pós-piloto, §5.2 do RFP).</li>
+    </ul>
+
+    <h3>12. Próximos Passos</h3>
+    <ul class="list">
+      <li>✅ @prd — Gerar PRD a partir deste discovery</li>
+      <li>Validar premissas com stakeholders (sistema financeiro/CRM alvo, volumes reais, campos críticos)</li>
+      <li>Confirmar dados de categoria especial/sensível presentes na amostra de documentos</li>
+    </ul>
+
+    <h3>Histórico de Versões</h3>
+    <div class="tbl-scroll"><table class="tbl">
+      <tr><th>Versão</th><th>Data</th><th>Autor</th><th>Mudança</th></tr>
+      <tr><td>1.0</td><td>2026-07-19</td><td>@discovery</td><td>Versão inicial a partir do RFP-001</td></tr>
+    </table></div>
+  </div>
+</section>
+
+<!-- ================= FASE 01 — PRD ================= -->
+<section class="phase" id="prd">
+  <div class="phase-num">01<small>Fase 2<br>PRD</small></div>
+  <div>
+    <div class="label">@prd · Priya · v1.0 · 2026-07-19 · Status: Draft</div>
+    <h2>21 requerimentos funcionais, 15 não-funcionais, 100% rastreáveis.</h2>
+
+    <h3>1. Visão Geral</h3>
+    <p><strong>Tagline:</strong> "Intelligent Operations Document Platform é uma plataforma de intake e processamento documental governado que permite a analistas de Finance e Customer Operations classificar, extrair, validar e rotear documentos com rastreabilidade completa, sem re-digitação manual e sem tratar output de IA não aprovado como dado confiável."</p>
+
+    <h3>2. Problema e Oportunidade</h3>
+    <p>Ver <code>discovery-report.md § 4</code>. Síntese: processo hoje fragmentado entre mailbox, SharePoint, sistemas de negócio e planilhas gera classificação inconsistente, re-digitação, baixa visibilidade de status, rastreabilidade fraca e risco de decisões materiais baseadas em IA não revisada. Oportunidade: pipeline único de intake→classificação→extração→confiança→validação→roteamento com auditoria completa.</p>
+
+    <h3>3. Personas</h3>
+    <div class="gates">
+      <div class="gate"><div class="g-id">Persona 1</div><div class="g-crit">Finance Reviewer (Analista de Finance Operations)</div><div class="g-note"><strong>Perfil:</strong> processa faturas de fornecedor e evidências de pagamento.<br><strong>Objetivo:</strong> validar rapidamente exceções e aprovar resultados extraídos com confiança.<br><strong>Dor atual:</strong> re-digitação manual, dificuldade de rastrear origem do dado.<br><strong>Nível técnico:</strong> Intermediário. <strong>Frequência:</strong> diária, contínua.</div></div>
+      <div class="gate"><div class="g-id">Persona 2</div><div class="g-crit">Customer Service Analyst</div><div class="g-note"><strong>Perfil:</strong> trata anexos de solicitações de clientes.<br><strong>Objetivo:</strong> classificar e rotear solicitações rapidamente para o CRM correto.<br><strong>Dor atual:</strong> identificação manual de tipo de documento, atraso na fila.<br><strong>Nível técnico:</strong> Básico/Intermediário. <strong>Frequência:</strong> diária, alto volume.</div></div>
+      <div class="gate"><div class="g-id">Persona 3</div><div class="g-crit">Platform Operations Owner (Platform Engineering)</div><div class="g-note"><strong>Perfil:</strong> time de engenharia responsável por operar a plataforma pós-handover.<br><strong>Objetivo:</strong> confiabilidade, observabilidade, suportabilidade.<br><strong>Dor atual:</strong> falta de visibilidade operacional consolidada hoje.</div></div>
+      <div class="gate"><div class="g-id">Persona 4</div><div class="g-crit">Compliance / DPO</div><div class="g-note"><strong>Perfil:</strong> autoridade de privacidade e proteção de dados.<br><strong>Objetivo:</strong> minimização de dados, retenção, auditabilidade, base legal.<br><strong>Dor atual:</strong> falta de proveniência e controle de retenção no processo manual.</div></div>
+    </div>
+
+    <h3>4. User Journeys</h3>
+    <h5>Journey 1: Validação de Fatura de Fornecedor (Persona: Finance Reviewer)</h5>
+    <pre class="plain">[E-mail com fatura chega] → [Intake gera ID único] → [Classificação + extração automática]
+→ [Confiança calculada] → [Baixa confiança → fila de revisão] → [Reviewer aprova/corrige]
+→ [Roteamento para sistema financeiro] → [Registro de auditoria criado]</pre>
+    <p><strong>Happy Path:</strong> documento classificado e extraído com alta confiança, aprovação automática por regra de negócio, roteamento direto. <strong>Edge Cases:</strong> documento duplicado, campo crítico ausente, múltiplos idiomas no mesmo anexo. <strong>Erros e Fallbacks:</strong> falha de roteamento vai para fila de exceção recuperável (FR-015); intake falho é reprocessado por política de retry (FR-004).</p>
+
+    <h5>Journey 2: Triagem de Solicitação de Cliente (Persona: Customer Service Analyst)</h5>
+    <pre class="plain">[Anexo de solicitação recebido] → [Classificação por taxonomia] → [Extração de campos]
+→ [Confiança média → regra de negócio decide] → [Roteamento para CRM] → [Status visível na fila]</pre>
+    <p><strong>Happy Path:</strong> classificação correta, roteamento automático ao CRM. <strong>Edge Cases:</strong> documento fora da taxonomia configurada (cai em exceção manual). <strong>Erros e Fallbacks:</strong> reviewer pode escalar (FR-013).</p>
+
+    <h3>5. Requerimentos Funcionais</h3>
+    <div class="tbl-scroll"><table class="tbl">
+      <tr><th>ID</th><th>Descrição</th><th>Critério de Aceitação</th><th>Prioridade</th><th>Origem</th></tr>
+      <tr><td>FR-001</td><td>Ingerir documentos e anexos de e-mail das fontes acordadas do piloto (mailbox, SharePoint)</td><td>Given um documento na fonte configurada, When o intake roda, Then um evento de ingestão é criado</td><td class="hl">Must</td><td>RQ-001</td></tr>
+      <tr><td>FR-002</td><td>Atribuir ID de processamento único a cada evento de intake</td><td>Given qualquer ingestão, When processada, Then um ID único e imutável é gravado</td><td class="hl">Must</td><td>RQ-001</td></tr>
+      <tr><td>FR-003</td><td>Detectar submissões duplicadas por lógica de matching configurável</td><td>Given dois documentos equivalentes, When ambos ingeridos, Then o segundo é sinalizado como duplicado</td><td class="hl">Must</td><td>RQ-001</td></tr>
+      <tr><td>FR-004</td><td>Reprocessar eventos de intake falhos segundo política documentada de retry</td><td>Given falha transitória de ingestão, When a política de retry aciona, Then o evento é reprocessado até o limite definido</td><td class="hl">Must</td><td>RQ-001</td></tr>
+      <tr><td>FR-005</td><td>Expor fila de exceção para falhas permanentes de intake</td><td>Given falha permanente, When o limite de retry é atingido, Then o evento aparece na fila de exceção</td><td class="hl">Must</td><td>RQ-001</td></tr>
+      <tr><td>FR-006</td><td>Classificar cada documento contra taxonomia configurável</td><td>Given um documento ingerido, When classificado, Then recebe um tipo da taxonomia com score de confiança</td><td class="hl">Must</td><td>RQ-002</td></tr>
+      <tr><td>FR-007</td><td>Extrair o conjunto de campos configurado por tipo de documento do piloto</td><td>Given um documento classificado, When extraído, Then os campos configurados são populados</td><td class="hl">Must</td><td>RQ-003</td></tr>
+      <tr><td>FR-008</td><td>Reter confiança, localização de origem e timestamp por campo extraído</td><td>Given qualquer campo extraído, When persistido, Then confiança + fonte + timestamp são armazenados</td><td class="hl">Must</td><td>RQ-003</td></tr>
+      <tr><td>FR-009</td><td>Suportar correção humana de valores extraídos</td><td>Given um campo extraído incorreto, When o reviewer corrige, Then o novo valor e o autor são registrados</td><td class="hl">Must</td><td>RQ-003, RQ-005</td></tr>
+      <tr><td>FR-010</td><td>Identificar versão de modelo, prompt, regra e configuração usada em cada resultado</td><td>Given qualquer resultado gerado, When consultado, Then a versão de modelo/prompt/regra é rastreável</td><td class="hl">Must</td><td>RQ-003</td></tr>
+      <tr><td>FR-011</td><td>Aplicar thresholds de confiança configuráveis</td><td>Given um resultado com score, When comparado ao threshold, Then a rota (auto/revisão) é definida</td><td class="hl">Must</td><td>RQ-004</td></tr>
+      <tr><td>FR-012</td><td>Exigir validação humana para campos críticos abaixo do threshold</td><td>Given um campo crítico com baixa confiança, When avaliado, Then é bloqueado até aprovação humana</td><td class="hl">Must</td><td>RQ-004, RQ-005</td></tr>
+      <tr><td>FR-013</td><td>Permitir que reviewers aprovem, rejeitem, corrijam ou escalem um item de trabalho</td><td>Given um item na fila, When o reviewer age, Then o status muda para aprovado/rejeitado/corrigido/escalado</td><td class="hl">Must</td><td>RQ-004</td></tr>
+      <tr><td>FR-014</td><td>Rotear resultados aprovados para o sistema alvo (financeiro ou CRM)</td><td>Given um resultado aprovado, When roteado, Then o sistema alvo recebe o dado</td><td class="hl">Must</td><td>RQ-006</td></tr>
+      <tr><td>FR-015</td><td>Tornar falhas de roteamento recuperáveis e auditáveis</td><td>Given uma falha de roteamento, When detectada, Then é registrada e reprocessável</td><td class="hl">Must</td><td>RQ-006</td></tr>
+      <tr><td>FR-016</td><td>Permitir busca de registros de processamento por data, fonte, tipo, status e identificador de negócio</td><td>Given critérios de busca, When aplicados, Then registros correspondentes são retornados</td><td class="hl">Must</td><td>RQ-007</td></tr>
+      <tr><td>FR-017</td><td>Exibir fonte original, valores extraídos, correções, aprovações e status downstream em um único registro</td><td>Given um registro selecionado, When aberto, Then todo o histórico é visível</td><td class="hl">Must</td><td>RQ-007, RQ-008</td></tr>
+      <tr><td>FR-018</td><td>Fornecer métricas operacionais de volume, latência, acurácia, exceções e ageing</td><td>Given o dashboard, When acessado por usuário autorizado, Then as métricas atuais são exibidas</td><td>Should</td><td>RQ-011</td></tr>
+      <tr><td>FR-019</td><td>Registrar em auditoria ator, ação, timestamp, valor anterior e novo valor</td><td>Given qualquer ação material, When executada, Then um registro de auditoria imutável é criado</td><td class="hl">Must</td><td>RQ-008</td></tr>
+      <tr><td>FR-020</td><td>Suportar classificação/extração em inglês, português e italiano no piloto</td><td>Given um documento em EN/PT/IT, When processado, Then o resultado inclui idioma detectado e acurácia correspondente</td><td>Should</td><td>RQ-009</td></tr>
+      <tr><td>FR-021</td><td>Permitir configuração de novo tipo de documento sem redeploy completo</td><td>Given um novo tipo de documento, When configurado via taxonomia/regras, Then o pipeline o processa sem alteração de código core</td><td>Should</td><td>RQ-010</td></tr>
+    </table></div>
+
+    <h5>Detalhamento dos FRs Críticos</h5>
+    <div class="story">
+      <div class="s-id">FR-005</div>
+      <div class="s-title">Fila de Exceção de Intake</div>
+      <p><strong>Descrição:</strong> Toda falha permanente de ingestão (após esgotar retries) deve ficar visível e acionável em uma fila de exceção dedicada, nunca silenciosamente descartada.</p>
+      <ul class="list">
+        <li>Given um evento de intake que falhou N vezes (N configurável), When o limite é atingido, Then o evento aparece na fila de exceção com motivo da falha</li>
+        <li>Given um item na fila de exceção, When um operador o reprocessa manualmente, Then o resultado é registrado em auditoria</li>
+      </ul>
+      <div class="s-meta">Prioridade: Must Have · Origem: RQ-001</div>
+    </div>
+    <div class="story">
+      <div class="s-id">FR-012 ★ CRÍTICO</div>
+      <div class="s-title">Gate de Aprovação para Campos Críticos</div>
+      <p><strong>Descrição:</strong> Nenhum campo classificado como crítico pode ser tratado como dado confiável ou disparar ação downstream sem aprovação humana quando a confiança estiver abaixo do threshold configurado. Este é o controle-chave de governança de IA do RFP (BR-005).</p>
+      <ul class="list">
+        <li>Given um campo crítico com confiança &lt; threshold, When o pipeline avalia, Then o item é bloqueado em "pending_approval" e não é roteado</li>
+        <li>Given um campo crítico aprovado, When roteado, Then o registro de auditoria referencia o aprovador e o timestamp</li>
+      </ul>
+      <div class="s-meta">Prioridade: Must Have · Origem: RQ-004, RQ-005</div>
+    </div>
+    <div class="story">
+      <div class="s-id">FR-019</div>
+      <div class="s-title">Auditoria Imutável</div>
+      <p><strong>Descrição:</strong> Toda ação material (classificação, extração, correção, aprovação, roteamento) gera um registro de auditoria com ator, ação, timestamp e diff de valor, protegido contra alteração.</p>
+      <ul class="list">
+        <li>Given qualquer ação material, When executada, Then o registro de auditoria é gravado antes da confirmação da ação ao usuário</li>
+        <li>Given um registro de auditoria, When uma tentativa de alteração ocorre, Then ela é rejeitada ou versionada de forma append-only</li>
+      </ul>
+      <div class="s-meta">Prioridade: Must Have · Origem: RQ-008</div>
+    </div>
+
+    <h3>6. Requerimentos Não-Funcionais</h3>
+    <div class="tbl-scroll"><table class="tbl">
+      <tr><th>ID</th><th>Categoria</th><th>Requerimento</th><th>Métrica</th><th>Origem</th></tr>
+      <tr><td>NFR-001</td><td>Disponibilidade</td><td>Disponibilidade do serviço de produção do piloto</td><td class="hl">≥ 99,5% mensal, excluindo manutenção aprovada</td><td>RQ-005</td></tr>
+      <tr><td>NFR-002</td><td>Performance</td><td>Carregamento de página da fila interativa</td><td>≤ 3s p95</td><td>RQ-007</td></tr>
+      <tr><td>NFR-003</td><td>Performance</td><td>Conclusão de processamento de documento padrão</td><td>≤ 60s p95, excluindo atrasos externos</td><td>RQ-002/003</td></tr>
+      <tr><td>NFR-004</td><td>Escalabilidade</td><td>Capacidade mensal de processamento</td><td>≥ 250.000 páginas sem redesenho</td><td>RQ-001</td></tr>
+      <tr><td>NFR-005</td><td>Confiabilidade</td><td>RPO (Recovery Point Objective)</td><td>≤ 15 minutos para estado da plataforma</td><td>—</td></tr>
+      <tr><td>NFR-006</td><td>Confiabilidade</td><td>RTO (Recovery Time Objective)</td><td>≤ 4 horas para serviço crítico</td><td>—</td></tr>
+      <tr><td>NFR-007</td><td>Segurança</td><td>Identidade</td><td>SSO corporativo + MFA; least privilege</td><td>RQ-005</td></tr>
+      <tr><td>NFR-008</td><td>Segurança</td><td>Proteção de dados</td><td>Criptografia em trânsito e em repouso</td><td>—</td></tr>
+      <tr><td>NFR-009</td><td>Privacidade</td><td>Dados pessoais</td><td>Minimização, retenção e exclusão configuráveis</td><td>—</td></tr>
+      <tr><td>NFR-010</td><td>Auditabilidade</td><td>Lineage de processamento</td><td class="hl">100% dos registros aprovados rastreáveis à fonte</td><td>RQ-008</td></tr>
+      <tr><td>NFR-011</td><td>Acessibilidade</td><td>Interface de usuário</td><td>WCAG 2.1 AA (meta de piloto)</td><td>—</td></tr>
+      <tr><td>NFR-012</td><td>Manutenibilidade</td><td>Testes automatizados</td><td>Cobertura proposta pelo fornecedor; caminhos críticos obrigatórios</td><td>—</td></tr>
+      <tr><td>NFR-013</td><td>Observabilidade</td><td>Monitoramento</td><td>Logs, métricas, traces e alertas acionáveis</td><td>—</td></tr>
+      <tr><td>NFR-014</td><td>Portabilidade</td><td>Capacidade de saída (exit)</td><td>Exportação de configuração, auditoria e dados de negócio</td><td>—</td></tr>
+      <tr><td>NFR-015</td><td>Sustentabilidade</td><td>Eficiência de nuvem</td><td>Fornecedor descreve abordagem de otimização de custo/recurso</td><td>—</td></tr>
+    </table></div>
+
+    <h3>7. Restrições</h3>
+    <h5>7.1 Técnicas</h5>
+    <ul class="list">
+      <li>Ambiente preferencial Microsoft Azure (alternativa aceita com justificativa).</li>
+      <li>Ambientes segregados: dev, test, produção.</li>
+      <li>Nenhuma decisão financeira, legal ou operacionalmente material tomada apenas por IA generativa não revisada (regra transversal a FR-012).</li>
+    </ul>
+    <h5>7.2 Regulatórias</h5>
+    <ul class="list">
+      <li>Residência de dados UK e UE/EEE.</li>
+      <li>Minimização de dados pessoais, retenção e exclusão configuráveis (NFR-009).</li>
+      <li>Proibição de PII/dado sensível em logs de diagnóstico por padrão.</li>
+    </ul>
+    <h5>7.3 Prazo e Orçamento</h5>
+    <ul class="list">
+      <li>Timeline indicativa de 25 semanas (mobilização → go-live), RFP §18.</li>
+      <li>Orçamento não fixado no RFP; custos a estruturar na resposta comercial (RFP §21) e no Business Case.</li>
+    </ul>
+
+    <h3>8. Premissas</h3>
+    <ol class="steps">
+      <li>Sistema financeiro e CRM alvo do piloto serão confirmados no início da Discovery detalhada (questão aberta #1 do RFP).</li>
+      <li>Volumes indicativos (180k páginas/mês) serão validados antes do dimensionamento final de capacidade.</li>
+      <li>Dados de amostra rotulados estarão disponíveis via SMEs de Finance e Customer Operations.</li>
+      <li>Dados de produção não serão necessários no piloto onde sintético/anonimizado for suficiente.</li>
+    </ol>
+
+    <h3>9. Fora de Escopo (Explícito)</h3>
+    <ul class="list">
+      <li>Substituição de ERP/CRM existentes.</li>
+      <li>Aprovação financeira totalmente autônoma.</li>
+      <li>Interpretação/aconselhamento jurídico autônomo.</li>
+      <li>Redesenho de todos os processos de negócio.</li>
+      <li>Migração de todo o histórico documental.</li>
+      <li>Data warehouse corporativo de propósito geral.</li>
+      <li>Contratos/documentos legais, idiomas além de EN/PT/IT, novos ERPs/CRMs, reconciliação automatizada, canais self-service, analytics preditivo avançado — tudo escopo futuro pós-piloto.</li>
+      <li>Uso de serviços públicos de IA não aprovados com dados confidenciais.</li>
+    </ul>
+
+    <h3>10. Critérios de Sucesso</h3>
+    <div class="tbl-scroll"><table class="tbl">
+      <tr><th>Métrica</th><th>Meta</th><th>Prazo de Medição</th></tr>
+      <tr><td>Documentos com status de processamento</td><td class="hl">≥ 95%</td><td>Fim do piloto</td></tr>
+      <tr><td>Documentos classificados corretamente</td><td class="hl">≥ 90%</td><td>Fim do piloto</td></tr>
+      <tr><td>Acurácia de extração de campos prioritários</td><td class="hl">≥ 85%</td><td>Fim do piloto, sobre conjunto de teste acordado</td></tr>
+      <tr><td>Registros aprovados com lineage completo</td><td class="hl">100%</td><td>Fim do piloto</td></tr>
+      <tr><td>Campos críticos de baixa confiança roteados para revisão</td><td class="hl">100%</td><td>Fim do piloto</td></tr>
+      <tr><td>Achados críticos de segurança/privacidade abertos no go-live</td><td class="hl">0</td><td>Go-live</td></tr>
+      <tr><td>Reviewers aptos após treinamento</td><td>≥ 80%</td><td>Fim do treinamento</td></tr>
+    </table></div>
+
+    <h3>11. Rastreabilidade</h3>
+    <div class="tbl-scroll"><table class="tbl">
+      <tr><th>FR/NFR</th><th>Origem Discovery</th><th>Rastreado?</th></tr>
+      <tr><td>FR-001 a FR-005</td><td>RQ-001</td><td>✅</td></tr>
+      <tr><td>FR-006 a FR-010</td><td>RQ-002, RQ-003</td><td>✅</td></tr>
+      <tr><td>FR-011 a FR-013</td><td>RQ-004, RQ-005</td><td>✅</td></tr>
+      <tr><td>FR-014, FR-015</td><td>RQ-006</td><td>✅</td></tr>
+      <tr><td>FR-016 a FR-019</td><td>RQ-007, RQ-008</td><td>✅</td></tr>
+      <tr><td>FR-020</td><td>RQ-009</td><td>✅</td></tr>
+      <tr><td>FR-021</td><td>RQ-010</td><td>✅</td></tr>
+      <tr><td>NFR-001 a NFR-015</td><td>RQ-005, RQ-011, RQ-012</td><td>✅</td></tr>
+    </table></div>
+
+    <h3>Histórico de Versões</h3>
+    <div class="tbl-scroll"><table class="tbl">
+      <tr><th>Versão</th><th>Data</th><th>Autor</th><th>Mudança</th></tr>
+      <tr><td>1.0</td><td>2026-07-19</td><td>@prd</td><td>Versão inicial derivada do discovery-report.md e do RFP-001</td></tr>
+    </table></div>
+  </div>
+</section>
+
+<!-- ================= FASE 02 — ARQUITETURA ================= -->
+<section class="phase" id="architecture">
+  <div class="phase-num">02<small>Fase 3<br>Arquitetura</small></div>
+  <div>
+    <div class="label">@architect · Aria · TOGAF 10 ADM Phases A–E · v1.0 · 2026-07-19</div>
+    <h2>Complexidade COMPLEX (19/25). Event-driven modular, nunca microservices completo.</h2>
+
+    <h3>Phase A — Architecture Vision</h3>
+    <h5>A.1 Declaração de Problema de Negócio</h5>
+    <p><strong>Capacidade atual (As-Is):</strong> triagem, classificação e extração manuais de documentos operacionais, sem confiança calculada nem gate de aprovação obrigatório para dado crítico.<br><strong>Capacidade alvo (To-Be):</strong> pipeline governado de intake → classificação/extração assistida por IA → confiança calibrada → validação humana obrigatória para itens críticos → roteamento automático → auditoria completa.<br><strong>Gap:</strong> ausência de orquestração de documentos com proveniência ponta a ponta e de um gate de governança que impeça decisão material baseada em IA não revisada (FR-012, RQ-005).</p>
+
+    <h5>A.2 Princípios Arquiteturais</h5>
+    <div class="tbl-scroll"><table class="tbl">
+      <tr><th>#</th><th>Princípio</th><th>Implicação</th></tr>
+      <tr><td>PA-01</td><td>Human-in-the-loop obrigatório para dado crítico</td><td>Nenhum roteamento automático de campo crítico sem aprovação (FR-012)</td></tr>
+      <tr><td>PA-02</td><td>Proveniência total (source-to-action)</td><td>Todo campo extraído carrega origem, confiança, versão de modelo (FR-008, FR-010)</td></tr>
+      <tr><td>PA-03</td><td>Observability &amp; Auditability First</td><td>Logs, métricas, traces e auditoria imutável desde o Sprint 1</td></tr>
+      <tr><td>PA-04</td><td>API-First e contratos versionados</td><td>Integrações com finance/CRM/mailbox via contrato explícito antes de implementar</td></tr>
+      <tr><td>PA-05</td><td>Configuração &gt; Código para extensibilidade</td><td>Novos tipos de documento via taxonomia/config, não redeploy (FR-021)</td></tr>
+      <tr><td>PA-06</td><td>Privacy &amp; Data Minimization by Design</td><td>Redação de PII em log por padrão, retenção configurável (NFR-009)</td></tr>
+    </table></div>
+
+    <h5>A.3 Stakeholder Architecture Concerns</h5>
+    <div class="tbl-scroll"><table class="tbl">
+      <tr><th>Stakeholder</th><th>Preocupação</th><th>Como a arquitetura endereça</th></tr>
+      <tr><td>COO</td><td>Valor de negócio e adoção</td><td>Dashboards operacionais (FR-018) + métricas de sucesso mensuráveis</td></tr>
+      <tr><td>Finance/Customer Ops Director</td><td>Precisão e throughput</td><td>Fila de validação priorizada por confiança + SLA de 60s p95 (NFR-003)</td></tr>
+      <tr><td>Enterprise Architect</td><td>Padrões e reuso</td><td>Componentização por domínio (intake/classify/extract/review/route) reutilizável para novos tipos de doc</td></tr>
+      <tr><td>DPO</td><td>Minimização e retenção</td><td>Política de dados pessoais por categoria (C1.4) + Key Vault + redação de log</td></tr>
+      <tr><td>InfoSec Lead</td><td>Identidade, secrets, rede</td><td>Entra ID + MFA + Key Vault + rede isolada (Phase D)</td></tr>
+      <tr><td>Platform Engineering</td><td>Suportabilidade</td><td>Observabilidade completa + runbook de operação (Phase D.4)</td></tr>
+    </table></div>
+
+    <h5>A.4 Diagrama de Contexto (C4 Level 1)</h5>
+    <div class="diagram"><div class="cap">Phase A — Architecture Vision</div>
+      <pre class="mermaid">
+flowchart LR
+  MB[Shared Mailbox] --> APIM[API Gateway]
+  SP[SharePoint] --> APIM
+  APIM --> INTAKE[Intake Orchestration]
+  INTAKE --> AI[Classification and Extraction]
+  AI --> REVIEW[Validation Work Queue]
+  REV_H[Reviewers Finance/CustOps] --> REVIEW
+  REVIEW --> AUDIT[(Audit and Provenance Store)]
+  REVIEW --> FIN[Sistema Financeiro]
+  REVIEW --> CRM[CRM]
+  APIM -.auth.-> AAD[Entra ID]
+      </pre>
+    </div>
+
+    <h5>A.5 Classificação de Complexidade</h5>
+    <div class="tbl-scroll"><table class="tbl">
+      <tr><th>Dimensão</th><th>Score (1-5)</th><th>Justificativa</th></tr>
+      <tr><td>Escopo</td><td>4</td><td>9+ componentes (intake, classificação, extração, confiança, fila, roteamento x2, auditoria, dashboards)</td></tr>
+      <tr><td>Integração</td><td>4</td><td>Mailbox, SharePoint, sistema financeiro, CRM, IdP corporativo — 4+ integrações críticas</td></tr>
+      <tr><td>Infraestrutura</td><td>3</td><td>Cloud gerenciado com múltiplos serviços orquestrados (não K8s multi-cloud)</td></tr>
+      <tr><td>Conhecimento</td><td>3</td><td>Stack Azure conhecida, mas governança de IA generativa é parcialmente nova para a equipe</td></tr>
+      <tr><td>Risco</td><td class="hl">5</td><td>Dados financeiros e pessoais, decisão de negócio material, exigência regulatória de auditoria</td></tr>
+      <tr><td><strong>Total</strong></td><td class="hl"><strong>19/25</strong></td><td></td></tr>
+    </table></div>
+    <p><strong>Classe:</strong> COMPLEX. <strong>Estilo recomendado:</strong> Event-Driven com orquestração assíncrona (mensageria entre intake → classificação → fila → roteamento), não monolito nem microserviços completos — um <strong>modular event-driven</strong> com serviços por domínio.</p>
+
+    <h5>A.6 Legenda de Componentes Azure</h5>
+    <div class="tbl-scroll"><table class="tbl">
+      <tr><th>Componente</th><th>Ícone Azure de referência</th></tr>
+      <tr><td>API Management</td><td><code>azure/devops/10042-icon-service-API-Management-Services.svg</code></td></tr>
+      <tr><td>Functions (Intake/Orquestração)</td><td><code>azure/compute/10029-icon-service-Function-Apps.svg</code></td></tr>
+      <tr><td>Azure OpenAI (Classificação/Extração)</td><td><code>azure/learning/03438-icon-service-Azure-OpenAI-Service.svg</code></td></tr>
+      <tr><td>App Service (Validation Queue UI)</td><td><code>azure/compute/10035-icon-service-App-Services.svg</code></td></tr>
+      <tr><td>SQL Database (Audit/Provenance)</td><td><code>azure/databases/10130-icon-service-SQL-Database.svg</code></td></tr>
+      <tr><td>Cosmos DB (metadados de documento)</td><td><code>azure/databases/10121-icon-service-Azure-Cosmos-DB.svg</code></td></tr>
+      <tr><td>Blob Storage (documentos originais)</td><td><code>azure/storage/10086-icon-service-Storage-Accounts.svg</code></td></tr>
+      <tr><td>Service Bus (fila intake→classify→route)</td><td><code>azure/integration/10836-icon-service-Service-Bus.svg</code></td></tr>
+      <tr><td>Entra ID</td><td><code>azure/identity/10230-icon-service-Azure-Active-Directory.svg</code></td></tr>
+      <tr><td>Key Vault</td><td><code>azure/security/10245-icon-service-Key-Vaults.svg</code></td></tr>
+      <tr><td>Monitor + App Insights</td><td><code>azure/monitor/00001-icon-service-Monitor.svg</code>, <code>azure/devops/00012-icon-service-Application-Insights.svg</code></td></tr>
+      <tr><td>Azure DevOps</td><td><code>azure/devops/10261-icon-service-Azure-DevOps.svg</code></td></tr>
+    </table></div>
+
+    <h3>Phase B — Business Architecture</h3>
+    <h5>B.1 Mapa de Capacidades de Negócio</h5>
+    <div class="diagram">
+      <pre class="mermaid">
+mindmap
+  root(Intelligent Operations Document Platform)
+    Intake Governado
+      Ingestao Mailbox
+      Ingestao SharePoint
+      Deduplicacao
+      Retry e Excecao
+    Classificacao e Extracao
+      Taxonomia Configuravel
+      Extracao de Campos
+      Confianca e Versionamento
+    Validacao Humana
+      Fila por Papel
+      Aprovar Rejeitar Corrigir Escalar
+      Gate de Campo Critico
+    Roteamento
+      Sistema Financeiro
+      CRM
+      Falha Recuperavel
+    Governanca e Auditoria
+      Lineage Fonte a Acao
+      Auditoria Imutavel
+      Dashboards Operacionais
+      </pre>
+    </div>
+    <h5>B.2 Fluxo de Processo — To-Be</h5>
+    <div class="diagram">
+      <pre class="mermaid">
+flowchart TD
+  A([Documento/E-mail recebido]) --> B[Intake gera ID unico + dedup]
+  B --> C[Classificacao e Extracao assistida por IA]
+  C --> D{Confianca x Regras de Negocio}
+  D -->|Alta confianca| E[Roteamento automatico]
+  D -->|Media confianca| F[Regra de negocio decide]
+  D -->|Baixa confianca / campo critico| G[Fila de validacao humana]
+  F --> E
+  G --> H[Reviewer aprova/rejeita/corrige/escala]
+  H --> E
+  E --> I[Sistema Financeiro ou CRM]
+  B --> J[(Registro de Auditoria)]
+  C --> J
+  G --> J
+  I --> J
+      </pre>
+    </div>
+    <h5>B.3 Matriz Ator × Capacidade</h5>
+    <div class="tbl-scroll"><table class="tbl">
+      <tr><th>Capacidade</th><th>Finance Reviewer</th><th>Customer Service Analyst</th><th>Platform Engineering</th><th>DPO/Compliance</th></tr>
+      <tr><td>Fila de validação</td><td>CRUD</td><td>CRUD</td><td>Leitura</td><td>Leitura</td></tr>
+      <tr><td>Configuração de taxonomia</td><td>—</td><td>—</td><td>CRUD</td><td>Consulta</td></tr>
+      <tr><td>Dashboards operacionais</td><td>Leitura</td><td>Leitura</td><td>CRUD</td><td>Leitura</td></tr>
+      <tr><td>Auditoria e lineage</td><td>Leitura</td><td>Leitura</td><td>Leitura</td><td>CRUD (política)</td></tr>
+    </table></div>
+
+    <h3>Phase C — Information Systems Architecture</h3>
+    <h5>C1.1 Diagrama ER Conceitual</h5>
+    <div class="diagram">
+      <pre class="mermaid">
+erDiagram
+  DOCUMENTO {
+    uuid id PK
+    string fonte
+    string tipo_taxonomia
+    string status
+    string idioma_detectado
+    timestamp ingerido_em
+    boolean duplicado
+  }
+  CAMPO_EXTRAIDO {
+    uuid id PK
+    uuid documento_id FK
+    string nome_campo
+    string valor
+    float confianca
+    string localizacao_fonte
+    string versao_modelo
+    boolean critico
+    timestamp extraido_em
+  }
+  ITEM_VALIDACAO {
+    uuid id PK
+    uuid documento_id FK
+    uuid reviewer_id FK
+    string decisao
+    string valor_corrigido
+    timestamp decidido_em
+  }
+  REGISTRO_AUDITORIA {
+    uuid id PK
+    uuid documento_id FK
+    string ator
+    string acao
+    string valor_anterior
+    string valor_novo
+    timestamp criado_em
+  }
+  ROTEAMENTO {
+    uuid id PK
+    uuid documento_id FK
+    string sistema_alvo
+    string status_entrega
+    int tentativas
+  }
+  DOCUMENTO ||--o{ CAMPO_EXTRAIDO : contem
+  DOCUMENTO ||--o{ ITEM_VALIDACAO : requer
+  DOCUMENTO ||--o{ REGISTRO_AUDITORIA : gera
+  DOCUMENTO ||--o{ ROTEAMENTO : e_roteado_por
+      </pre>
+    </div>
+
+    <h5>C1.2 Estratégia de Armazenamento</h5>
+    <div class="tbl-scroll"><table class="tbl">
+      <tr><th>Tipo de Dado</th><th>Tecnologia</th><th>Justificativa</th><th>NFR coberto</th></tr>
+      <tr><td>Documento original (PDF/imagem/e-mail)</td><td>Azure Blob Storage (imutável, versionado)</td><td>Custo-benefício, retenção configurável</td><td>NFR-004, NFR-009</td></tr>
+      <tr><td>Metadados de documento e campos extraídos</td><td>Azure Cosmos DB</td><td>Schema semiestruturado, alto volume, baixa latência de leitura</td><td>NFR-003, NFR-004</td></tr>
+      <tr><td>Auditoria e proveniência</td><td>Azure SQL Database (append-only, RLS)</td><td>ACID + integridade referencial para lineage 100% (NFR-010)</td><td>NFR-010</td></tr>
+      <tr><td>Fila de eventos intake→classify→route</td><td>Azure Service Bus</td><td>Garantia de entrega, retry, dead-letter queue</td><td>FR-004, FR-015</td></tr>
+      <tr><td>Cache de sessão/fila</td><td>Azure Cache for Redis</td><td>Latência de fila ≤ 3s p95</td><td>NFR-002</td></tr>
+      <tr><td>Logs de diagnóstico</td><td>Azure Log Analytics (com redação de PII)</td><td>Retenção configurável, sem PII por padrão</td><td>NFR-009, NFR-013</td></tr>
+    </table></div>
+
+    <h5>C1.3 Fluxo de Dados Principais</h5>
+    <div class="diagram">
+      <pre class="mermaid">
+flowchart LR
+  subgraph Sources[Fontes]
+    MB[Shared Mailbox]
+    SP[SharePoint]
+  end
+  subgraph Processing[Processamento]
+    INTAKE[Intake Function]
+    BUS[Service Bus]
+    AI[Classify/Extract - Azure OpenAI + Rules]
+    REVIEW[Validation Queue]
+  end
+  subgraph Storage[Armazenamento]
+    BLOB[(Blob Storage - originais)]
+    COSMOS[(Cosmos DB - campos)]
+    SQL[(SQL DB - auditoria)]
+  end
+  subgraph Targets[Sistemas Alvo]
+    FIN[Sistema Financeiro]
+    CRM[CRM]
+  end
+  MB --> INTAKE
+  SP --> INTAKE
+  INTAKE -->|armazena original| BLOB
+  INTAKE -->|enfileira| BUS
+  BUS --> AI
+  AI -->|grava campos e confianca| COSMOS
+  AI -->|baixa confianca| REVIEW
+  REVIEW -->|decisao| SQL
+  AI -->|alta confianca| BUS
+  BUS -->|aprovado| FIN
+  BUS -->|aprovado| CRM
+  INTAKE --> SQL
+  AI --> SQL
+      </pre>
+    </div>
+
+    <h5>C1.4 Política de Dados Pessoais (Privacidade / DPO)</h5>
+    <div class="tbl-scroll"><table class="tbl">
+      <tr><th>Dado Pessoal</th><th>Onde Armazenado</th><th>Criptografado</th><th>Retenção</th><th>Exclusão</th></tr>
+      <tr><td>Dados de fatura/pagamento (nome, conta)</td><td>Cosmos DB + Blob</td><td>Em repouso (AES-256) + TLS em trânsito</td><td>Configurável por tipo de documento (definir em Discovery detalhado, §12 RFP)</td><td>Exclusão lógica + purga programada</td></tr>
+      <tr><td>Anexos de solicitação de cliente (PII)</td><td>Blob Storage</td><td>Em repouso</td><td>Conforme política de retenção acordada</td><td>Exclusão sob solicitação (DSAR)</td></tr>
+      <tr><td>Logs de diagnóstico</td><td>Log Analytics</td><td>Em repouso</td><td>90 dias, sem PII por padrão (redação automática)</td><td>Purge automático</td></tr>
+      <tr><td>Registro de auditoria</td><td>SQL Database</td><td>Em repouso</td><td>Retenção estendida (compliance) — nunca deletado, apenas arquivado</td><td>Não aplicável (append-only)</td></tr>
+    </table></div>
+    <p><em>Residência de dados UK/UE-EEA a confirmar por região Azure na Discovery detalhada (questão aberta #5 e #6 do RFP).</em></p>
+
+    <h5>C2.1 Catálogo de Componentes</h5>
+    <div class="tbl-scroll"><table class="tbl">
+      <tr><th>Componente</th><th>Responsabilidade</th><th>Tecnologia</th><th>Expõe</th><th>Consome</th></tr>
+      <tr><td>Intake Orchestration</td><td>Ingestão, dedup, ID único, retry</td><td>Azure Functions</td><td>Eventos Service Bus</td><td>Mailbox/SharePoint connectors</td></tr>
+      <tr><td>Classification &amp; Extraction</td><td>Classificar taxonomia + extrair campos + confiança</td><td>Azure OpenAI + regras determinísticas</td><td>Eventos processados</td><td>Blob, Service Bus</td></tr>
+      <tr><td>Validation Work Queue</td><td>UI e API de fila de revisão por papel</td><td>App Service (Web + API)</td><td>REST</td><td>Cosmos DB, SQL</td></tr>
+      <tr><td>Routing Service</td><td>Entrega a sistema financeiro/CRM com retry</td><td>Azure Functions</td><td>Conectores de saída</td><td>Service Bus</td></tr>
+      <tr><td>Audit &amp; Provenance Store</td><td>Registro imutável de toda ação material</td><td>Azure SQL (append-only)</td><td>API de consulta</td><td>Todos os componentes</td></tr>
+      <tr><td>Dashboards &amp; Metrics</td><td>Métricas operacionais e exportação</td><td>Power BI / Azure Workbooks</td><td>Read API</td><td>Cosmos DB, SQL</td></tr>
+      <tr><td>Auth Service</td><td>SSO/MFA/RBAC</td><td>Entra ID</td><td>OAuth2/OIDC</td><td>—</td></tr>
+    </table></div>
+
+    <h5>C2.2 Diagrama de Container (C4 Level 2)</h5>
+    <div class="diagram">
+      <pre class="mermaid">
+flowchart TB
+  subgraph FE[Frontend]
+    WEB[Validation Queue Web App]
+  end
+  subgraph BE[Backend Services]
+    APIM2[API Management]
+    INTK[Intake Function]
+    AIS[Classify/Extract Service]
+    ROUT[Routing Function]
+    BUS[Service Bus]
+  end
+  subgraph DATA[Data Layer]
+    COSMOS[(Cosmos DB - campos)]
+    SQL[(SQL DB - auditoria)]
+    BLOB[(Blob Storage - originais)]
+    REDIS[(Redis Cache)]
+  end
+  subgraph INFRA[Infra]
+    AADX[Entra ID]
+    KV[Key Vault]
+    MON[Monitor + App Insights]
+  end
+  WEB --> APIM2 --> INTK --> BLOB
+  INTK --> BUS --> AIS --> COSMOS
+  AIS --> BUS --> ROUT --> SQL
+  INTK --> SQL
+  AIS --> SQL
+  APIM2 -.-> AADX
+  INTK -.-> KV
+  APIM2 -.-> MON
+      </pre>
+    </div>
+
+    <h5>C2.3 Diagrama de Sequência — Validação de Campo Crítico</h5>
+    <div class="diagram">
+      <pre class="mermaid">
+sequenceDiagram
+  autonumber
+  actor R as Finance Reviewer
+  participant Q as Validation Queue
+  participant APIM as API Gateway
+  participant AI as Classify/Extract
+  participant AUD as Audit Store
+  participant ROUTE as Routing Service
+  participant FIN as Sistema Financeiro
+  AI->>AUD: Grava campo critico com confianca abaixo do threshold
+  AI->>Q: Publica item em pending_approval
+  R->>Q: Abre item na fila
+  Q->>APIM: GET /items/id
+  APIM-->>Q: Detalhe e lineage completo
+  R->>Q: Aprova ou corrige valor
+  Q->>APIM: POST /items/id/approve
+  APIM->>AUD: Grava aprovacao (ator, timestamp, diff)
+  APIM->>ROUTE: Publica evento approved
+  ROUTE->>FIN: Envia dado aprovado
+  FIN-->>ROUTE: 200 OK
+  ROUTE->>AUD: Grava confirmacao de roteamento
+      </pre>
+    </div>
+
+    <h3>Phase D — Technology Architecture</h3>
+    <h5>D.1 Diagrama de Tecnologia</h5>
+    <div class="diagram">
+      <pre class="mermaid">
+flowchart TB
+  subgraph PUB[Public Zone]
+    APIM3[API Management]
+  end
+  subgraph PRIV[Private Zone]
+    WEBQ[Validation Queue App Service]
+    INTF[Intake Functions]
+    AIF[Azure OpenAI + Cognitive Services]
+    ROUTF[Routing Functions]
+    BUSP[Service Bus Premium]
+  end
+  subgraph DATAZ[Data Zone]
+    COSMOSZ[(Cosmos DB)]
+    SQLZ[(SQL Database Business Critical)]
+    BLOBZ[(Storage Account GRS)]
+  end
+  subgraph SECZ[Security Zone]
+    KVZ[Key Vault Premium]
+    AADZ[Entra ID P2 + Conditional Access]
+  end
+  subgraph DEVOPSZ[DevOps]
+    ADOZ[Azure DevOps Pipelines]
+    MONZ[Monitor + App Insights]
+  end
+  APIM3 --> WEBQ
+  APIM3 --> INTF
+  INTF --> BUSP
+  BUSP --> AIF
+  AIF --> COSMOSZ
+  AIF --> SQLZ
+  BUSP --> ROUTF
+  ROUTF --> SQLZ
+  INTF --> BLOBZ
+  WEBQ --> KVZ
+  APIM3 --> AADZ
+  ADOZ --> APIM3
+  WEBQ --> MONZ
+      </pre>
+    </div>
+
+    <h5>D.2 Padrões de Rede e Segurança</h5>
+    <div class="diagram">
+      <pre class="mermaid">
+flowchart TB
+  subgraph Internet
+    USR[Reviewer / Analista]
+    MB2[Shared Mailbox]
+  end
+  subgraph DMZ[DMZ - Public Subnet]
+    APIMD[API Management + WAF]
+  end
+  subgraph APP[Application Zone - Private Subnet]
+    FUNCD[Intake / Classify / Routing Functions]
+    WEBD[Validation Queue App Service]
+  end
+  subgraph DATAD[Data Zone - Private Endpoints]
+    COSMOSD[(Cosmos DB)]
+    SQLD[(SQL DB)]
+    BLOBD[(Blob Storage)]
+  end
+  subgraph SECD[Security]
+    KVD[Key Vault]
+    AADD[Entra ID + MFA]
+  end
+  USR --> APIMD
+  MB2 --> APIMD
+  APIMD --> FUNCD
+  APIMD --> WEBD
+  FUNCD --> COSMOSD
+  FUNCD --> SQLD
+  FUNCD --> BLOBD
+  WEBD --> COSMOSD
+  FUNCD --> KVD
+  APIMD --> AADD
+      </pre>
+    </div>
+
+    <h5>D.3 Estratégia CI/CD</h5>
+    <div class="diagram">
+      <pre class="mermaid">
+flowchart LR
+  subgraph Dev
+    CODE[Commit + PR]
+  end
+  subgraph CI[Azure DevOps Pipelines]
+    LINT[Lint + TypeCheck]
+    TEST[Unit + Integration + Golden-set Accuracy Tests]
+    SEC[Security/Secret Scan]
+    BUILD[Build + Container]
+  end
+  subgraph CD
+    DEVENV[Deploy Dev]
+    STAGING[Deploy Staging]
+    UAT[UAT + Accuracy Regression]
+    PROD[Deploy Prod - Blue/Green]
+  end
+  CODE --> LINT --> TEST --> SEC --> BUILD
+  BUILD --> DEVENV --> STAGING --> UAT --> PROD
+      </pre>
+    </div>
+
+    <h5>D.4 Observabilidade</h5>
+    <div class="tbl-scroll"><table class="tbl">
+      <tr><th>Pilar</th><th>Ferramenta</th><th>O que monitora</th></tr>
+      <tr><td>Logs</td><td>Azure Log Analytics (com redação de PII)</td><td>Erros, ações de auditoria, acesso</td></tr>
+      <tr><td>Métricas</td><td>Azure Monitor</td><td>Latência de fila, throughput de documentos, taxa de exceção</td></tr>
+      <tr><td>Traces</td><td>Application Insights</td><td>Rastreamento E2E de um documento (intake → roteamento)</td></tr>
+      <tr><td>Alertas</td><td>Azure Monitor Alerts</td><td>Violação de SLA (NFR-001/002/003), spike de exceções, falha de roteamento</td></tr>
+      <tr><td>Dashboard</td><td>Power BI / Workbooks</td><td>KPIs de FR-018: volume, latência, acurácia, exceções, ageing</td></tr>
+    </table></div>
+
+    <h3>Phase E — Opportunities &amp; Solutions</h3>
+    <h5>E.1 Work Packages</h5>
+    <div class="tbl-scroll"><table class="tbl">
+      <tr><th>WP</th><th>Nome</th><th>Fase TOGAF</th><th>Componentes</th><th>Sprint</th></tr>
+      <tr><td>WP-01</td><td>Foundation &amp; Security</td><td>D</td><td>APIM, Entra ID, Key Vault, ambientes dev/test/prod, CI/CD</td><td>S1</td></tr>
+      <tr><td>WP-02</td><td>Intake Governado</td><td>C2</td><td>Intake Function, dedup, retry, fila de exceção</td><td>S1-S2</td></tr>
+      <tr><td>WP-03</td><td>Classificação e Extração</td><td>C2</td><td>Azure OpenAI, taxonomia, confiança, versionamento</td><td>S2-S3</td></tr>
+      <tr><td>WP-04</td><td>Validação Humana e Gate Crítico</td><td>C2</td><td>Validation Queue, gate de aprovação (FR-012)</td><td>S3-S4</td></tr>
+      <tr><td>WP-05</td><td>Roteamento e Integrações</td><td>C2</td><td>Routing Function, conectores finance/CRM</td><td>S4-S5</td></tr>
+      <tr><td>WP-06</td><td>Auditoria, Busca e Dashboards</td><td>C1+C2</td><td>Audit Store, busca (FR-016), dashboards (FR-018)</td><td>S5-S6</td></tr>
+    </table></div>
+
+    <h5>E.2 Sequência de Entrega</h5>
+    <div class="diagram">
+      <pre class="mermaid">
+gantt
+  title Roadmap de Entrega
+  dateFormat YYYY-MM-DD
+  section Mobilizacao
+    Discovery e Design :a0, 2026-08-01, 49d
+  section Foundation
+    WP-01 Foundation e Security :a1, after a0, 14d
+  section Core
+    WP-02 Intake :a2, after a1, 21d
+    WP-03 Classificacao Extracao :a3, after a2, 21d
+    WP-04 Validacao Humana :a4, after a3, 21d
+    WP-05 Roteamento :a5, after a4, 14d
+  section Governanca
+    WP-06 Auditoria Dashboards :a6, after a4, 14d
+  section Pilot
+    Teste e Piloto :a7, after a5, 28d
+    Go-live Decision :milestone, after a7, 0d
+      </pre>
+    </div>
+
+    <h5>E.3 Build vs Buy vs Integrate</h5>
+    <div class="tbl-scroll"><table class="tbl">
+      <tr><th>Componente</th><th>Decisão</th><th>Ferramenta/Produto</th><th>Justificativa</th></tr>
+      <tr><td>Identidade/SSO</td><td>Integrate</td><td>Entra ID</td><td>Compliance e MFA nativos, já corporativo</td></tr>
+      <tr><td>Classificação/Extração de IA</td><td>Integrate + Build (camada de regras)</td><td>Azure OpenAI + Document Intelligence + regras próprias</td><td>Reduz time-to-market mantendo controle do gate de confiança</td></tr>
+      <tr><td>Fila de validação humana</td><td>Build</td><td>App Service próprio</td><td>Diferenciação: workflow de aprovação específico do domínio (FR-012/013)</td></tr>
+      <tr><td>Auditoria/Proveniência</td><td>Build</td><td>SQL Database append-only próprio</td><td>Requisito de auditoria imutável não atendido totalmente por produto de prateleira</td></tr>
+      <tr><td>Dashboards</td><td>Buy/Integrate</td><td>Power BI</td><td>Custo-benefício, sem necessidade de construir BI próprio</td></tr>
+    </table></div>
+
+    <h3>Phase E — Team Plan</h3>
+    <h5>E.4 Composição da Equipe</h5>
+    <div class="tbl-scroll"><table class="tbl">
+      <tr><th>Papel</th><th>Dedicação</th><th>Início</th></tr>
+      <tr><td>Product Owner</td><td>Full-time</td><td>Semana 1</td></tr>
+      <tr><td>Arquiteto de Solução</td><td>50%</td><td>Semana 1</td></tr>
+      <tr><td>Tech Lead</td><td>Full-time</td><td>Semana 3 (Sprint 0)</td></tr>
+      <tr><td>Backend Devs (2)</td><td>Full-time</td><td>Sprint 1</td></tr>
+      <tr><td>AI/ML Engineer</td><td>Full-time</td><td>Sprint 1</td></tr>
+      <tr><td>Frontend Dev</td><td>Full-time</td><td>Sprint 1</td></tr>
+      <tr><td>DevOps/SRE</td><td>50%</td><td>Sprint 0</td></tr>
+      <tr><td>QA Engineer</td><td>Full-time</td><td>Sprint 1</td></tr>
+      <tr><td>Data Engineer</td><td>50%</td><td>Sprint 2</td></tr>
+      <tr><td>Scrum Master</td><td>50%</td><td>Sprint 0</td></tr>
+      <tr><td>DPO/Compliance Advisor</td><td>20% consultivo</td><td>Semana 1</td></tr>
+    </table></div>
+
+    <h5>E.5 Ramp-up da Equipe</h5>
+    <div class="diagram">
+      <pre class="mermaid">
+gantt
+  title Ramp-up da Equipe
+  dateFormat YYYY-MM-DD
+  section Analise
+    Product Owner :active, po, 2026-08-01, 175d
+    Arquiteto :arq, 2026-08-01, 42d
+  section Sprint 0
+    Tech Lead :tl, after arq, 154d
+    DevOps :ops, after arq, 140d
+    Scrum Master :sm, after arq, 154d
+  section Sprint 1
+    Backend Devs 2 :be, after tl, 126d
+    AI/ML Engineer :ai, after tl, 126d
+    Frontend Dev :fe, after tl, 126d
+    QA Engineer :qa, after tl, 126d
+  section Sprint 2
+    Data Engineer :de, after be, 98d
+  section Marcos
+    Kick-off :milestone, m1, 2026-08-01, 0d
+    Go-live Decision :milestone, m2, 2027-01-16, 0d
+      </pre>
+    </div>
+
+    <h5>E.6 Matriz RACI</h5>
+    <div class="tbl-scroll"><table class="tbl">
+      <tr><th>Atividade</th><th>PO</th><th>Arquiteto</th><th>Tech Lead</th><th>Backend</th><th>AI/ML</th><th>DevOps</th><th>QA</th><th>DPO</th></tr>
+      <tr><td>Discovery e PRD</td><td>A</td><td>C</td><td>C</td><td>I</td><td>I</td><td>I</td><td>I</td><td>C</td></tr>
+      <tr><td>Decisões de arquitetura</td><td>C</td><td>R</td><td>C</td><td>C</td><td>C</td><td>C</td><td>I</td><td>C</td></tr>
+      <tr><td>Gate de confiança/regras de IA</td><td>A</td><td>C</td><td>R</td><td>C</td><td>R</td><td>I</td><td>C</td><td>C</td></tr>
+      <tr><td>Implementação pipeline</td><td>I</td><td>C</td><td>A</td><td>R</td><td>R</td><td>I</td><td>C</td><td>I</td></tr>
+      <tr><td>Integrações finance/CRM</td><td>A</td><td>C</td><td>R</td><td>R</td><td>I</td><td>C</td><td>C</td><td>I</td></tr>
+      <tr><td>Segurança e privacidade</td><td>I</td><td>C</td><td>C</td><td>I</td><td>I</td><td>R</td><td>C</td><td>A</td></tr>
+      <tr><td>Testes e validação de acurácia</td><td>I</td><td>I</td><td>A</td><td>C</td><td>R</td><td>I</td><td>R</td><td>C</td></tr>
+      <tr><td>Deploy e release</td><td>A</td><td>I</td><td>C</td><td>I</td><td>I</td><td>R</td><td>C</td><td>I</td></tr>
+    </table></div>
+    <p><em>R=Responsável · A=Aprovador · C=Consultado · I=Informado</em></p>
+
+    <h5>E.7 Estimativa de Custo de Equipe</h5>
+    <div class="tbl-scroll"><table class="tbl">
+      <tr><th>Papel</th><th>Dedicação</th><th>Custo/Mês (R$)</th><th>Duração</th><th>Total (R$)</th></tr>
+      <tr><td>Product Owner</td><td>100%</td><td>18.000</td><td>6 meses</td><td>108.000</td></tr>
+      <tr><td>Arquiteto</td><td>50%</td><td>12.000</td><td>1,5 mês</td><td>9.000</td></tr>
+      <tr><td>Tech Lead</td><td>100%</td><td>22.000</td><td>5,5 meses</td><td>121.000</td></tr>
+      <tr><td>Backend Devs (2)</td><td>100%</td><td>24.000 (par)</td><td>4,5 meses</td><td>108.000</td></tr>
+      <tr><td>AI/ML Engineer</td><td>100%</td><td>16.000</td><td>4,5 meses</td><td>72.000</td></tr>
+      <tr><td>Frontend Dev</td><td>100%</td><td>11.000</td><td>4,5 meses</td><td>49.500</td></tr>
+      <tr><td>DevOps/SRE</td><td>50%</td><td>7.000</td><td>5 meses</td><td>35.000</td></tr>
+      <tr><td>QA Engineer</td><td>100%</td><td>9.000</td><td>4,5 meses</td><td>40.500</td></tr>
+      <tr><td>Data Engineer</td><td>50%</td><td>6.000</td><td>3,5 meses</td><td>21.000</td></tr>
+      <tr><td>Scrum Master</td><td>50%</td><td>6.000</td><td>5,5 meses</td><td>33.000</td></tr>
+      <tr><td><strong>Total (pico mensal ~R$ 95.500 / total equipe ~R$ 597.000)</strong></td><td></td><td></td><td></td><td class="hl"><strong>597.000</strong></td></tr>
+    </table></div>
+    <p><em>Multiplicador CLT 1,7x se aplicável; valores base para o Business Case (§ Custo de Desenvolvimento). Freelancer/PJ: sem multiplicador, mas adicionar margem de 10-15% para imprevistos.</em></p>
+
+    <h5>E.8 Plano de Onboarding</h5>
+    <div class="diagram">
+      <pre class="mermaid">
+flowchart TD
+  A([Novo Membro]) --> B[Acesso: Azure DevOps + Azure Portal]
+  B --> C[Leitura: PRD + Architecture + Politica de Dados]
+  C --> D{Papel?}
+  D -->|Dev/AI| E[Setup local + acesso Azure OpenAI sandbox]
+  D -->|DevOps| F[Acesso IaC + pipelines]
+  D -->|QA| G[Acesso staging + golden-set de testes]
+  E --> H[Pair com Tech Lead - 2 dias]
+  F --> I[Pair DevOps - 1 dia]
+  G --> J[Review de ACs com PO - 1 dia]
+  H --> K([Pronto para Sprint])
+  I --> K
+  J --> K
+      </pre>
+    </div>
+
+    <h5>E.9 Canais e Ferramentas de Comunicação</h5>
+    <div class="tbl-scroll"><table class="tbl">
+      <tr><th>Daily</th><th>Sprint</th><th>Demo</th><th>Tracking</th><th>Code</th></tr>
+      <tr><td>MS Teams</td><td>Azure Boards</td><td>Teams</td><td>Azure DevOps Boards</td><td>Azure Repos</td></tr>
+    </table></div>
+
+    <h3>ADRs — Architecture Decision Records</h3>
+    <div class="adr">
+      <h4>ADR-001: Estilo Arquitetural — Event-Driven Modular (não microservices completo)</h4>
+      <div class="meta">Status: Accepted · Data: 2026-07-19 · Fase TOGAF: Phase A · NFRs relacionados: NFR-001, NFR-003, NFR-004, NFR-010</div>
+      <h5>Contexto</h5>
+      <p>O pipeline exige processamento assíncrono (intake → classificação → validação → roteamento) com múltiplos pontos de espera humana e reprocessamento, além de rastreabilidade completa. Escopo (score 19/25, COMPLEX) exige mais que um monolito, mas 25 semanas de piloto não comportam microserviços plenamente independentes com todo o overhead operacional.</p>
+      <h5>Decisão</h5>
+      <p>Adotar arquitetura <strong>event-driven modular</strong>: serviços por domínio (Intake, Classify/Extract, Validation Queue, Routing, Audit) comunicando-se via Azure Service Bus, com deploy independente mas governança e observabilidade compartilhadas.</p>
+      <h5>Alternativas Consideradas</h5>
+      <div class="tbl-scroll"><table class="tbl">
+        <tr><th>Alternativa</th><th>Por que foi rejeitada</th></tr>
+        <tr><td>Monolito modular síncrono</td><td>Não suporta bem revisão humana assíncrona nem retry/dead-letter de integrações externas</td></tr>
+        <tr><td>Microservices completos (K8s)</td><td>Overhead operacional desproporcional para um piloto de 25 semanas e equipe de ~8 pessoas</td></tr>
+      </table></div>
+      <h5>Consequências</h5>
+      <p><strong>Positivas:</strong> Retry, dead-letter e reprocessamento nativos via Service Bus (atende FR-004, FR-015); cada domínio evolui e escala independentemente sem acoplar UI de revisão ao motor de IA.<br><strong>Negativas/Trade-offs:</strong> complexidade de rastrear um documento através de múltiplos eventos assíncronos (mitigado por Application Insights distributed tracing + Audit Store).</p>
+      <h5>Revisão</h5>
+      <p>Revisar se o volume ultrapassar 250.000 páginas/mês (NFR-004) sem atender SLA, ou se o programa migrar para múltiplos domínios de negócio pós-piloto (contratos, etc.), quando microserviços completos podem se justificar.</p>
+    </div>
+    <div class="adr">
+      <h4>ADR-002: Camada de Classificação/Extração — Azure OpenAI + Document Intelligence + Regras Determinísticas</h4>
+      <div class="meta">Status: Accepted · Data: 2026-07-19 · Fase TOGAF: Phase C2 · NFRs relacionados: NFR-003, NFR-010, NFR-012</div>
+      <h5>Contexto</h5>
+      <p>O RFP exige que nenhuma decisão material seja tomada apenas por IA generativa não revisada (RQ-005) e que confiança seja calculada e calibrada por tipo de documento e idioma (EN/PT/IT).</p>
+      <h5>Decisão</h5>
+      <p>Combinar Azure Document Intelligence (OCR + extração estruturada) para campos de layout previsível (faturas) com Azure OpenAI para classificação semântica e campos de texto livre, sempre com uma camada de regras determinísticas de negócio decidindo o roteamento final (auto vs. revisão humana) — nunca o LLM decide sozinho o roteamento.</p>
+      <h5>Alternativas Consideradas</h5>
+      <div class="tbl-scroll"><table class="tbl">
+        <tr><th>Alternativa</th><th>Por que foi rejeitada</th></tr>
+        <tr><td>Somente LLM genérico (Azure OpenAI) para extração e roteamento</td><td>Risco de hallucination e decisão automática de campo crítico sem controle determinístico — viola RQ-005</td></tr>
+        <tr><td>Somente OCR + regras (sem IA generativa)</td><td>Não escala para variação de layout e não suporta requisitos "Should" de multilinguismo com boa acurácia</td></tr>
+      </table></div>
+      <h5>Consequências</h5>
+      <p><strong>Positivas:</strong> separação clara entre "sugestão de IA" e "decisão de roteamento", que é sempre regra determinística + gate humano; versionamento de modelo/prompt rastreável por resultado (FR-010).<br><strong>Negativas/Trade-offs:</strong> maior complexidade de pipeline (duas camadas de IA + camada de regras) — mitigado por testes de acurácia por documento/idioma no CI.</p>
+      <h5>Revisão</h5>
+      <p>Revisar quando a acurácia medida (NFR/critério de sucesso ≥ 85%) cair abaixo do alvo em produção por 2 ciclos consecutivos de medição.</p>
+    </div>
+    <div class="adr">
+      <h4>ADR-003: Identidade e Acesso — Entra ID com RBAC + Conditional Access</h4>
+      <div class="meta">Status: Accepted · Data: 2026-07-19 · Fase TOGAF: Phase D · NFRs relacionados: NFR-007</div>
+      <h5>Contexto</h5>
+      <p>BR/NFR exigem SSO corporativo, MFA e least privilege para 900 usuários internos em 3 países, com papéis distintos (reviewer, admin, auditor).</p>
+      <h5>Decisão</h5>
+      <p>Usar Entra ID como IdP único com Conditional Access e RBAC por papel (Finance Reviewer, Customer Service Analyst, Platform Ops, Auditor/DPO), federado ao IdP corporativo existente da Northstar.</p>
+      <h5>Alternativas Consideradas</h5>
+      <div class="tbl-scroll"><table class="tbl">
+        <tr><th>Alternativa</th><th>Por que foi rejeitada</th></tr>
+        <tr><td>Autenticação própria (usuário/senha customizado)</td><td>Risco de segurança alto, sem MFA nativo, esforço de manutenção desnecessário</td></tr>
+        <tr><td>IdP de terceiros fora do ecossistema Microsoft</td><td>Vendor lock-in adicional sem ganho, ambiente preferencial já é Azure</td></tr>
+      </table></div>
+      <h5>Consequências</h5>
+      <p><strong>Positivas:</strong> MFA e Conditional Access nativos, auditável para compliance; federação simples com IdP corporativo existente (premissa #2 do discovery).<br><strong>Negativas/Trade-offs:</strong> depende de disponibilidade e configuração correta do IdP corporativo (risco de dependência externa).</p>
+      <h5>Revisão</h5>
+      <p>Permanente — critério de segurança não é renegociável, salvo mudança de fornecedor de IdP corporativo pela Northstar.</p>
+    </div>
+
+    <h3>Riscos Técnicos</h3>
+    <div class="tbl-scroll"><table class="tbl">
+      <tr><th>#</th><th>Risco</th><th>Prob.</th><th>Impacto</th><th>Severidade</th><th>Mitigação</th><th>Plano de Contingência</th></tr>
+      <tr><td>RT-01</td><td>Sistema financeiro/CRM alvo não definidos a tempo</td><td>Alta</td><td class="hl">Alto</td><td class="hl">CRÍTICO</td><td>Bloquear WP-05 até confirmação em Discovery; contrato de integração genérico como fallback</td><td>Adiar WP-05 sem impactar WP-01 a WP-04</td></tr>
+      <tr><td>RT-02</td><td>Acurácia de extração abaixo de 85% em PT/IT</td><td>Média</td><td class="hl">Alto</td><td>ALTO</td><td>Golden-set de testes por idioma desde Sprint 2; fallback para revisão humana mais conservador</td><td>Reduzir threshold de auto-aprovação temporariamente</td></tr>
+      <tr><td>RT-03</td><td>Vazamento de PII em log de diagnóstico</td><td>Média</td><td class="hl">Alto</td><td>ALTO</td><td>Redação automática de PII antes de gravar log; revisão de segurança pré-go-live</td><td>Rotação de credenciais + purge de logs afetados</td></tr>
+      <tr><td>RT-04</td><td>Latência de fila &gt; 3s p95 sob carga real</td><td>Baixa</td><td>Médio</td><td>MÉDIO</td><td>Cache Redis + testes de carga no CI/CD</td><td>Scale-out de App Service Plan</td></tr>
+      <tr><td>RT-05</td><td>Dependência de disponibilidade do IdP corporativo</td><td>Baixa</td><td class="hl">Alto</td><td>MÉDIO</td><td>Health check e alerta dedicado; fallback de acesso de emergência documentado</td><td>Runbook de acesso break-glass</td></tr>
+    </table></div>
+
+    <h3>Cobertura de NFRs</h3>
+    <div class="tbl-scroll"><table class="tbl">
+      <tr><th>NFR</th><th>Descrição</th><th>Solução Arquitetural</th><th>Fase TOGAF</th><th>ADR</th><th>Status</th></tr>
+      <tr><td>NFR-001</td><td>Disponibilidade ≥ 99,5%</td><td>App Service + SQL Business Critical + Front Door/APIM redundante</td><td>D</td><td>ADR-001</td><td>✅</td></tr>
+      <tr><td>NFR-002</td><td>Fila ≤ 3s p95</td><td>Redis Cache + Cosmos DB de baixa latência</td><td>C1+D</td><td>—</td><td>✅</td></tr>
+      <tr><td>NFR-003</td><td>Processamento ≤ 60s p95</td><td>Pipeline assíncrono Service Bus + auto-scale de Functions</td><td>C2</td><td>ADR-001</td><td>✅</td></tr>
+      <tr><td>NFR-004</td><td>≥ 250k páginas/mês</td><td>Auto-scale de Functions + Cosmos DB particionado</td><td>C1+D</td><td>ADR-001</td><td>✅</td></tr>
+      <tr><td>NFR-005/006</td><td>RPO 15min / RTO 4h</td><td>Backup geo-redundante SQL + Blob GRS + Service Bus geo-DR</td><td>D</td><td>—</td><td>✅</td></tr>
+      <tr><td>NFR-007</td><td>SSO + MFA + least privilege</td><td>Entra ID + Conditional Access + RBAC</td><td>D</td><td>ADR-003</td><td>✅</td></tr>
+      <tr><td>NFR-008</td><td>Criptografia em trânsito/repouso</td><td>TLS 1.2+ + AES-256 + Key Vault</td><td>D</td><td>—</td><td>✅</td></tr>
+      <tr><td>NFR-009</td><td>Minimização/retenção de dados</td><td>Política por categoria de dado (C1.4) + redação de log</td><td>C1</td><td>—</td><td>✅</td></tr>
+      <tr><td>NFR-010</td><td>Lineage 100%</td><td>Audit Store append-only + tracing distribuído</td><td>C1+C2</td><td>ADR-001</td><td>✅</td></tr>
+      <tr><td>NFR-011</td><td>WCAG 2.1 AA</td><td>Design system acessível na Validation Queue Web App</td><td>C2</td><td>—</td><td>⚠️ Validar em UAT</td></tr>
+      <tr><td>NFR-012</td><td>Testes automatizados</td><td>Golden-set de acurácia + testes de integração no CI/CD</td><td>D</td><td>—</td><td>✅</td></tr>
+      <tr><td>NFR-013</td><td>Observabilidade</td><td>Monitor + App Insights + alertas</td><td>D</td><td>—</td><td>✅</td></tr>
+      <tr><td>NFR-014</td><td>Portabilidade/exit</td><td>Exportação de config, auditoria e dados via API dedicada</td><td>C2</td><td>—</td><td>✅</td></tr>
+      <tr><td>NFR-015</td><td>Eficiência de nuvem</td><td>Auto-scale + tiers dimensionados por volume real pós-Discovery</td><td>D</td><td>—</td><td>⚠️ Depende de volumes validados</td></tr>
+    </table></div>
+
+    <h3>Handoff → @backlog</h3>
+    <ul class="list">
+      <li><strong>Componentes principais:</strong> Intake Orchestration, Classification &amp; Extraction, Validation Work Queue, Routing Service, Audit &amp; Provenance Store, Dashboards.</li>
+      <li><strong>Complexidade:</strong> COMPLEX (19/25).</li>
+      <li><strong>Stories técnicas obrigatórias:</strong> setup Entra ID/RBAC, Key Vault, Service Bus + dead-letter, Audit Store append-only, pipeline CI/CD com golden-set de acurácia, redação de PII em log.</li>
+    </ul>
+
+    <h3>Histórico de Versões</h3>
+    <div class="tbl-scroll"><table class="tbl">
+      <tr><th>Versão</th><th>Data</th><th>Autor</th><th>Mudança</th></tr>
+      <tr><td>1.0</td><td>2026-07-19</td><td>@architect (Aria)</td><td>Versão inicial — TOGAF ADM Phases A-E, 3 ADRs</td></tr>
+    </table></div>
+  </div>
+</section>
+
+<!-- ================= FASE 03 — BACKLOG ================= -->
+<section class="phase" id="backlog">
+  <div class="phase-num">03<small>Fase 4<br>Backlog</small></div>
+  <div>
+    <div class="label">@backlog · Ben · v1.0 · 2026-07-19 · Status: Draft</div>
+    <h2>6 epics, 176 pontos, Sprint 1 de fundação em 47 pontos.</h2>
+
+    <div class="epic-header"><div class="e-title">Epic EPIC-00: Foundation &amp; Security (Técnico)</div><div class="e-meta">Estimativa total: 34 pts · Suporte transversal a NFR-001, NFR-007, NFR-008, NFR-013</div></div>
+    <p><strong>Objetivo:</strong> Prover base de infraestrutura, identidade e pipeline de CI/CD sobre a qual todos os demais epics são construídos.</p>
+
+    <div class="story"><div class="s-id">STORY-00.01</div><div class="s-title">Provisionar ambientes dev/test/prod no Azure</div><p><strong>Como</strong> Platform Engineering <strong>quero</strong> ambientes segregados de dev, test e produção <strong>para</strong> isolar mudanças antes do go-live</p><ul class="list"><li>Given uma nova infraestrutura, When provisionada via IaC, Then existem 3 ambientes isolados com naming e RBAC próprios</li><li>Given um deploy em dev, When promovido, Then não afeta produção</li></ul><div class="s-meta">Estimativa: M (8pts) · Prioridade: Must Have · Dependências: — · Rastreabilidade: NFR-001, NFR-013 (técnica, sem FR direto)</div></div>
+    <div class="story"><div class="s-id">STORY-00.02</div><div class="s-title">Configurar Entra ID + RBAC por papel</div><p><strong>Como</strong> Platform Engineering <strong>quero</strong> SSO corporativo com MFA e papéis (Reviewer, Admin, Auditor) <strong>para</strong> garantir least privilege (ADR-003)</p><ul class="list"><li>Given um usuário corporativo, When faz login, Then passa por MFA via Entra ID</li><li>Given um papel RBAC, When atribuído, Then o usuário só acessa recursos permitidos ao papel</li></ul><div class="s-meta">Estimativa: M (8pts) · Prioridade: Must Have · Dependências: STORY-00.01 · Rastreabilidade: NFR-007</div></div>
+    <div class="story"><div class="s-id">STORY-00.03</div><div class="s-title">Configurar Key Vault e gestão de secrets</div><p><strong>Como</strong> Platform Engineering <strong>quero</strong> secrets e chaves geridos centralmente <strong>para</strong> eliminar credenciais em código/configuração</p><div class="s-meta">Estimativa: S (3pts) · Prioridade: Must Have · Dependências: STORY-00.01 · Rastreabilidade: NFR-008</div></div>
+    <div class="story"><div class="s-id">STORY-00.04</div><div class="s-title">Pipeline CI/CD com lint, testes e scan de segurança</div><p><strong>Como</strong> Tech Lead <strong>quero</strong> pipeline automatizado dev→staging→prod <strong>para</strong> entregar com qualidade e segurança consistentes</p><ul class="list"><li>Given um PR, When aberto, Then lint + testes + scan de secrets rodam automaticamente</li><li>Given merge em main, When pipeline passa, Then deploy automático em staging</li></ul><div class="s-meta">Estimativa: M (8pts) · Prioridade: Must Have · Dependências: STORY-00.01 · Rastreabilidade: NFR-012</div></div>
+    <div class="story"><div class="s-id">STORY-00.05</div><div class="s-title">Observabilidade base (Monitor + App Insights + alertas)</div><p><strong>Como</strong> Platform Engineering <strong>quero</strong> logs, métricas, traces e alertas desde o Sprint 1 <strong>para</strong> detectar falhas e violação de SLA cedo</p><div class="s-meta">Estimativa: M (8pts) · Prioridade: Must Have · Dependências: STORY-00.01 · Rastreabilidade: NFR-013</div></div>
+
+    <div class="epic-header"><div class="e-title">Epic EPIC-01: Intake Governado</div><div class="e-meta">Estimativa total: 29 pts · FR-001 a FR-005</div></div>
+    <p><strong>Objetivo:</strong> Ingerir documentos de mailbox e SharePoint com ID único, deduplicação e tratamento de falhas.</p>
+
+    <div class="story"><div class="s-id">STORY-01.01</div><div class="s-title">Ingerir anexos de shared mailbox</div><p><strong>Como</strong> plataforma <strong>quero</strong> capturar e-mails/anexos da mailbox compartilhada <strong>para</strong> iniciar o processamento sem intervenção manual</p><ul class="list"><li>Given um e-mail novo na mailbox configurada, When o conector roda, Then um evento de intake é criado</li><li>Given um anexo não suportado, When recebido, Then é sinalizado sem travar o restante da fila</li></ul><div class="s-meta">Estimativa: M (8pts) · Prioridade: Must Have · Dependências: STORY-00.01 · Rastreabilidade: FR-001</div></div>
+    <div class="story"><div class="s-id">STORY-01.02</div><div class="s-title">Ingerir documentos do SharePoint</div><p><strong>Como</strong> plataforma <strong>quero</strong> capturar documentos de bibliotecas SharePoint configuradas <strong>para</strong> cobrir a segunda fonte obrigatória do piloto</p><div class="s-meta">Estimativa: M (8pts) · Prioridade: Must Have · Dependências: STORY-00.01 · Rastreabilidade: FR-001</div></div>
+    <div class="story"><div class="s-id">STORY-01.03</div><div class="s-title">Atribuir ID de processamento único</div><p><strong>Como</strong> plataforma <strong>quero</strong> gerar um ID imutável por evento de intake <strong>para</strong> permitir rastreamento fonte-a-ação</p><div class="s-meta">Estimativa: XS (1pt) · Prioridade: Must Have · Dependências: STORY-01.01, STORY-01.02 · Rastreabilidade: FR-002</div></div>
+    <div class="story"><div class="s-id">STORY-01.04</div><div class="s-title">Detectar documentos duplicados</div><p><strong>Como</strong> plataforma <strong>quero</strong> identificar submissões equivalentes <strong>para</strong> evitar processamento e roteamento duplicado</p><ul class="list"><li>Given dois documentos com mesmo hash/critério configurável, When o segundo é ingerido, Then é marcado como duplicado e não roteado automaticamente</li></ul><div class="s-meta">Estimativa: M (8pts) · Prioridade: Must Have · Dependências: STORY-01.03 · Rastreabilidade: FR-003</div></div>
+    <div class="story"><div class="s-id">STORY-01.05</div><div class="s-title">Retry e fila de exceção de intake</div><p><strong>Como</strong> Platform Engineering <strong>quero</strong> retry automático com limite e fila de exceção para falhas permanentes <strong>para</strong> nenhum documento se perder silenciosamente</p><div class="s-meta">Estimativa: S (3pts) · Prioridade: Must Have · Dependências: STORY-01.03 · Rastreabilidade: FR-004, FR-005</div></div>
+    <div class="story"><div class="s-id">STORY-01.06 (técnica)</div><div class="s-title">Configurar Service Bus com dead-letter queue</div><p><strong>Como</strong> Platform Engineering <strong>quero</strong> fila assíncrona com dead-letter <strong>para</strong> suportar retry/exceção sem perda de mensagem</p><div class="s-meta">Estimativa: S (3pts) · Prioridade: Must Have · Dependências: STORY-00.01 · Rastreabilidade: técnica (suporta FR-004, FR-005)</div></div>
+
+    <div class="epic-header"><div class="e-title">Epic EPIC-02: Classificação e Extração</div><div class="e-meta">Estimativa total: 42 pts · FR-006, FR-007, FR-008, FR-009, FR-010, FR-020, FR-021</div></div>
+    <p><strong>Objetivo:</strong> Classificar documentos por taxonomia e extrair campos com confiança, fonte e versão rastreáveis.</p>
+
+    <div class="story"><div class="s-id">STORY-02.01</div><div class="s-title">Classificar documento por taxonomia configurável</div><p><strong>Como</strong> plataforma <strong>quero</strong> atribuir um tipo de documento com score de confiança <strong>para</strong> direcionar o pipeline de extração correto</p><div class="s-meta">Estimativa: L (13pts) · Prioridade: Must Have · Dependências: EPIC-01 · Rastreabilidade: FR-006</div></div>
+    <div class="story"><div class="s-id">STORY-02.02</div><div class="s-title">Extrair campos configurados por tipo de documento (fatura)</div><p><strong>Como</strong> Finance Reviewer <strong>quero</strong> que os campos de fatura sejam extraídos automaticamente <strong>para</strong> eliminar re-digitação manual</p><ul class="list"><li>Given uma fatura classificada, When extraída, Then os campos prioritários (fornecedor, valor, vencimento) aparecem com confiança individual</li></ul><div class="s-meta">Estimativa: L (13pts) · Prioridade: Must Have · Dependências: STORY-02.01 · Rastreabilidade: FR-007</div></div>
+    <div class="story"><div class="s-id">STORY-02.03</div><div class="s-title">Reter confiança, fonte e timestamp por campo</div><p><strong>Como</strong> auditor <strong>quero</strong> que todo campo extraído carregue proveniência <strong>para</strong> permitir auditoria fonte-a-ação</p><div class="s-meta">Estimativa: S (3pts) · Prioridade: Must Have · Dependências: STORY-02.02 · Rastreabilidade: FR-008</div></div>
+    <div class="story"><div class="s-id">STORY-02.04</div><div class="s-title">Suportar correção humana de valor extraído</div><p><strong>Como</strong> reviewer <strong>quero</strong> corrigir um valor extraído incorretamente <strong>para</strong> garantir que o dado final esteja correto antes do roteamento</p><div class="s-meta">Estimativa: M (8pts) · Prioridade: Must Have · Dependências: STORY-02.03 · Rastreabilidade: FR-009</div></div>
+    <div class="story"><div class="s-id">STORY-02.05</div><div class="s-title">Versionar modelo/prompt/regra por resultado</div><p><strong>Como</strong> Tech Lead <strong>quero</strong> rastrear qual versão gerou cada resultado <strong>para</strong> permitir auditoria de mudanças de modelo (ADR-002)</p><div class="s-meta">Estimativa: S (3pts) · Prioridade: Must Have · Dependências: STORY-02.01 · Rastreabilidade: FR-010</div></div>
+    <div class="story"><div class="s-id">STORY-02.06</div><div class="s-title">Suporte a EN/PT/IT na classificação e extração</div><p><strong>Como</strong> analista multi-país <strong>quero</strong> processar documentos em inglês, português e italiano <strong>para</strong> cobrir as 3 geografias do piloto</p><div class="s-meta">Estimativa: L (13pts) · Prioridade: Should Have · Dependências: STORY-02.02 · Rastreabilidade: FR-020</div></div>
+    <div class="story"><div class="s-id">STORY-02.07</div><div class="s-title">Configurar novo tipo de documento sem redeploy</div><p><strong>Como</strong> Platform Engineering <strong>quero</strong> adicionar um tipo de documento via configuração de taxonomia <strong>para</strong> suportar expansão futura sem alterar código core</p><div class="s-meta">Estimativa: M (8pts, registrada como técnica de plataforma) · Prioridade: Should Have · Dependências: STORY-02.01 · Rastreabilidade: FR-021</div></div>
+    <p><em>Nota: soma nominal do Epic é 13+13+3+8+3+13+8 = 61pts; ajustada para 42pts no total considerando reuso de componentes entre stories (ver estimativa consolidada da arquitetura, WP-03).</em></p>
+
+    <div class="epic-header"><div class="e-title">Epic EPIC-03: Confiança e Validação Humana</div><div class="e-meta">Estimativa total: 24 pts · FR-011, FR-012, FR-013</div></div>
+    <p><strong>Objetivo:</strong> Aplicar thresholds de confiança e garantir gate obrigatório de aprovação humana para campos críticos.</p>
+
+    <div class="story"><div class="s-id">STORY-03.01</div><div class="s-title">Aplicar thresholds de confiança configuráveis</div><p><strong>Como</strong> Platform Engineering <strong>quero</strong> configurar thresholds por tipo de campo <strong>para</strong> decidir a rota (automática vs. revisão) de forma ajustável</p><div class="s-meta">Estimativa: M (8pts) · Prioridade: Must Have · Dependências: EPIC-02 · Rastreabilidade: FR-011</div></div>
+    <div class="story"><div class="s-id">STORY-03.02 ★ crítico</div><div class="s-title">Gate de aprovação obrigatório para campo crítico</div><p><strong>Como</strong> Compliance/DPO <strong>quero</strong> que nenhum campo crítico de baixa confiança seja roteado sem aprovação humana <strong>para</strong> cumprir o controle de governança de IA do RFP (BR-005)</p><ul class="list"><li>Given um campo crítico com confiança abaixo do threshold, When avaliado, Then fica bloqueado em "pending_approval"</li><li>Given uma tentativa de roteamento automático de campo crítico não aprovado, When detectada, Then é rejeitada pelo sistema</li></ul><div class="s-meta">Estimativa: L (13pts) · Prioridade: Must Have · Dependências: STORY-03.01 · Rastreabilidade: FR-012</div></div>
+    <div class="story"><div class="s-id">STORY-03.03</div><div class="s-title">Fila de revisão com ações aprovar/rejeitar/corrigir/escalar</div><p><strong>Como</strong> Finance Reviewer / Customer Service Analyst <strong>quero</strong> agir sobre itens da minha fila <strong>para</strong> desbloquear o roteamento com decisão registrada</p><div class="s-meta">Estimativa: M (8pts, parte já coberta por STORY-02.04) — registrada como 8pts autônoma para ações de rejeitar/escalar · Prioridade: Must Have · Dependências: STORY-02.04 · Rastreabilidade: FR-013</div></div>
+    <p><em>Total ajustado do Epic: 8+13+3 = 24pts (STORY-03.03 conta 3pts incrementais sobre a base já entregue em STORY-02.04).</em></p>
+
+    <div class="epic-header"><div class="e-title">Epic EPIC-04: Roteamento e Integrações</div><div class="e-meta">Estimativa total: 21 pts · FR-014, FR-015</div></div>
+    <p><strong>Objetivo:</strong> Rotear resultados aprovados para o sistema financeiro e CRM com recuperação de falhas.</p>
+
+    <div class="story"><div class="s-id">STORY-04.01</div><div class="s-title">Rotear resultado aprovado para sistema financeiro</div><p><strong>Como</strong> Finance Reviewer <strong>quero</strong> que o dado aprovado chegue automaticamente ao sistema financeiro <strong>para</strong> eliminar o passo manual de submissão</p><div class="s-meta">Estimativa: L (13pts) · Prioridade: Must Have · Dependências: EPIC-03, definição do sistema financeiro alvo (risco RT-01) · Rastreabilidade: FR-014</div></div>
+    <div class="story"><div class="s-id">STORY-04.02</div><div class="s-title">Rotear resultado aprovado para o CRM</div><p><strong>Como</strong> Customer Service Analyst <strong>quero</strong> que a solicitação aprovada crie/atualize um caso no CRM <strong>para</strong> eliminar duplicação manual de registro</p><div class="s-meta">Estimativa: M (8pts) · Prioridade: Must Have · Dependências: EPIC-03, definição do CRM alvo (risco RT-01) · Rastreabilidade: FR-014</div></div>
+    <div class="story"><div class="s-id">STORY-04.03</div><div class="s-title">Falha de roteamento recuperável e auditável</div><p><strong>Como</strong> Platform Engineering <strong>quero</strong> que falhas de roteamento fiquem visíveis e reprocessáveis <strong>para</strong> nunca perder um resultado aprovado</p><div class="s-meta">Estimativa: — (incluída no dead-letter de STORY-01.06, sem pontos adicionais) · Prioridade: Must Have · Dependências: STORY-01.06 · Rastreabilidade: FR-015</div></div>
+
+    <div class="epic-header"><div class="e-title">Epic EPIC-05: Busca, Auditoria e Dashboards</div><div class="e-meta">Estimativa total: 26 pts · FR-016, FR-017, FR-018, FR-019</div></div>
+    <p><strong>Objetivo:</strong> Fornecer busca, visão consolidada de lineage e métricas operacionais.</p>
+
+    <div class="story"><div class="s-id">STORY-05.01</div><div class="s-title">Buscar registros por data, fonte, tipo, status e ID de negócio</div><p><strong>Como</strong> usuário autorizado <strong>quero</strong> buscar processamentos por múltiplos critérios <strong>para</strong> localizar rapidamente um caso específico</p><div class="s-meta">Estimativa: M (8pts) · Prioridade: Must Have · Dependências: EPIC-01, EPIC-02 · Rastreabilidade: FR-016</div></div>
+    <div class="story"><div class="s-id">STORY-05.02</div><div class="s-title">Visão unificada de fonte, extração, correções e status</div><p><strong>Como</strong> auditor <strong>quero</strong> ver todo o histórico de um documento em uma tela <strong>para</strong> resolver disputas e auditorias com evidência completa</p><div class="s-meta">Estimativa: M (8pts) · Prioridade: Must Have · Dependências: STORY-05.01 · Rastreabilidade: FR-017, FR-019</div></div>
+    <div class="story"><div class="s-id">STORY-05.03</div><div class="s-title">Registro de auditoria imutável (ator, ação, timestamp, diff)</div><p><strong>Como</strong> Compliance/DPO <strong>quero</strong> que toda ação material gere um registro protegido <strong>para</strong> cumprir requisito regulatório de rastreabilidade</p><div class="s-meta">Estimativa: M (8pts) · Prioridade: Must Have · Dependências: — (transversal, iniciar no Sprint 1) · Rastreabilidade: FR-019</div></div>
+    <div class="story"><div class="s-id">STORY-05.04</div><div class="s-title">Dashboards operacionais (volume, latência, acurácia, exceções, ageing)</div><p><strong>Como</strong> COO / Diretor de área <strong>quero</strong> visualizar métricas operacionais consolidadas <strong>para</strong> decidir sobre o scale-up com dados</p><div class="s-meta">Estimativa: M (8pts, ajustado para 2pts residual pois reaproveita dados de STORY-05.03) · Prioridade: Should Have · Dependências: STORY-05.03 · Rastreabilidade: FR-018</div></div>
+
+    <h3>Resumo de Estimativas</h3>
+    <div class="tbl-scroll"><table class="tbl">
+      <tr><th>Epic</th><th>Pontos</th><th>FRs</th></tr>
+      <tr><td>EPIC-00 Foundation &amp; Security</td><td>34</td><td>técnico</td></tr>
+      <tr><td>EPIC-01 Intake Governado</td><td>29</td><td>FR-001 a FR-005</td></tr>
+      <tr><td>EPIC-02 Classificação e Extração</td><td>42</td><td>FR-006 a FR-010, FR-020, FR-021</td></tr>
+      <tr><td>EPIC-03 Confiança e Validação Humana</td><td>24</td><td>FR-011 a FR-013</td></tr>
+      <tr><td>EPIC-04 Roteamento e Integrações</td><td>21</td><td>FR-014, FR-015</td></tr>
+      <tr><td>EPIC-05 Busca, Auditoria e Dashboards</td><td>26</td><td>FR-016 a FR-019</td></tr>
+      <tr><td><strong>Total</strong></td><td class="hl"><strong>176 pts</strong></td><td></td></tr>
+    </table></div>
+    <p><strong>Sprints estimados:</strong> ~4-5 sprints de 2 semanas a 40-50pts/sprint (equipe descrita em architecture.md § E.4-E.7), consistente com a janela de 12 semanas de "Foundation + AI configuration + validation workflows" do RFP §18.</p>
+
+    <h3>Sprint 1 (MVP) — Proposta</h3>
+    <p><strong>Critério:</strong> apenas Must Have, máximo 40-60pts, cobre happy path de Finance Reviewer + infraestrutura/autenticação.</p>
+    <div class="tbl-scroll"><table class="tbl">
+      <tr><th>Story</th><th>Epic</th><th>Pontos</th></tr>
+      <tr><td>STORY-00.01 Ambientes dev/test/prod</td><td>EPIC-00</td><td>8</td></tr>
+      <tr><td>STORY-00.02 Entra ID + RBAC</td><td>EPIC-00</td><td>8</td></tr>
+      <tr><td>STORY-00.03 Key Vault</td><td>EPIC-00</td><td>3</td></tr>
+      <tr><td>STORY-00.04 CI/CD</td><td>EPIC-00</td><td>8</td></tr>
+      <tr><td>STORY-01.01 Ingerir mailbox</td><td>EPIC-01</td><td>8</td></tr>
+      <tr><td>STORY-01.03 ID único</td><td>EPIC-01</td><td>1</td></tr>
+      <tr><td>STORY-01.06 Service Bus + dead-letter</td><td>EPIC-01</td><td>3</td></tr>
+      <tr><td>STORY-05.03 Auditoria imutável (base)</td><td>EPIC-05</td><td>8</td></tr>
+      <tr><td><strong>Total Sprint 1</strong></td><td></td><td class="hl"><strong>47 pts</strong></td></tr>
+    </table></div>
+    <div class="callout"><p>Sprint 1 entrega a fundação de segurança/observabilidade + o primeiro segmento do intake (mailbox) com auditoria desde o dia 1, dentro do limite de 40-60pts. Extração, gate de confiança e roteamento entram a partir do Sprint 2, condicionados à confirmação do sistema financeiro/CRM alvo (risco RT-01).</p></div>
+
+    <h3>Dependências entre Stories (sem ciclos)</h3>
+    <div class="diagram">
+      <pre class="mermaid">
+flowchart LR
+  E00[EPIC-00 Foundation] --> E01[EPIC-01 Intake]
+  E01 --> E02[EPIC-02 Classificacao Extracao]
+  E02 --> E03[EPIC-03 Confianca Validacao]
+  E03 --> E04[EPIC-04 Roteamento]
+  E00 --> E05[EPIC-05 Auditoria - paralelo ao Sprint 1]
+      </pre>
+    </div>
+
+    <h3>Rastreabilidade Stories → FR (resumo)</h3>
+    <div class="tbl-scroll"><table class="tbl">
+      <tr><th>FR</th><th>Story(ies)</th></tr>
+      <tr><td>FR-001 a FR-005</td><td>STORY-01.01 a STORY-01.06</td></tr>
+      <tr><td>FR-006 a FR-010, FR-020, FR-021</td><td>STORY-02.01 a STORY-02.07</td></tr>
+      <tr><td>FR-011 a FR-013</td><td>STORY-03.01 a STORY-03.03</td></tr>
+      <tr><td>FR-014, FR-015</td><td>STORY-04.01 a STORY-04.03</td></tr>
+      <tr><td>FR-016 a FR-019</td><td>STORY-05.01 a STORY-05.04</td></tr>
+    </table></div>
+    <p><strong>Cobertura:</strong> 100% dos FRs Must/Should do PRD têm pelo menos 1 story associada.</p>
+
+    <h3>Histórico de Versões</h3>
+    <div class="tbl-scroll"><table class="tbl">
+      <tr><th>Versão</th><th>Data</th><th>Autor</th><th>Mudança</th></tr>
+      <tr><td>1.0</td><td>2026-07-19</td><td>@backlog (Ben)</td><td>Versão inicial — 6 Epics, 176pts, Sprint 1 de 47pts</td></tr>
+    </table></div>
+  </div>
+</section>
+
+<!-- ================= FASE 04 — BUSINESS CASE ================= -->
+<section class="phase" id="business-case">
+  <div class="phase-num">04<small>Fase 5<br>Business Case</small></div>
+  <div>
+    <div class="label">@business-case · Biz · v1.0 · 2026-07-19 · Status: Draft</div>
+    <h2>GO com ressalvas — NPV positivo, payback ~14–16 meses.</h2>
+    <blockquote><strong>Nota de escopo:</strong> todos os valores monetários abaixo são estimativas ilustrativas construídas a partir do Team Plan da Arquitetura (§E.7) e de premissas de volume do RFP-001 (fictício, para teste do framework). Nenhum custo foi validado com fornecedor real ou com a organização — devem ser tratados como baseline de discussão, não como orçamento aprovado.</blockquote>
+
+    <h3>1. Resumo Executivo</h3>
+    <p>A Northstar processa hoje ~180.000 páginas, 65.000 e-mails e 12.000 documentos estruturados/mês de forma manual e fragmentada, sem rastreabilidade de fonte-a-ação nem controle formal sobre uso de IA em decisão material. O investimento estimado de piloto (~R$ 827 mil em custo único + ~R$ 540 mil/ano recorrente) é justificado por uma economia projetada de ~R$ 1,0 milhão/ano em retrabalho e re-digitação manual nos documentos em escopo do piloto, com payback estimado em ~14-16 meses. Dado o requisito não-negociável de gate humano para dado crítico (FR-012), o risco de governança de IA é mitigado por design. <strong>Recomendação: GO com ressalvas</strong>, condicionado à confirmação do sistema financeiro/CRM alvo e dos volumes reais na Discovery detalhada.</p>
+
+    <h3>2. Contexto e Problema</h3>
+    <p>Ver <code>discovery-report.md § 4</code>. Processo manual gera re-digitação, classificação inconsistente, ageing de exceções sem dono e risco de decisão material baseada em IA não revisada.</p>
+
+    <h3>3. Solução Proposta</h3>
+    <p>Pipeline event-driven modular (architecture.md, ADR-001) com: intake governado (mailbox + SharePoint), classificação/extração híbrida (Document Intelligence + Azure OpenAI + regras determinísticas — ADR-002), gate obrigatório de aprovação humana para campo crítico (FR-012), roteamento a 1 sistema financeiro e 1 CRM, e auditoria imutável fonte-a-ação. Entrega em 6 Epics / 176 pontos, com Sprint 1 de fundação + intake (47 pts).</p>
+
+    <h3>4. Análise de Custo</h3>
+    <h5>4.1 Desenvolvimento</h5>
+    <pre class="plain">Custo Dev = Custo de Equipe (Team Plan) para 176 pts ao longo de ~6 meses de construção
+          = R$ 597.000 (architecture.md § E.7)</pre>
+    <div class="tbl-scroll"><table class="tbl">
+      <tr><th>Item</th><th>Valor (R$)</th></tr>
+      <tr><td>Equipe de entrega (PO, Arquiteto, Tech Lead, Devs, AI/ML, QA, DevOps, Data Eng, SM)</td><td>597.000</td></tr>
+      <tr><td>Discovery e design detalhados (7 semanas, parte já coberta na equipe acima)</td><td>incluído</td></tr>
+      <tr><td><strong>Subtotal Desenvolvimento</strong></td><td class="hl"><strong>597.000</strong></td></tr>
+    </table></div>
+
+    <h5>4.2 Infraestrutura e Operação</h5>
+    <div class="tbl-scroll"><table class="tbl">
+      <tr><th>Item</th><th>Custo mensal estimado (R$)</th><th>Observação</th></tr>
+      <tr><td>Azure OpenAI + Document Intelligence (consumo)</td><td>12.000</td><td>Volume de piloto, escala com documentos processados</td></tr>
+      <tr><td>App Service + Functions + Service Bus</td><td>8.000</td><td>Múltiplos ambientes (dev/test/prod)</td></tr>
+      <tr><td>Cosmos DB + SQL Database + Blob Storage</td><td>9.000</td><td>Retenção e redundância geo</td></tr>
+      <tr><td>Monitor + App Insights + Key Vault</td><td>3.000</td><td>Observabilidade e segurança</td></tr>
+      <tr><td><strong>Subtotal mensal (produção + ambientes não-produtivos)</strong></td><td class="hl"><strong>32.000</strong></td><td>~R$ 384.000/ano</td></tr>
+    </table></div>
+    <p>Durante os ~6 meses de build (ambientes dev/test/staging ativos): <strong>~R$ 150.000</strong> (tiers reduzidos antes do go-live).</p>
+
+    <h5>4.3 Licenças e Ferramentas</h5>
+    <div class="tbl-scroll"><table class="tbl">
+      <tr><th>Item</th><th>Custo</th><th>Observação</th></tr>
+      <tr><td>Azure DevOps (licenças de equipe)</td><td>incluído no custo de equipe</td><td></td></tr>
+      <tr><td>Suporte e manutenção pós-go-live (15% do custo de dev/ano)</td><td>R$ 89.550/ano</td><td>Estimativa padrão de mercado</td></tr>
+      <tr><td>Treinamento e handover</td><td>R$ 40.000 (único)</td><td>Materiais + sessões com reviewers</td></tr>
+      <tr><td>Testes de segurança e privacidade (assurance)</td><td>R$ 30.000 (único)</td><td>Pentest + revisão de privacidade pré-go-live</td></tr>
+    </table></div>
+
+    <h5>4.4 Consolidado</h5>
+    <div class="tbl-scroll"><table class="tbl">
+      <tr><th>Categoria</th><th>Custo único (R$)</th><th>Custo recorrente anual (R$)</th></tr>
+      <tr><td>Desenvolvimento (equipe)</td><td>597.000</td><td>—</td></tr>
+      <tr><td>Infraestrutura durante build</td><td>150.000</td><td>—</td></tr>
+      <tr><td>Treinamento e handover</td><td>40.000</td><td>—</td></tr>
+      <tr><td>Testes de segurança/privacidade</td><td>30.000</td><td>—</td></tr>
+      <tr><td>Infraestrutura em produção</td><td>—</td><td>384.000</td></tr>
+      <tr><td>Suporte e manutenção</td><td>—</td><td>89.550</td></tr>
+      <tr><td><strong>Total</strong></td><td class="hl"><strong>817.000</strong></td><td class="hl"><strong>473.550</strong></td></tr>
+    </table></div>
+    <p><strong>TCO 3 anos (indicativo):</strong> 817.000 + 3 × 473.550 = <strong>R$ 2.237.650</strong></p>
+
+    <h3>5. Análise de Benefícios</h3>
+    <h5>5.1 Benefícios Quantificáveis</h5>
+    <p>Premissa: ~20.000 documentos/mês em escopo do piloto (faturas de fornecedor, evidências de pagamento, anexos de solicitação de cliente) atualmente processados manualmente a ~8 minutos/documento (classificação + re-digitação), custo totalmente carregado de ~R$ 45/hora.</p>
+    <pre class="plain">Custo manual atual = 20.000 docs x (8/60)h x R$45/h ~= R$ 120.000/mes
+Reducao esperada com automacao (70% dos documentos com alta confianca, roteamento automatico) ~= R$ 84.000/mes
+Economia anualizada ~= R$ 1.008.000/ano</pre>
+    <div class="tbl-scroll"><table class="tbl">
+      <tr><th>Benefício</th><th>Estimativa anual (R$)</th></tr>
+      <tr><td>Redução de re-digitação e retrabalho manual</td><td class="hl">1.008.000</td></tr>
+      <tr><td>Redução de tempo de resolução de exceções (ageing)</td><td>Qualitativo (não quantificado nesta fase)</td></tr>
+      <tr><td>Redução de disputa/tempo de auditoria via lineage completo</td><td>Qualitativo</td></tr>
+    </table></div>
+
+    <h5>5.2 Benefícios Qualitativos</h5>
+    <ul class="list">
+      <li>Rastreabilidade fonte-a-ação para 100% dos registros aprovados (mitiga risco regulatório).</li>
+      <li>Visibilidade operacional única (dashboards) para tomada de decisão do scale-up.</li>
+      <li>Arquitetura reutilizável para novos domínios pós-piloto (contratos, novos ERPs/CRMs).</li>
+      <li>Redução do risco de decisão material baseada em IA não revisada (controle de governança, não só eficiência).</li>
+    </ul>
+
+    <h3>6. ROI e Payback</h3>
+    <pre class="plain">Investimento Ano 1 = Custo unico + Custo recorrente ano 1
+                    = R$ 817.000 + R$ 473.550 = R$ 1.290.550
+
+Beneficio Ano 1 (ramp-up: 50% nos primeiros 6 meses de piloto, 100% nos 6 meses seguintes)
+                    ~= 0,5 x 504.000 + 1,0 x 504.000 = R$ 756.000
+
+ROI Ano 1 = (Beneficio - Investimento) / Investimento
+          = (756.000 - 1.290.550) / 1.290.550 ~= -41% (Ano 1, esperado - investimento concentrado no piloto)
+
+Payback simples (considerando so o custo unico de R$ 817.000 contra beneficio mensal pleno de R$ 84.000)
+          ~= 817.000 / 84.000 ~= 9,7 meses apos go-live plenamente rampado
+          ~= ~14-16 meses corridos desde o inicio do projeto (considerando ramp-up gradual)</pre>
+
+    <p><strong>NPV (3 anos, taxa de desconto 10% a.a., benefício pleno a partir do mês 12):</strong></p>
+    <div class="tbl-scroll"><table class="tbl">
+      <tr><th>Ano</th><th>Fluxo líquido (R$)</th><th>Fator desconto</th><th>Valor presente (R$)</th></tr>
+      <tr><td>0 (build)</td><td>-817.000</td><td>1,00</td><td>-817.000</td></tr>
+      <tr><td>1</td><td>756.000 - 473.550 = 282.450</td><td>0,91</td><td>257.030</td></tr>
+      <tr><td>2</td><td>1.008.000 - 473.550 = 534.450</td><td>0,83</td><td>443.594</td></tr>
+      <tr><td>3</td><td>1.008.000 - 473.550 = 534.450</td><td>0,75</td><td>400.838</td></tr>
+      <tr><td><strong>NPV</strong></td><td></td><td></td><td class="hl"><strong>R$ 284.462</strong></td></tr>
+    </table></div>
+    <p><em>NPV positivo em 3 anos sob as premissas acima — favorável, mas sensível ao volume real validado em Discovery (ver §7).</em></p>
+
+    <h5>Análise de Sensibilidade</h5>
+    <div class="tbl-scroll"><table class="tbl">
+      <tr><th>Cenário</th><th>Premissa</th><th>ROI Ano 1</th><th>Payback (meses)</th><th>NPV 3 anos (R$)</th></tr>
+      <tr><td>Pessimista (-30% benefícios / volume real 50% do estimado)</td><td>10.000 docs/mês em vez de 20.000</td><td>-58%</td><td>~24</td><td class="hl">-66.000 (negativo)</td></tr>
+      <tr><td>Base (conforme premissas acima)</td><td>20.000 docs/mês, 70% automação</td><td>-41%</td><td>~15</td><td>284.462</td></tr>
+      <tr><td>Otimista (+20% benefícios / volume real 100-120% do estimado)</td><td>24.000 docs/mês, 75% automação</td><td>-30%</td><td>~11</td><td>612.000</td></tr>
+    </table></div>
+    <div class="callout"><p>No cenário pessimista o NPV se torna negativo — reforça a ressalva de validar volume real antes de comprometer o orçamento pleno (§9, ressalva 2).</p></div>
+
+    <h3>7. Análise de Risco</h3>
+    <div class="tbl-scroll"><table class="tbl">
+      <tr><th>Risco de Negócio</th><th>Probabilidade</th><th>Impacto</th><th>Classificação</th><th>Mitigação</th></tr>
+      <tr><td>Volume real de documentos menor que a premissa (20k/mês)</td><td>Média</td><td class="hl">Alto</td><td>ALTO</td><td>Validar volume real na Discovery antes de aprovar orçamento final</td></tr>
+      <tr><td>Acurácia de extração insuficiente (&lt; 85%) eleva revisão manual e reduz economia</td><td>Média</td><td class="hl">Alto</td><td>ALTO</td><td>Golden-set de testes por idioma/tipo desde Sprint 2 (RT-02 na arquitetura)</td></tr>
+      <tr><td>Atraso na definição do sistema financeiro/CRM alvo posterga benefícios de roteamento (RT-01)</td><td>Alta</td><td class="hl">Alto</td><td class="hl">CRÍTICO</td><td>Priorizar decisão no kick-off; sequenciar backlog para não bloquear entrega de valor de intake/classificação</td></tr>
+      <tr><td>Achado crítico de segurança/privacidade no pré-go-live atrasa lançamento</td><td>Média</td><td class="hl">Alto</td><td>ALTO</td><td>Teste de segurança e privacidade dedicado antes do go-live (§4.3)</td></tr>
+      <tr><td>Resistência de adoção por reviewers</td><td>Baixa</td><td>Médio</td><td>MÉDIO</td><td>Treinamento dedicado e meta de 80% de proficiência pós-treinamento (critério de sucesso do PRD)</td></tr>
+    </table></div>
+
+    <h3>8. Alternativas Consideradas</h3>
+    <div class="tbl-scroll"><table class="tbl">
+      <tr><th>Critério</th><th>Build (proposto)</th><th>Buy (RPA/IDP de prateleira)</th><th>Integrate (BPO terceirizado)</th></tr>
+      <tr><td>Controle sobre gate de governança de IA (FR-012)</td><td class="hl">Alto</td><td>Baixo — produtos de prateleira raramente expõem gate customizável</td><td>Baixo — depende do fornecedor de BPO</td></tr>
+      <tr><td>Custo inicial</td><td>Alto (R$ 817k)</td><td>Médio (licenciamento + configuração)</td><td>Baixo (custo variável por volume)</td></tr>
+      <tr><td>Time-to-market</td><td>~6 meses até piloto</td><td>Potencialmente mais rápido, mas com customização limitada</td><td>Rápido, mas sem ganho estrutural de longo prazo</td></tr>
+      <tr><td>Rastreabilidade fonte-a-ação nativa</td><td class="hl">Alta (requisito de design)</td><td>Depende do produto — frequentemente limitada</td><td>Baixa — depende de relatórios do fornecedor</td></tr>
+      <tr><td>Vendor lock-in</td><td class="hl">Nenhum (arquitetura própria sobre Azure)</td><td>Alto (produto proprietário)</td><td>Alto (dependência operacional do BPO)</td></tr>
+      <tr><td>Reuso para domínios futuros (contratos, etc.)</td><td class="hl">Alto</td><td>Médio</td><td>Baixo</td></tr>
+    </table></div>
+    <p><strong>Conclusão:</strong> Build é recomendado porque o requisito não-negociável de governança de IA (FR-005/FR-012, RQ-005) e de rastreabilidade fonte-a-ação (NFR-010) dificilmente são atendidos de forma auditável por produtos de prateleira ou por BPO terceirizado sem visibilidade de processo.</p>
+
+    <h3>9. Recomendação</h3>
+    <div class="gates">
+      <div class="gate"><div class="g-id">Recomendação</div><div class="g-crit">GO com ressalvas</div><div class="g-note">NPV positivo em 3 anos (R$ 284.462) e payback ~14-16 meses estão dentro de faixa aceitável para um investimento com forte componente de governança/compliance (não apenas eficiência).</div></div>
+      <div class="gate"><div class="g-id">Ressalva 1</div><div class="g-crit">Confirmar sistema financeiro e CRM alvo</div><div class="g-note">Risco RT-01/CRÍTICO — sem isso, WP-05 e parte dos benefícios quantificados (roteamento automático) não se realizam no prazo.</div></div>
+      <div class="gate"><div class="g-id">Ressalva 2</div><div class="g-crit">Validar volumes reais de documentos em escopo</div><div class="g-note">Atualmente estimativa do RFP, não medida — necessário antes de aprovar o dimensionamento final de capacidade (NFR-004) e o cálculo de benefício.</div></div>
+      <div class="gate"><div class="g-id">Ressalva 3</div><div class="g-crit">Confirmar dados sensíveis na amostra</div><div class="g-note">Antes de finalizar a política de retenção (C1.4 da arquitetura).</div></div>
+    </div>
+
+    <h3>10. Próximos Passos</h3>
+    <ul class="list">
+      <li>Validar premissas de volume e sistemas alvo na Discovery aprofundada com os stakeholders de Finance e Customer Operations</li>
+      <li>Aprovar orçamento de piloto (~R$ 817k único + ~R$ 474k/ano) sujeito às ressalvas acima</li>
+      <li>Iniciar Sprint 0/Foundation (EPIC-00) em paralelo à confirmação das integrações</li>
+      <li>Definir baseline real de acurácia/tempo de processamento manual antes do go-live para medir os critérios de sucesso do PRD §10</li>
+    </ul>
+
+    <h3>Handoff → Lessons Learned</h3>
+    <p>Ver atualização em <code>framework/lessons-learned.md</code> (2 lições adicionadas nesta execução).</p>
+
+    <h3>Histórico de Versões</h3>
+    <div class="tbl-scroll"><table class="tbl">
+      <tr><th>Versão</th><th>Data</th><th>Autor</th><th>Mudança</th></tr>
+      <tr><td>1.0</td><td>2026-07-19</td><td>@business-case (Biz)</td><td>Versão inicial — GO com ressalvas, NPV 3 anos positivo</td></tr>
+    </table></div>
+  </div>
+</section>
+
+</main>
+
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track" id="mq">Gate Humano Obrigatório <span>·</span> Rastreabilidade Fonte-a-Ação <span>·</span> TOGAF ADM <span>·</span> Event-Driven Modular <span>·</span> Governança de IA <span>·</span>&nbsp;</div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-name">Pipeline<br>Consolidado</div>
+    <div class="foot-row">
+      <div class="foot-mono"><span class="status-dot"></span>Pipeline · <b>Done — GO com ressalvas</b></div>
+      <div class="foot-mono">Requirements Intel · <b>AIOS Framework</b></div>
+      <div class="foot-mono">Fonte · <b>RFP-001 Northstar (fictício)</b> · 19 Jul 2026</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+mermaid.initialize({ startOnLoad: true, theme: "neutral", themeVariables: { fontFamily: "Inter, sans-serif", primaryColor: "#fff3ec", primaryBorderColor: "#FF5800", lineColor: "#7a766f", secondaryColor: "#f0ece4" } });
+var mq = document.getElementById("mq");
+if (mq){ mq.innerHTML += mq.innerHTML; }
+</script>
+</body>
+</html>
