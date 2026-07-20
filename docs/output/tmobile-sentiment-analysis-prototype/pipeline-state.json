@@ -1,0 +1,144 @@
+{
+  "project": "tmobile-sentiment-analysis-prototype",
+  "version": "1.0",
+  "created_at": "2026-06-01T09:00:00Z",
+  "updated_at": "2026-06-01T12:00:00Z",
+  "current_phase": "done",
+  "pipeline_status": "completed",
+  "phases": {
+    "discovery": {
+      "status": "completed",
+      "started_at": "2026-06-01T09:00:00Z",
+      "completed_at": "2026-06-01T09:45:00Z",
+      "agent": "scout",
+      "artifact": "docs/output/tmobile-sentiment-analysis-prototype/discovery-report.md",
+      "artifact_exists": true,
+      "quality_gate": "passed",
+      "handoff_written": true
+    },
+    "prd": {
+      "status": "completed",
+      "started_at": "2026-06-01T09:45:00Z",
+      "completed_at": "2026-06-01T10:30:00Z",
+      "agent": "priya",
+      "artifact": "docs/output/tmobile-sentiment-analysis-prototype/prd.md",
+      "artifact_exists": true,
+      "quality_gate": "passed",
+      "handoff_written": true,
+      "depends_on": [
+        "discovery"
+      ]
+    },
+    "architect": {
+      "status": "completed",
+      "started_at": "2026-06-01T10:30:00Z",
+      "completed_at": "2026-06-01T11:15:00Z",
+      "agent": "aria",
+      "artifact": "docs/output/tmobile-sentiment-analysis-prototype/architecture.md",
+      "artifact_exists": true,
+      "quality_gate": "passed",
+      "handoff_written": true,
+      "depends_on": [
+        "prd"
+      ],
+      "diagrams": {
+        "context": true,
+        "business_capabilities": true,
+        "process_to_be": true,
+        "er_conceptual": true,
+        "data_flow": true,
+        "container": true,
+        "sequence": true,
+        "technology": true,
+        "network_security": true,
+        "cicd": true,
+        "roadmap": true,
+        "team_plan": true
+      },
+      "team_plan": {
+        "total_people": 7,
+        "roles": [
+          "Delivery Lead",
+          "AI Architect",
+          "Data Architect/Engineer",
+          "AI Engineer",
+          "AI Engineer",
+          "Power BI Developer",
+          "QA Engineer"
+        ],
+        "monthly_cost_peak_brl": 620000,
+        "rampup_weeks": 4,
+        "onboarding_days": 10
+      }
+    },
+    "backlog": {
+      "status": "completed",
+      "started_at": "2026-06-01T11:15:00Z",
+      "completed_at": "2026-06-01T11:45:00Z",
+      "agent": "ben",
+      "artifact": "docs/output/tmobile-sentiment-analysis-prototype/backlog.md",
+      "artifact_exists": true,
+      "quality_gate": "passed",
+      "handoff_written": true,
+      "depends_on": [
+        "prd",
+        "architect"
+      ],
+      "metrics": {
+        "total_epics": 4,
+        "total_stories": 18,
+        "total_points": 107,
+        "sprint1_points": 34,
+        "estimated_sprints": 4
+      }
+    },
+    "business_case": {
+      "status": "completed",
+      "started_at": "2026-06-01T11:45:00Z",
+      "completed_at": "2026-06-01T12:00:00Z",
+      "agent": "biz",
+      "artifact": "docs/output/tmobile-sentiment-analysis-prototype/business-case.md",
+      "artifact_exists": true,
+      "quality_gate": "passed",
+      "handoff_written": true,
+      "depends_on": [
+        "discovery",
+        "prd",
+        "architect",
+        "backlog"
+      ],
+      "recommendation": "go_with_conditions",
+      "roi_24m": 30,
+      "payback_months": 17
+    }
+  },
+  "memory": {
+    "path": "docs/output/tmobile-sentiment-analysis-prototype/memory.md",
+    "last_updated": "2026-06-01T12:00:00Z",
+    "questions_answered": 5,
+    "tokens_saved_estimate": 16000
+  },
+  "todo": {
+    "path": "docs/output/tmobile-sentiment-analysis-prototype/todo.md",
+    "total_items": 17,
+    "completed_items": 15,
+    "blocked_items": 0
+  },
+  "lessons_applied": [
+    "[DISCOVERY] Ask impact and governance questions early",
+    "[BACKLOG] Keep technical enablers in sprint 1",
+    "[PIPELINE] Structured handoff improves continuity"
+  ],
+  "decisions": [
+    "Fabric medallion architecture selected",
+    "Aggregate-only outputs in PoC",
+    "Copilot portal selected over custom frontend"
+  ],
+  "icons": {
+    "m365_path": "assets/icons/m365/",
+    "power_platform_path": "assets/icons/power-platform/",
+    "azure_path": "assets/icons/azure/",
+    "catalog": "assets/icons/ICONS.md",
+    "azure_catalog": "assets/icons/azure/AZURE-ICONS.md"
+  }
+}

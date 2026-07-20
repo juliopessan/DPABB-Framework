@@ -108,4 +108,4 @@ Write: framework/lessons-learned.md (append)
 | @prd lê discovery completo | ~3.000 | ~800 (handoff) | ~73% |
 | @architect re-elicita stack | ~1.500 | 0 (decisão salva) | 100% |
 | @backlog lê PRD completo | ~4.000 | ~1.000 (handoff) | ~75% |
-| Pipeline completo cold | ~18.000 | ~6.000 | ~67% |
+| Pipeline completo cold | ~22.500 | ~5.600 | ~75% |

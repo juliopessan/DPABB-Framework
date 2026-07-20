@@ -40,6 +40,11 @@ O @business-case é responsável por adicionar novas lições ao finalizar cada 
 **Aplicar quando:** Sempre.  
 **Lição:** TECH-001 (CI/CD) e TECH-002 (Auth) são sempre Must Have no Sprint 1.
 
+### [PIPELINE] Conformidade 100% com templates canônicos (2026-06-03)
+**Contexto:** Agentes produziam artefatos de discovery mais curtos e fora do padrão dos templates do repositório.  
+**Aplicar quando:** Sempre, ao gerar qualquer artefato de fase.  
+**Lição:** Aplicar os templates canônicos de `/templates/` integralmente. Se faltar valor para um campo do template, perguntar ao usuário em vez de omitir a seção.
+
 ### [PIPELINE] Handoff escrito economiza >40% dos tokens na fase seguinte
 **Contexto:** Agentes que escrevem um handoff estruturado no memory.md permitem que o próximo agente inicie sem re-ler artefatos inteiros.  
 **Aplicar quando:** Sempre, ao finalizar cada fase.  
@@ -49,6 +54,16 @@ O @business-case é responsável por adicionar novas lições ao finalizar cada 
 **Contexto:** No projeto Intelligent Operations Document Platform (RFP-001), o requisito "nenhuma decisão material apenas por IA não revisada" foi tratado como princípio arquitetural (PA-01) e refletido em todo componente (gate de confiança, auditoria, ADR-002), não como uma story isolada.  
 **Aplicar quando:** RFP/PRD contém requisito explícito de supervisão humana sobre resultado de IA.  
 **Lição:** Elevar o requisito de governança de IA a princípio arquitetural (Phase A) garante que ele seja considerado em todas as fases TOGAF seguintes, em vez de arriscar ser esquecido em uma única story de backlog.
+
+### [DISCOVERY] Definir escopo de privacidade e nivel de agregacao no inicio evita retrabalho
+**Contexto:** Em projetos com dados de comunicacao corporativa, quando o nivel de analise (agregado vs individual) nao e decidido no discovery, PRD e arquitetura precisam ser revisados depois.  
+**Aplicar quando:** Casos com dados sensiveis (chat, email, colaboracao interna).  
+**Lição:** Registrar no discovery a fronteira de privacidade e o nivel de agregacao permitido para todas as camadas de consumo.
+
+### [BUSINESS-CASE] Modelar cenario base com gates obrigatorios melhora decisao executiva
+**Contexto:** Recomendacoes binarias (GO/NO-GO) sem condicoes de qualidade e governanca nao refletem risco real em projetos de IA aplicada.  
+**Aplicar quando:** PoCs de IA com dados sensiveis e risco de escala de custo.  
+**Lição:** Emitir "GO com condicoes" com gates explicitos (compliance, qualidade de modelo, custo de escala) aumenta confianca e governanca da decisao.
 
 ---
 
@@ -73,6 +88,42 @@ O @business-case é responsável por adicionar novas lições ao finalizar cada 
 
 ### [BACKLOG] Estimativas sem referência de velocidade
 **O que acontece:** Story points estimados sem saber a velocidade do time geram roadmap irreal.  
+
+### [DISCOVERY] Communication-data requires 2x governance time vs. other PoCs
+**O que acontece:** Quando dados são de comunicação interna (Teams, email), legal+security+privacy levam 2-3x mais tempo validar scopes, retention e uso.
+**Causa:** Reputational risk elevado; threat model complexo (re-identification, inference attacks, misuse).
+**Prevenção:** Listar "compliance gates" no Discovery e assumir Week 1-2 para aprovações. Ter plano B reduzido de escopo se approvals atrasarem.
+
+---
+
+## Padrões do T-Mobile Sentiment Analysis PoC
+
+> Lições específicas do projeto que podem ser generalizadas.
+
+### [DISCOVERY + PRD] Privacy-by-design começa na definição de agregação
+**Contexto:** No T-Mobile, decidir "agregado por org/time/topic, sem drill-to-individual" no Discovery economizou 40+ horas de re-arquitetura.
+**Aplicar quando:** Qualquer projeto com dados sensíveis (chat, email, HR, medical, financeiro).
+**Lição:** Registrar explicitamente no Discovery: (1) o que é PII neste contexto, (2) qual é o nível mínimo de agregação seguro, (3) quem aprova casos de edge.
+
+### [PRD] Confidence labeling deve ser feature de MVP, não Phase 2
+**Contexto:** Inicialmente T-Mobile considerou remover confidence scores para simplificar. Cancelado após avaliar: executivos com baixa confiança tomariam decisões erradas.
+**Aplicar quando:** PoC com LLM ou modelos com incerteza inerente.
+**Lição:** Confidence labeling, low-confidence flagging, e fallback suggestions são **non-negotiable** para credibilidade. Incluir no Sprint 1.
+
+### [BUSINESS-CASE] "GO com condições" é mais responsável que GO/NO-GO binário
+**Contexto:** T-Mobile ROI calcula +30%, mas risco de escala de custos é alto. Recomendação "GO with conditions: model F1 >= 0.78, privacy audit 0 findings, cost governance quotas" reflete risco real.
+**Aplicar quando:** PoCs de IA com dados sensíveis, LLM consumption, ou modelos que podem degradar na escala.
+**Lição:** Estruturar decisão como GO/AMBER/NO-GO com explicit gates. Comunica responsabilidade.
+
+### [ARCHITECT] Purview governance designer deve estar no kick-off, não no UAT
+**Contexto:** Governance lead juntou-se na week 10; lineage + audit foi retrofitted. Com presença early, teria economizado 20 horas.
+**Aplicar quando:** Qualquer projeto com Purview, compliance, ou PII.
+**Lição:** Governance/Compliance **não é fase-final**; é workstream paralela desde week 1.
+
+### [BACKLOG] Sentiment ML requires both human validation SET e continuous monitoring harness
+**Contexto:** Estimativa inicial de 8 pts para "model validation". Com dois repositórios (validation set + monitoring harness) cresceu para 16 pts (M-size).
+**Aplicar quando:** Qualquer NLP/sentiment scope.
+**Lição:** Separar: (1) curated validation set (labeled, Avanade-owned), (2) production monitoring harness (automated daily checks), (3) human review loop (governance gate). Cada um é story separada.
 **Causa:** Ausência de dados históricos ou benchmark.  
 **Prevenção:** Perguntar sempre: "qual é a velocidade média do time por sprint?" ou usar 20pts como default conservador para times novos.
 

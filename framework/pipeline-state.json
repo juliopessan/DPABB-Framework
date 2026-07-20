@@ -1,12 +1,12 @@
 {
-  "_comment": "Estado do pipeline. Atualizado automaticamente por cada agente ao iniciar e finalizar sua fase.",
+  "_comment": "Estado do pipeline com handoff JSON estruturado + approval gates (CORREÇÃO 2 + 5)",
   "project": "{PROJETO}",
-  "version": "1.0",
+  "version": "1.1",
   "created_at": "{ISO_DATE}",
   "updated_at": "{ISO_DATE}",
 
   "current_phase": "discovery",
-  "pipeline_status": "in_progress",
+  "pipeline_status": "not_started",
 
   "phases": {
     "discovery": {
@@ -16,8 +16,12 @@
       "agent": "scout",
       "artifact": "docs/output/{projeto}/discovery-report.md",
       "artifact_exists": false,
-      "quality_gate": null,
-      "handoff_written": false
+      "quality_gate": {
+        "required_approvals": 1,
+        "approvers": [{"role": "Product Owner", "status": "pending", "approved_at": null, "comments": null}],
+        "gate_status": "pending"
+      },
+      "handoff": {"from_previous_phase": null, "to_next_phase": {"summary": null, "stakeholders": 0, "problems": []}}
     },
     "prd": {
       "status": "pending",
@@ -26,8 +30,18 @@
       "agent": "priya",
       "artifact": "docs/output/{projeto}/prd.md",
       "artifact_exists": false,
-      "quality_gate": null,
-      "handoff_written": false,
+      "quality_gate": {
+        "required_approvals": 2,
+        "approvers": [
+          {"role": "Product Owner", "status": "pending", "approved_at": null},
+          {"role": "Tech Lead", "status": "pending", "approved_at": null}
+        ],
+        "gate_status": "pending"
+      },
+      "handoff": {
+        "from_previous_phase": {"summary": null, "decisions": [], "constraints": []},
+        "to_next_phase": {"summary": null, "frs": 0, "nfrs": 0, "personas": 0}
+      },
       "depends_on": ["discovery"]
     },
     "architect": {
@@ -37,23 +51,38 @@
       "agent": "aria",
       "artifact": "docs/output/{projeto}/architecture.md",
       "artifact_exists": false,
-      "quality_gate": null,
-      "handoff_written": false,
-      "depends_on": ["prd"],
-      "diagrams": {
-        "context": false,
-        "container": false,
-        "component": false,
-        "technology": false,
-        "team_plan": false
+      "quality_gate": {
+        "required_approvals": 2,
+        "approvers": [
+          {"role": "Tech Lead", "status": "pending", "approved_at": null},
+          {"role": "Product Owner", "status": "pending", "approved_at": null}
+        ],
+        "gate_status": "pending"
       },
-      "team_plan": {
-        "total_people": 0,
-        "roles": [],
-        "monthly_cost_peak_brl": 0,
-        "rampup_weeks": 0,
-        "onboarding_days": 0
-      }
+      "handoff": {
+        "from_previous_phase": {"summary": null, "decisions": [], "constraints": []},
+        "to_next_phase": {
+          "summary": null,
+          "critical_decisions": [],
+          "team_estimated": 0,
+          "cost_monthly_peak_brl": 0,
+          "cost_total_capex_brl": 0,
+          "risks_identified": 0,
+          "nfr_coverage_pct": 0,
+          "azure_caf_status": "PENDING",
+          "stories_technical_from_nfrs": [],
+          "spike_stories_from_risks": []
+        }
+      },
+      "azure_caf_validation": {
+        "security": {"compliant": false, "gaps": [], "review_date": null},
+        "reliability": {"compliant": false, "gaps": [], "review_date": null},
+        "cost_optimization": {"compliant": false, "gaps": [], "review_date": null},
+        "operational_excellence": {"compliant": false, "gaps": [], "review_date": null},
+        "performance_efficiency": {"compliant": false, "gaps": [], "review_date": null},
+        "overall_status": "PENDING"
+      },
+      "depends_on": ["prd"]
     },
     "backlog": {
       "status": "pending",
@@ -62,16 +91,19 @@
       "agent": "ben",
       "artifact": "docs/output/{projeto}/backlog.md",
       "artifact_exists": false,
-      "quality_gate": null,
-      "handoff_written": false,
-      "depends_on": ["prd", "architect"],
-      "metrics": {
-        "total_epics": 0,
-        "total_stories": 0,
-        "total_points": 0,
-        "sprint1_points": 0,
-        "estimated_sprints": 0
-      }
+      "quality_gate": {
+        "required_approvals": 2,
+        "approvers": [
+          {"role": "Product Owner", "status": "pending", "approved_at": null},
+          {"role": "Tech Lead", "status": "pending", "approved_at": null}
+        ],
+        "gate_status": "pending"
+      },
+      "handoff": {
+        "from_previous_phase": {"summary": null, "decisions": [], "constraints": []},
+        "to_next_phase": {"summary": null, "epics": 0, "stories": 0, "tech_stories": 0, "spike_stories": 0}
+      },
+      "depends_on": ["prd", "architect"]
     },
     "business_case": {
       "status": "pending",
@@ -80,35 +112,30 @@
       "agent": "biz",
       "artifact": "docs/output/{projeto}/business-case.md",
       "artifact_exists": false,
-      "quality_gate": null,
-      "handoff_written": false,
-      "depends_on": ["discovery", "prd", "architect", "backlog"],
-      "recommendation": null,
-      "roi_24m": null,
-      "payback_months": null
+      "quality_gate": {
+        "required_approvals": 2,
+        "approvers": [
+          {"role": "Sponsor", "status": "pending", "approved_at": null},
+          {"role": "Finance", "status": "pending", "approved_at": null}
+        ],
+        "gate_status": "pending"
+      },
+      "handoff": {
+        "from_all_phases": {"summary": null, "capex_brl": 0, "opex_brl": 0, "roi_24m": 0, "payback_months": 0}
+      },
+      "depends_on": ["discovery", "prd", "architect", "backlog"]
     }
   },
 
-  "memory": {
-    "path": "docs/output/{projeto}/memory.md",
-    "last_updated": null,
-    "questions_answered": 0,
-    "tokens_saved_estimate": 0
-  },
-
-  "todo": {
-    "path": "docs/output/{projeto}/todo.md",
-    "total_items": 0,
-    "completed_items": 0,
-    "blocked_items": 0
-  },
-
+  "memory": {"path": "docs/output/{projeto}/memory.md", "last_updated": null, "questions_answered": 0},
+  "todo": {"path": "docs/output/{projeto}/todo.md", "total_items": 0, "completed_items": 0},
   "icons": {
     "m365_path": "assets/icons/m365/",
     "power_platform_path": "assets/icons/power-platform/",
-    "catalog": "assets/icons/ICONS.md"
+    "azure_path": "assets/icons/azure/",
+    "catalog": "assets/icons/ICONS.md",
+    "azure_catalog": "assets/icons/azure/AZURE-ICONS.md"
   },
-
   "lessons_applied": [],
   "decisions": []
 }

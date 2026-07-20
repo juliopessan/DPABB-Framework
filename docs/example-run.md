@@ -1,6 +1,6 @@
 # Exemplo de Execução — Sistema de Agendamento Médico
 
-> Demonstra como usar o pipeline requirements-intel em um projeto real.
+> Demonstra como usar o pipeline DPABB Framework em um projeto real.
 
 ---
 
@@ -40,7 +40,7 @@ Após completar o pipeline, em `docs/output/medschedule/`:
 
 ### architecture.md
 - Estilo: Monolito Modular (equipe pequena, prazo 4 meses)
-- Stack: Next.js + Node.js + PostgreSQL + Supabase Auth + Vercel
+- Stack: Azure App Service + ASP.NET Core + Azure SQL + Microsoft Entra ID + Azure Front Door
 - 4 ADRs documentados
 - Cobertura 100% de NFRs
 

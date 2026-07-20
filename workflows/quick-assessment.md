@@ -12,7 +12,7 @@
 |---------|-----------------|-----------------|
 | Duração | 60-120 min | 20-40 min |
 | Business Case | Completo com ROI | Estimativa rápida |
-| Elicitação | 16 perguntas | 8 perguntas |
+| Elicitação | 16 perguntas | 5 perguntas |
 | ADRs | ≥3 documentados | 1 principal |
 | Profundidade | Alta | Média |
 | Quando usar | Projetos novos | Spike / avaliação inicial |

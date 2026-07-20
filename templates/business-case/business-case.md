@@ -187,8 +187,42 @@
 
 ---
 
+## Enrichment Section A - Generic Decision Governance
+
+| Critério | Status | Observação |
+|---|---|---|
+| ROI mínimo atingido | Sim/Não | |
+| Payback dentro da janela alvo | Sim/Não | |
+| Riscos críticos mitigáveis | Sim/Não | |
+| Viabilidade operacional | Sim/Não | |
+
+---
+
+## Enrichment Section B - Generic Sensitivity and Scenario Add-on
+
+### B.1 Cenários de referência
+| Cenário | Premissa principal | Impacto em ROI | Impacto em Payback |
+|---|---|---|---|
+| Pessimista | {Premissa} | {Impacto} | {Impacto} |
+| Base | {Premissa} | {Impacto} | {Impacto} |
+| Otimista | {Premissa} | {Impacto} | {Impacto} |
+
+### B.2 Triggers de revisão do case
+1. {Trigger financeiro}
+2. {Trigger operacional}
+
+---
+
+## Enrichment Section C - Generic Execution Guardrails
+
+1. Gate financeiro antes de cada release relevante.
+2. Revalidação de premissas de benefício a cada marco de roadmap.
+3. Escalonamento para steering committee quando houver desvio material.
+
+---
+
 ## Histórico de Versões
 
 | Versão | Data | Autor | Mudança |
 |--------|------|-------|---------|
-| 1.0 | {DATA} | @business-case | Versão inicial |
+| 1.0 | {DATA} | @business-case | Estrutura base preservada + seções genéricas de enriquecimento |

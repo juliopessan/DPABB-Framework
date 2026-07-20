@@ -1,4 +1,4 @@
-# Requirements Intel — AIOS Framework
+# DPABB Framework
 
 > Pipeline AIOS de 5 fases que transforma uma especificação bruta em **Discovery Report + PRD + Arquitetura TOGAF + Backlog + Business Case** — totalmente gerados por agentes de IA especializados, e consolidados ao final em um único relatório HTML.
 
@@ -101,7 +101,7 @@ O pipeline avança automaticamente fase a fase, lendo o `memory.md` para não re
 ## Estrutura do Repositório
 
 ```
-requirements-intel/
+DPABB-Framework/
 │
 ├── CLAUDE.md                        ← Configuração AIOS + regras de memória
 │
@@ -125,8 +125,9 @@ requirements-intel/
 │   ├── business-case/business-case.md
 │   ├── discovery/discovery-report.md
 │   ├── prd/prd.md
-│   └── consolidated-report/
-│       └── base-template.html       ← Skeleton do relatório HTML final (etapa obrigatória de *exit)
+│   ├── consolidated-report/
+│   │   └── base-template.html       ← Skeleton do relatório HTML final (etapa obrigatória de *exit)
+│   └── html/sme-view.html           ← Developer Guide HTML navegável (SME View, opcional via @architect *html)
 │
 ├── framework/                       ← Arquivos globais do framework
 │   ├── memory.md                    ← Template de memória por projeto

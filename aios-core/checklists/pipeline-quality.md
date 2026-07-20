@@ -33,15 +33,21 @@ Use para validar o pipeline inteiro antes de entregar ao cliente/stakeholder.
 
 ## Arquitetura ✓
 
-- [ ] Cada NFR coberto por decisão arquitetural
-- [ ] Mínimo 3 ADRs documentados
-- [ ] Riscos técnicos com mitigação
-- [ ] Diagrama C4 Context e Container descritos
-- [ ] Estratégia de segurança explicitada
-- [ ] Estratégia de escalabilidade documentada
-- [ ] Dependências externas com SLAs listados
+> Espelha `agents/architect.md § Checklist de Qualidade` (TOGAF ADM Phases A–E).
 
-**Gate:** 7/7 para GO
+- [ ] Phase A: Visão, princípios arquiteturais e diagrama de Contexto (azure: icons)
+- [ ] Phase B: Mindmap de capacidades + flowchart processo To-Be
+- [ ] Phase C1: erDiagram conceitual + estratégia de dados + política LGPD
+- [ ] Phase C2: Diagrama Container (architecture-beta azure:) + sequenceDiagram
+- [ ] Phase D: Diagrama Tecnologia (architecture-beta azure:) + CI/CD + Rede/Segurança
+- [ ] Phase E Work Packages: tabela WP + gantt de entrega + build vs buy
+- [ ] Phase E Team Plan E.4–E.9: composição + ramp-up gantt + RACI + custo + onboarding
+- [ ] ADRs: mínimo 3, com alternativas documentadas e condição de revisão
+- [ ] NFRs: cobertura 100% com fase TOGAF e ADR mapeados
+- [ ] Riscos técnicos com mitigação e dependências externas com SLAs
+- [ ] Ícones M365 usados na seção Team Plan (HTML img tags)
+
+**Gate:** 11/11 para GO
 
 ---
 

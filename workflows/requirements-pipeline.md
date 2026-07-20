@@ -71,7 +71,7 @@
 |------|------|--------|
 | Discovery | Checklist 7/7 | Problema + 3 stakeholders + 5 RQs + restrições + KPIs |
 | PRD | Checklist 6/6 | Rastreabilidade 100% + NFRs com métricas |
-| Architect | Checklist 9/9 | TOGAF A-E + 3 ADRs + Mermaid Azure + NFR coverage |
+| Architect | Checklist 11/11 | TOGAF A-E + Team Plan + 3 ADRs + Mermaid Azure + NFR coverage |
 | Backlog | Checklist 7/7 | Rastreabilidade 100% + Sprint 1 + sem XL |
 | Business Case | Checklist 7/7 | ROI+Payback+NPV + 3 cenários + recomendação |
 

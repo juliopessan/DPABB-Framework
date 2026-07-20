@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{CLIENTE} — Developer Guide | {PROJETO} SME View</title>
+<!--
+  Template: SME View / Developer Guide (HTML)
+  Gerado por: @architect *html (após architecture.md + backlog.md concluídos)
+  Placeholders: {CLIENTE}, {PROJETO}, {DATA}, {N_*} e blocos marcados com "EXEMPLO".
+  Regras:
+   - Consolidar dados de memory.md + architecture.md + backlog.md + business-case.md
+   - Diagramas em Mermaid (mermaid-wrap) — mesmo conteúdo do architecture.md
+   - Substituir cores da marca em :root (--p primária, --a acento, --soft fundo suave)
+   - Tabelas largas SEMPRE dentro de .table-scroll
+-->
+<style>
+:root{--p:#FF5800;--a:#D14600;--soft:#FFEDE3;--ink:#1B1B1B;--mute:#6E6E6E;--line:#E5E5E5}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#F8F8F8;color:var(--ink)}
+.layout{display:block;min-height:100vh}
+aside{width:240px;background:#000;color:#fff;padding:24px 18px;position:fixed;top:0;left:0;height:100vh;overflow-y:auto;z-index:10}
+.brand{font-size:20px;font-weight:900;color:#fff;margin-bottom:24px;letter-spacing:-0.5px}
+.brand span{color:var(--p)}
+.nav-group{margin-bottom:18px}
+.nav-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#888;margin-bottom:6px;padding-left:2px}
+aside a{display:block;color:#ccc;text-decoration:none;font-size:12.5px;padding:5px 8px;border-radius:6px;margin-bottom:2px;transition:all .15s}
+aside a:hover{color:#fff;background:#1a1a1a}
+main{margin-left:240px;padding:32px 40px;max-width:1280px;overflow-x:hidden;box-sizing:border-box}
+.hero{background:linear-gradient(135deg,#111 0%,#1e1e1e 60%,#2a1a0e 100%);color:#fff;border-radius:16px;padding:40px 44px;margin-bottom:32px;border-left:5px solid var(--p)}
+.hero h1{font-size:26px;font-weight:900;margin-bottom:6px;line-height:1.2}
+.hero .sub{color:#ccc;font-size:14px;margin-bottom:16px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:rgba(255,88,0,.2);color:#FF8040;border:1px solid rgba(255,88,0,.35);border-radius:20px;padding:4px 12px;font-size:11px;font-weight:600}
+.chip.blue{background:rgba(29,78,216,.2);color:#60a5fa;border-color:rgba(29,78,216,.35)}
+.chip.green{background:rgba(5,150,105,.2);color:#34d399;border-color:rgba(5,150,105,.35)}
+.chip.purple{background:rgba(137,0,120,.2);color:#e879f9;border-color:rgba(137,0,120,.35)}
+.chip.red{background:rgba(220,38,38,.2);color:#f87171;border-color:rgba(220,38,38,.35)}
+.sec{background:#fff;border:1px solid var(--line);border-radius:14px;padding:28px 32px;margin-bottom:24px;scroll-margin-top:20px;overflow-x:hidden}
+.sec h2{font-size:22px;font-weight:800;color:var(--p);margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--soft)}
+.sec h3{font-size:15px;font-weight:700;color:var(--ink);margin:20px 0 8px;padding-left:10px;border-left:3px solid var(--p)}
+.sec h4{font-size:13px;font-weight:700;color:#444;margin:14px 0 6px;text-transform:uppercase;letter-spacing:.5px}
+table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:12px}
+th,td{padding:9px 11px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.th-grey th{background:#F4F4F5;color:#6E6E6E;font-weight:700;font-size:11px;text-transform:uppercase}
+.th-orange th{background:#FFF7EE;color:var(--a);font-weight:700;font-size:11px;text-transform:uppercase}
+.th-soft th{background:var(--soft);color:var(--p);font-weight:700;font-size:11px;text-transform:uppercase}
+.th-dark th{background:#1B1B1B;color:#fff;font-weight:700;font-size:11px;text-transform:uppercase}
+.th-blue th{background:#DBEAFE;color:#1e40af;font-weight:700;font-size:11px;text-transform:uppercase}
+tr:hover td{background:#FAFAFA}
+.table-scroll{overflow-x:auto;width:100%;margin-bottom:16px}
+.table-scroll table{width:100%}
+td a{word-break:break-all;overflow-wrap:anywhere}
+.total-row td{background:var(--soft);color:var(--p);font-weight:700;border-bottom:2px solid var(--p)}
+.badge{display:inline-block;padding:3px 9px;border-radius:12px;font-size:11px;font-weight:700}
+.badge-red{background:#FEE2E2;color:#DC2626}
+.badge-amber{background:#FEF3C7;color:#D97706}
+.badge-green{background:#D1FAE5;color:#065F46}
+.badge-blue{background:#DBEAFE;color:#1e40af}
+.badge-purple{background:#F3E8FF;color:#7c3aed}
+.callout{background:var(--soft);border-left:4px solid var(--p);border-radius:0 10px 10px 0;padding:12px 16px;margin:14px 0;font-size:13px;color:var(--a)}
+.callout-blue{background:#DBEAFE;border-left:4px solid #1D4ED8;border-radius:0 10px 10px 0;padding:12px 16px;margin:14px 0;font-size:13px;color:#1e40af}
+.callout-red{background:#FEE2E2;border-left:4px solid #DC2626;border-radius:0 10px 10px 0;padding:12px 16px;margin:14px 0;font-size:13px;color:#991b1b}
+.callout-green{background:#D1FAE5;border-left:4px solid #059669;border-radius:0 10px 10px 0;padding:12px 16px;margin:14px 0;font-size:13px;color:#065F46}
+.phase-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:14px 0}
+.phase-card{border-radius:10px;padding:16px;border:1px solid var(--line)}
+.phase-card .ph-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--p);margin-bottom:4px}
+.phase-card .ph-title{font-size:15px;font-weight:800;margin-bottom:6px}
+.phase-card .ph-weeks{font-size:12px;color:var(--mute);margin-bottom:8px}
+.phase-card ul{padding-left:16px;font-size:12.5px;color:#555}
+.phase-card ul li{margin-bottom:3px}
+.step-list{counter-reset:step;padding:0;list-style:none;margin:12px 0}
+.step-list li{counter-increment:step;padding:10px 12px 10px 48px;position:relative;border-left:2px solid var(--line);margin-bottom:6px;font-size:13px;line-height:1.6;background:#FAFAFA;border-radius:0 8px 8px 0}
+.step-list li::before{content:counter(step);position:absolute;left:-16px;top:8px;background:var(--p);color:#fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0}
+.step-list li strong{color:var(--a)}
+.code-block{background:#1e1e2e;color:#cdd6f4;font-family:'Cascadia Code','Courier New',monospace;font-size:12px;padding:14px 16px;border-radius:8px;margin:10px 0;overflow-x:auto;white-space:pre;line-height:1.5;max-width:100%;box-sizing:border-box}
+.code-block .kw{color:#cba6f7}
+.code-block .str{color:#a6e3a1}
+.code-block .cm{color:#585b70;font-style:italic}
+.code-block .num{color:#fab387}
+.prop-table td:first-child{font-family:'Cascadia Code','Courier New',monospace;font-size:12px;color:#7c3aed;background:#F5F3FF;white-space:nowrap;width:200px}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:14px 0}
+.kpi-card{background:var(--soft);border-radius:10px;padding:16px;text-align:center}
+.kpi-card .kv{font-size:24px;font-weight:900;color:var(--p)}
+.kpi-card .kl{font-size:11px;color:var(--mute);margin-top:4px;text-transform:uppercase;letter-spacing:.5px}
+.nfr-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.nfr-card{background:#F9FAFB;border:1px solid var(--line);border-radius:10px;padding:14px}
+.nfr-card .nfr-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--p);margin-bottom:6px}
+.flow-steps{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:12px 0}
+.flow-box{background:#fff;border:1.5px solid var(--line);border-radius:8px;padding:8px 12px;font-size:12px;font-weight:600;white-space:nowrap}
+.flow-box.active{background:var(--p);color:#fff;border-color:var(--p)}
+.flow-box.gate{background:#1D4ED8;color:#fff;border-color:#1D4ED8}
+.flow-arrow{color:#888;font-size:16px;font-weight:700}
+.schema-field{display:flex;gap:8px;align-items:baseline;padding:5px 0;border-bottom:1px solid #f0f0f0;font-size:12.5px}
+.schema-field .fn{font-family:monospace;color:#7c3aed;font-weight:600;width:180px;flex-shrink:0}
+.schema-field .ft{color:#1e40af;font-size:11px;background:#DBEAFE;padding:2px 7px;border-radius:10px;margin-right:6px;flex-shrink:0}
+.schema-field .fd{color:#555}
+.sme-footer{text-align:center;padding:24px;color:#6E6E6E;font-size:12px;margin-top:16px}
+.mermaid-wrap{background:#F9FAFB;border:1px solid var(--line);border-radius:12px;padding:24px;margin-top:20px;overflow-x:auto}
+.mermaid-wrap .mermaid{font-family:'Segoe UI',system-ui,sans-serif}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({startOnLoad:true,theme:'base',themeVariables:{primaryColor:'#FFF3E6',primaryTextColor:'#1B1B1B',primaryBorderColor:'#FF5800',lineColor:'#999',secondaryColor:'#DBEAFE',tertiaryColor:'#F3F4F6',clusterBkg:'#F9FAFB',clusterBorder:'#d1d5db',edgeLabelBackground:'#ffffff',fontFamily:"'Segoe UI',system-ui,sans-serif"}})</script>
+</head>
+<body>
+<div class="layout">
+
+<aside>
+  <div class="brand">{CLIENTE}<span>.</span></div>
+
+  <div class="nav-group">
+    <div class="nav-label">Overview</div>
+    <a href="#objective">1. Objetivo Técnico</a>
+    <a href="#arch">2. Arquitetura Alvo</a>
+    <a href="#techstack">3. Stack Tecnológica</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-label">Implementação</div>
+    <a href="#infra-guide">4. Setup de Infraestrutura</a>
+    <a href="#impl-guide">5. Guia de Implementação</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-label">Qualidade</div>
+    <a href="#nfr">6. NFRs &amp; Qualidade</a>
+    <a href="#security">7. Segurança &amp; Compliance</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-label">Estimativas</div>
+    <a href="#effort">8. Resumo de Esforço</a>
+    <a href="#tasks">9. WBS / Backlog</a>
+    <a href="#team">10. Plano de Equipe</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-label">Risco</div>
+    <a href="#risk">11. Registro de Riscos</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-label">Referências</div>
+    <a href="#ref">12. Referências &amp; Fontes</a>
+  </div>
+</aside>
+
+<main>
+
+<div class="hero">
+  <h1>{CLIENTE} — Developer Guide</h1>
+  <p class="sub">{PROJETO} SME View &bull; {DATA} &bull; Referência técnica interna gerada pelo pipeline Requirements Intel</p>
+  <div class="chips">
+    <!-- 1 chip por tecnologia-chave do stack (architecture.md § Phase D) -->
+    <span class="chip">{TECNOLOGIA_1}</span>
+    <span class="chip blue">{TECNOLOGIA_2}</span>
+    <span class="chip green">{TECNOLOGIA_3}</span>
+    <span class="chip red">{COMPLIANCE ex.: LGPD}</span>
+  </div>
+</div>
+
+<!-- ═══ S1: OBJETIVO TÉCNICO — fonte: memory.md (handoffs) + prd.md -->
+<div class="sec" id="objective">
+  <h2>1. Objetivo Técnico &amp; Foco</h2>
+  <div class="kpi-row">
+    <div class="kpi-card"><div class="kv">{N_UCS}</div><div class="kl">Use Cases</div></div>
+    <div class="kpi-card"><div class="kv">{N_SEMANAS} sem</div><div class="kl">Timeline</div></div>
+    <div class="kpi-card"><div class="kv">{N_PONTOS} pts</div><div class="kl">Esforço Total</div></div>
+    <div class="kpi-card"><div class="kv">{N_FTES} FTEs</div><div class="kl">Pico de Equipe</div></div>
+  </div>
+  <h3>O Que Estamos Construindo</h3>
+  <p style="font-size:13.5px;line-height:1.7;margin-bottom:14px">{RESUMO_SOLUCAO — 3-5 linhas do handoff Architect}</p>
+  <div class="callout">{RESTRICAO_OU_DECISAO_CRITICA — de memory.md § Decisões Tomadas}</div>
+</div>
+
+<!-- ═══ S2: ARQUITETURA ALVO — fonte: architecture.md Phases A/C2/D -->
+<div class="sec" id="arch">
+  <h2>2. Arquitetura Alvo</h2>
+  <h3>Diagrama Lógico de Componentes</h3>
+  <div class="mermaid-wrap">
+    <div class="mermaid">
+graph TB
+    subgraph SRC["FONTES DE DADOS"]
+        S1["{Fonte 1}"]
+    end
+    subgraph CORE["PROCESSAMENTO"]
+        C1["{Componente 1}"]
+    end
+    subgraph CNS["CONSUMIDORES"]
+        U1["{Persona 1}"]
+    end
+    S1 --> C1 --> U1
+    </div>
+  </div>
+  <h3>Fluxo Principal (Human-in-the-Loop / Happy Path)</h3>
+  <div class="flow-steps">
+    <span class="flow-box active">{Etapa 1}</span><span class="flow-arrow">→</span>
+    <span class="flow-box">{Etapa 2}</span><span class="flow-arrow">→</span>
+    <span class="flow-box gate">{Gate de aprovação}</span><span class="flow-arrow">→</span>
+    <span class="flow-box">{Etapa final}</span>
+  </div>
+</div>
+
+<!-- ═══ S3: STACK — fonte: architecture.md Phase D + ADRs -->
+<div class="sec" id="techstack">
+  <h2>3. Stack Tecnológica</h2>
+  <div class="table-scroll">
+    <table class="th-orange">
+      <tr><th>Camada</th><th>Tecnologia</th><th>Propósito</th><th>ADR</th></tr>
+      <tr><td>{Camada}</td><td>{Tecnologia}</td><td>{Propósito}</td><td><span class="badge badge-blue">ADR-001</span></td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ═══ S4: SETUP INFRA — fonte: architecture.md Phase D (CI/CD, rede) -->
+<div class="sec" id="infra-guide">
+  <h2>4. Setup de Infraestrutura</h2>
+  <ol class="step-list">
+    <li><strong>{Passo 1}:</strong> {descrição acionável}</li>
+    <li><strong>{Passo 2}:</strong> {descrição acionável}</li>
+  </ol>
+  <div class="code-block"><span class="cm"># EXEMPLO — comandos de provisionamento</span>
+az group create --name rg-{projeto} --location {regiao}</div>
+</div>
+
+<!-- ═══ S5: GUIA DE IMPLEMENTAÇÃO — 1 sub-seção por Epic/UC do backlog.md -->
+<div class="sec" id="impl-guide">
+  <h2>5. Guia de Implementação — {EPIC/UC}</h2>
+  <h3>Passo a Passo</h3>
+  <ol class="step-list">
+    <li><strong>{Passo}:</strong> {descrição com referência à story (ex.: US-001)}</li>
+  </ol>
+  <h3>Contrato de Dados Principal</h3>
+  <div class="schema-field"><span class="fn">{campo}</span><span class="ft">{tipo}</span><span class="fd">{descrição}</span></div>
+</div>
+
+<!-- ═══ S6: NFRs — fonte: prd.md § NFRs + architecture.md § cobertura NFR -->
+<div class="sec" id="nfr">
+  <h2>6. NFRs &amp; Qualidade</h2>
+  <div class="nfr-grid">
+    <div class="nfr-card"><div class="nfr-title">{NFR-001 — Categoria}</div>{métrica mensurável + como a arquitetura atende}</div>
+    <div class="nfr-card"><div class="nfr-title">{NFR-002 — Categoria}</div>{métrica mensurável + como a arquitetura atende}</div>
+  </div>
+</div>
+
+<!-- ═══ S7: SEGURANÇA — fonte: architecture.md Phase D (rede/segurança) -->
+<div class="sec" id="security">
+  <h2>7. Segurança &amp; Compliance</h2>
+  <div class="table-scroll">
+    <table class="th-dark">
+      <tr><th>Controle</th><th>Implementação</th><th>Norma / Requisito</th></tr>
+      <tr><td>{Controle}</td><td>{Como será implementado}</td><td>{LGPD / ISO / PCI}</td></tr>
+    </table>
+  </div>
+  <div class="callout-red">{Restrição regulatória crítica, se houver}</div>
+</div>
+
+<!-- ═══ S8: ESFORÇO — fonte: backlog.md § métricas + business-case.md -->
+<div class="sec" id="effort">
+  <h2>8. Resumo de Esforço</h2>
+  <div class="kpi-row">
+    <div class="kpi-card"><div class="kv">{N_EPICS}</div><div class="kl">Epics</div></div>
+    <div class="kpi-card"><div class="kv">{N_STORIES}</div><div class="kl">Stories</div></div>
+    <div class="kpi-card"><div class="kv">{N_PONTOS}</div><div class="kl">Story Points</div></div>
+    <div class="kpi-card"><div class="kv">{N_SPRINTS}</div><div class="kl">Sprints</div></div>
+  </div>
+  <div class="phase-grid">
+    <div class="phase-card"><div class="ph-label">Fase 1</div><div class="ph-title">{Nome}</div><div class="ph-weeks">Semanas {X–Y}</div><ul><li>{entrega}</li></ul></div>
+    <div class="phase-card"><div class="ph-label">Fase 2</div><div class="ph-title">{Nome}</div><div class="ph-weeks">Semanas {X–Y}</div><ul><li>{entrega}</li></ul></div>
+    <div class="phase-card"><div class="ph-label">Fase 3</div><div class="ph-title">{Nome}</div><div class="ph-weeks">Semanas {X–Y}</div><ul><li>{entrega}</li></ul></div>
+  </div>
+</div>
+
+<!-- ═══ S9: WBS — fonte: backlog.md (epics → stories) -->
+<div class="sec" id="tasks">
+  <h2>9. WBS / Backlog</h2>
+  <div class="table-scroll">
+    <table class="th-soft">
+      <tr><th>ID</th><th>Story</th><th>Epic</th><th>Pontos</th><th>Sprint</th><th>Prioridade</th></tr>
+      <tr><td>US-001</td><td>{título}</td><td>{epic}</td><td>{pts}</td><td>1</td><td><span class="badge badge-red">Must</span></td></tr>
+      <tr class="total-row"><td colspan="3">Total</td><td>{N_PONTOS}</td><td colspan="2">{N_SPRINTS} sprints</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ═══ S10: EQUIPE — fonte: architecture.md Phase E.4–E.9 (Team Plan) -->
+<div class="sec" id="team">
+  <h2>10. Plano de Equipe</h2>
+  <div class="table-scroll">
+    <table class="th-blue">
+      <tr><th>Papel</th><th>Alocação</th><th>Ramp-up</th><th>Responsabilidade (RACI)</th></tr>
+      <tr><td>{Papel}</td><td>{%}</td><td>{semanas}</td><td>{R/A/C/I resumido}</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ═══ S11: RISCOS — fonte: discovery-report.md + architecture.md § riscos -->
+<div class="sec" id="risk">
+  <h2>11. Registro de Riscos</h2>
+  <div class="table-scroll">
+    <table class="th-grey">
+      <tr><th>ID</th><th>Risco</th><th>Prob.</th><th>Impacto</th><th>Score</th><th>Mitigação</th></tr>
+      <tr><td>R-01</td><td>{descrição}</td><td>{A/M/B}</td><td>{A/M/B}</td><td><span class="badge badge-amber">{n}</span></td><td>{mitigação}</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ═══ S12: REFERÊNCIAS — links para os artefatos do pipeline -->
+<div class="sec" id="ref">
+  <h2>12. Referências &amp; Fontes</h2>
+  <div class="table-scroll">
+    <table class="th-grey">
+      <tr><th>Artefato</th><th>Caminho</th><th>Fase</th></tr>
+      <tr><td>Discovery Report</td><td><a href="discovery-report.md">docs/output/{projeto}/discovery-report.md</a></td><td>1 — Discovery</td></tr>
+      <tr><td>PRD</td><td><a href="prd.md">docs/output/{projeto}/prd.md</a></td><td>2 — PRD</td></tr>
+      <tr><td>Arquitetura (TOGAF)</td><td><a href="architecture.md">docs/output/{projeto}/architecture.md</a></td><td>3 — Architect</td></tr>
+      <tr><td>Backlog</td><td><a href="backlog.md">docs/output/{projeto}/backlog.md</a></td><td>4 — Backlog</td></tr>
+      <tr><td>Business Case</td><td><a href="business-case.md">docs/output/{projeto}/business-case.md</a></td><td>5 — Business Case</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="sme-footer">Gerado pelo pipeline Requirements Intel &bull; {PROJETO} &bull; {DATA}</div>
+
+</main>
+</div>
+</body>
+</html>

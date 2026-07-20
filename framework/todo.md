@@ -67,7 +67,7 @@
 - [ ] **Phase D:** Validar stack com equipe de infraestrutura
 - [ ] **Phase E:** Validar plano de equipe com RH/Gestão
 - [ ] Revisar ADRs com Tech Lead
-- [ ] **Gate:** architecture.md aprovado (9/9 checklist)
+- [ ] **Gate:** architecture.md aprovado (11/11 checklist)
 
 ---
 
@@ -146,7 +146,7 @@
 
 ## 🟪 Framework — Melhorias Pendentes
 
-> Melhorias ao próprio requirements-intel framework
+> Melhorias ao próprio DPABB Framework
 
 - [ ] Criar integração com Linear para importar backlog automaticamente
 - [ ] Criar integração com Azure DevOps para criar work items

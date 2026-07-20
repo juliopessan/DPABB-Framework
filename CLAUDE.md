@@ -54,7 +54,8 @@ docs/output/{projeto}/
 ├── architecture.md        ← Output: @architect (TOGAF + Mermaid)
 ├── backlog.md             ← Output: @backlog
 ├── business-case.md       ← Output: @business-case
-└── relatorio-consolidado.html  ← Output final: @business-case *consolidate (obrigatório)
+├── relatorio-consolidado.html  ← Output final: @business-case *consolidate (obrigatório)
+└── sme-view.html          ← Output opcional: @architect *html (Developer Guide navegável)
 ```
 
 ### Arquivos de Framework (globais)
@@ -232,7 +233,8 @@ Copilot     → CopilotStudio_scalable.svg
 | `*memory` | Exibe memory.md resumido do projeto atual |
 | `*lessons` | Exibe lições aplicáveis à fase atual |
 | `*todo` | Exibe TODO do projeto atual com progresso |
-| `*icons` | Lista ícones disponíveis (M365 + Power Platform) |
+| `*icons` | Lista ícones disponíveis (M365 + Power Platform + Azure) |
+| `*html {projeto}` | Gera `sme-view.html` — Developer Guide HTML navegável (template `templates/html/sme-view.html`) |
 
 ---
 
