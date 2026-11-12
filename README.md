@@ -1,6 +1,39 @@
 # DPABB Framework
 
-> Pipeline AIOS de 5 fases que transforma uma especificação bruta em **Discovery Report + PRD + Arquitetura TOGAF + Backlog + Business Case** — totalmente gerados por agentes de IA especializados, e consolidados ao final em um único relatório HTML.
+**Agentic requirements-to-business-case pipeline**
+
+DPABB transforms an initial technical requirement, document or meeting input into a connected set of delivery artifacts: discovery report, PRD, TOGAF-based architecture, backlog and business case. Specialized agents execute each phase and pass accumulated context to the next stage.
+
+## Pipeline
+
+`Discovery → PRD → Architecture → Backlog → Business Case → Consolidated report`
+
+| Agent | Responsibility | Primary output |
+| --- | --- | --- |
+| Scout | Discovery, stakeholders and business rules | Discovery report |
+| Priya | Functional and non-functional requirements, acceptance criteria | PRD |
+| Aria | TOGAF ADM architecture, diagrams and ADRs | Architecture |
+| Ben | Epics, stories and estimates | Backlog |
+| Biz | ROI, payback, TCO and go/no-go analysis | Business case |
+
+## Design principles
+
+- Preserve context across phases through project-level memory and explicit handoffs.
+- Keep artifacts traceable from requirements through architecture and backlog.
+- Separate generated recommendations from business decisions that require stakeholder approval.
+- Consolidate outputs into a stakeholder-facing HTML report while retaining Markdown artifacts as pipeline sources.
+
+## Maturity and interpretation
+
+This repository contains agent definitions, skills, templates, workflow guidance and example outputs. The stated token-efficiency figure is an estimate, not a benchmark independently validated across production workloads. Review generated requirements, architecture, estimates and ROI assumptions with accountable practitioners before using them for delivery commitments.
+
+## Explore
+
+- [Agent definitions](agents/)
+- [Skills](skills/)
+- [Templates](templates/)
+- [Workflow documentation](workflows/)
+- [Example run](docs/example-run.md)
 
 ---
 
